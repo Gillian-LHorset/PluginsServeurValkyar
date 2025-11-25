@@ -1,0 +1,13 @@
+name: ModeratorPlugin
+version: '0.1'
+main: fr.Valkyar.moderatorPlugin.ModeratorPlugin
+api-version: '1.21'
+authors: [ GG5 ]
+description: ══MODERATOR══ - A plugin who add some tools for moderate a server.
+
+commands:
+  vanish:
+    description: This command make you invisible and invulnerable.
+    usage: /<command>
+    permission: ModeratorPlugin.Moderator
+    permission-message: You need to be a moderator for use this command
