@@ -7,7 +7,7 @@ description: ══MODERATOR══ - A plugin who add some tools for moderate a 
 
 commands:
   vanish:
-    description: This command make you invisible and invincible.
+    description: This command make you invisible and invulnerable.
     usage: /<command>
     permission: ModeratorPlugin.Moderator
     permission-message: You need to be a moderator for use this command

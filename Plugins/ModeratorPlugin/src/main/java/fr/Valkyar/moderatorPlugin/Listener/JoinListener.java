@@ -17,6 +17,8 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin (PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        // hide players in vanish to new player
         for (Player playerInVanish : plugin.VanishList) {
             player.hidePlayer(plugin, playerInVanish);
         }
