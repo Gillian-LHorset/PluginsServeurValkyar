@@ -7,7 +7,7 @@ public final class PermissionPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
+        System.out.println("[PermissionPlugin] - PermissionPlugin plugin enabled");
     }
 
     @Override
