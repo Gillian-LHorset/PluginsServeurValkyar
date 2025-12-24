@@ -1,2 +1,3 @@
 fr\Valkyar\valkyarVaultPlugin\ValkyarVaultPlugin.class
+fr\Valkyar\valkyarVaultPlugin\db\Database.class
 fr\Valkyar\valkyarVaultPlugin\listeners\joinListener.class
