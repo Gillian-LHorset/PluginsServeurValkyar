@@ -1,11 +1,12 @@
 package fr.Valkyar.valkyarVaultPlugin;
 
+import fr.Valkyar.valkyarVaultPlugin.Commands.BalanceCommand;
+import fr.Valkyar.valkyarVaultPlugin.Commands.PayCommand;
+import fr.Valkyar.valkyarVaultPlugin.TabCompletion.PayTabCompletion;
 import fr.Valkyar.valkyarVaultPlugin.db.Database;
-import fr.Valkyar.valkyarVaultPlugin.listeners.joinListener;
+import fr.Valkyar.valkyarVaultPlugin.listeners.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public final class ValkyarVaultPlugin extends JavaPlugin {
@@ -19,9 +20,19 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new joinListener(this), this);
+        // Register Commands
+        getCommand("pay").setExecutor(new PayCommand(this));
+        getCommand("balance").setExecutor(new BalanceCommand(this));
 
-        // Plugin startup logic
+        // Register tab completion
+        getCommand("pay").setTabCompleter(new PayTabCompletion());
+
+        // Register Listeners
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+
 
         try {
             databaseLink = new Database(this);

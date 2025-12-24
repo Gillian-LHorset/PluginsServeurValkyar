@@ -71,4 +71,68 @@ public class Database {
         return null;
     }
 
+    public Double getBalanceByName(String player) throws SQLException{
+
+        PreparedStatement statement =  getConnection()
+                .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
+        statement.setString(1, player);
+
+        ResultSet results = statement.executeQuery();
+
+        if (results.next()) {
+            return results.getDouble("balance");
+        }
+
+
+        statement.close();
+
+        return null;
+    }
+
+    public Double getPlayerBalanceByUUID(Player player) throws SQLException{
+        PreparedStatement statement =  getConnection()
+                .prepareStatement("SELECT balance FROM t_players WHERE uuid = ?");
+        statement.setString(1, player.getUniqueId().toString());
+
+        ResultSet results = statement.executeQuery();
+
+        if (results.next()) {
+            return results.getDouble("balance");
+        }
+
+        statement.close();
+
+        return null;
+    }
+
+    public void setWithdrawBalanceByUUID(Player player, Double amount) throws SQLException{
+
+
+        ValkyarVaultPlugin.OutputColoredText(ValkyarVaultPlugin.RED_OUTPUT, "ta mere la pute");
+        Double currentBalance = getPlayerBalanceByUUID(player);
+        currentBalance -= amount;
+
+        PreparedStatement statement = getConnection()
+                .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
+        statement.setString(1, currentBalance.toString());
+        statement.setString(2, player.getUniqueId().toString());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void setAddBalanceByName(Player player, Double amount) throws SQLException{
+        Double currentBalance = getBalanceByName(player.getDisplayName());
+        currentBalance += amount;
+
+        PreparedStatement statement = getConnection()
+                .prepareStatement("UPDATE t_players SET balance = ? WHERE name = ?");
+
+        statement.setString(1, currentBalance.toString());
+        statement.setString(2, player.getDisplayName());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
 }
