@@ -8,6 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+
+
 import java.sql.SQLException;
 
 public class PayCommand implements CommandExecutor {
@@ -40,14 +42,14 @@ public class PayCommand implements CommandExecutor {
                 if (Bukkit.getPlayer(_targetName) != null) {
                     Player target = Bukkit.getPlayer(_targetName);
                     try {
-                        _plugin.databaseLink.getBalanceByName(args[1]);
-                        Double senderBalance = _plugin.databaseLink.getPlayerBalanceByUUID(player);
+                        _plugin.api.databaseLink.getBalanceByName(args[1]);
+                        Double senderBalance = _plugin.api.databaseLink.getPlayerBalanceByUUID(player);
                         if (senderBalance >= amountOfTransaction) {
                             // if the money of the sender is bigger than the amount of sent money
 
                             // Withdraw the amount of transaction to the sender
-                            _plugin.databaseLink.setWithdrawBalanceByUUID(player, amountOfTransaction);
-                            _plugin.databaseLink.setAddBalanceByName(target, amountOfTransaction);
+                            _plugin.api.databaseLink.setWithdrawBalanceByUUID(player, amountOfTransaction);
+                            _plugin.api.databaseLink.setAddBalanceByName(target, amountOfTransaction);
 
                             player.sendMessage("Transaction effectuée.");
                             target.sendMessage(player.getDisplayName() + " vous a envoyé " + amountOfTransaction + " $.");

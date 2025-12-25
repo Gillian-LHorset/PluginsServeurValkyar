@@ -1,0 +1,7 @@
+name: DatabaseCommunicationAPI
+version: '0.0.1'
+main: fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI
+api-version: '1.21'
+load: STARTUP
+authors: [ GG5 ]
+description: DATABASE - This plugin manage the communication to the database.

@@ -1,9 +1,11 @@
 name: ValkyarVaultPlugin
-version: '0.2.1'
+version: '0.2.2'
 main: fr.Valkyar.valkyarVaultPlugin.ValkyarVaultPlugin
 api-version: '1.21'
 authors: [ GG5 ]
 description: Implement a system of vault
+
+depend: [DatabaseCommunicationAPI]
 
 commands:
   pay:

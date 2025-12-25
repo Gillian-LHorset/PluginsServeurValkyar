@@ -1,6 +1,4 @@
-fr\Valkyar\valkyarVaultPlugin\listeners\JoinListener.class
 fr\Valkyar\valkyarVaultPlugin\Commands\BalanceCommand.class
 fr\Valkyar\valkyarVaultPlugin\ValkyarVaultPlugin.class
 fr\Valkyar\valkyarVaultPlugin\Commands\PayCommand.class
-fr\Valkyar\valkyarVaultPlugin\db\Database.class
 fr\Valkyar\valkyarVaultPlugin\TabCompletion\PayTabCompletion.class
