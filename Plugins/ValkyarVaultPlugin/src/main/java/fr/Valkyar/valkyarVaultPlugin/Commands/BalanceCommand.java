@@ -18,7 +18,6 @@ public class BalanceCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        ValkyarVaultPlugin.OutputColoredText(ValkyarVaultPlugin.RED_OUTPUT, "BalanceCommand");
         if (sender instanceof Player player) {
             try {
                 player.sendMessage("Votre compte : " + _plugin.api.databaseLink.getPlayerBalanceByUUID(player));

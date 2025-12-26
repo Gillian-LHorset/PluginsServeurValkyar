@@ -15,6 +15,12 @@ public class Database {
     private String _username = "root";
     private String _password = "root";
 
+    private DatabaseCommunicationAPI _plugin;
+
+    public Database(DatabaseCommunicationAPI plugin) {
+        this._plugin = plugin;
+    }
+
     /** Make a connexion to the db.
      * @return Return a connexion to the db.
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
@@ -46,7 +52,7 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public void firstTimeJoinStatement(Player player) throws SQLException{
-        PreparedStatement statement = getConnection()
+        PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("INSERT INTO t_players (uuid, name, balance) VALUE (?, ?, ?)");
 
         statement.setString(1, player.getUniqueId().toString());
@@ -63,7 +69,7 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public String getUUIDofPlayer(Player player) throws SQLException{
-        PreparedStatement statement =  getConnection()
+        PreparedStatement statement =  _plugin.databaseLink._connection
                 .prepareStatement("SELECT uuid FROM t_players WHERE uuid = ?");
         statement.setString(1, player.getUniqueId().toString());
 
@@ -86,7 +92,7 @@ public class Database {
      */
     public Double getBalanceByName(String player) throws SQLException{
 
-        PreparedStatement statement =  getConnection()
+        PreparedStatement statement =  _plugin.databaseLink._connection
                 .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
         statement.setString(1, player);
 
@@ -108,7 +114,7 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public Double getPlayerBalanceByUUID(Player player) throws SQLException{
-        PreparedStatement statement =  getConnection()
+        PreparedStatement statement =  _plugin.databaseLink._connection
                 .prepareStatement("SELECT balance FROM t_players WHERE uuid = ?");
         statement.setString(1, player.getUniqueId().toString());
 
@@ -132,7 +138,7 @@ public class Database {
         Double currentBalance = getPlayerBalanceByUUID(player);
         currentBalance -= amount;
 
-        PreparedStatement statement = getConnection()
+        PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
         statement.setString(1, currentBalance.toString());
         statement.setString(2, player.getUniqueId().toString());
@@ -150,7 +156,7 @@ public class Database {
         Double currentBalance = getBalanceByName(player.getDisplayName());
         currentBalance += amount;
 
-        PreparedStatement statement = getConnection()
+        PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET balance = ? WHERE name = ?");
 
         statement.setString(1, currentBalance.toString());
@@ -164,7 +170,7 @@ public class Database {
         try {
             List<String> jobsList = new ArrayList<>();
 
-            PreparedStatement statement = getConnection()
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT name FROM t_jobs");
             ResultSet results = statement.executeQuery();
 
@@ -181,7 +187,7 @@ public class Database {
     }
 
     public void setPlayerJob(Player player, String jobsId) throws SQLException{
-        PreparedStatement statement = getConnection()
+        PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET job_fk = ? WHERE uuid = ?");
         statement.setString(1, jobsId);
         statement.setString(2, player.getUniqueId().toString());
@@ -192,7 +198,7 @@ public class Database {
 
     public String getPlayerJob(Player player){
         try {
-            PreparedStatement statement = getConnection()
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT j.name " +
                                             "FROM t_players AS p " +
                                             "LEFT JOIN t_jobs AS j ON p.job_fk = j.job_id " +

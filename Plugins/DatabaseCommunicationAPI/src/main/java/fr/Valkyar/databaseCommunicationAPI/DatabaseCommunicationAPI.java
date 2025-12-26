@@ -27,7 +27,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
 
         // Plugin startup logic
         try {
-            databaseLink = new Database();
+            databaseLink = new Database(this);
             databaseLink.getConnection();
         } catch (SQLException error) {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion");
