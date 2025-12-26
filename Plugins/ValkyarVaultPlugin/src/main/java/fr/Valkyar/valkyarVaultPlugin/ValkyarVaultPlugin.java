@@ -6,9 +6,6 @@ import fr.Valkyar.valkyarVaultPlugin.TabCompletion.PayTabCompletion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
-import fr.Valkyar.databaseCommunicationAPI.db.Database;
-
-import java.sql.SQLException;
 
 public final class ValkyarVaultPlugin extends JavaPlugin {
 

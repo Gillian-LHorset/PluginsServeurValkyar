@@ -28,31 +28,30 @@ public class PayCommand implements CommandExecutor {
         try {
             amountOfTransaction = Double.parseDouble(args[1]);
 
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            amountOfTransaction = null;
         }
 
         if (commandSender instanceof Player player) {
-            if (args.length != 2) {
-                player.sendMessage(ChatColor.RED + "Utilisation de la commande :"+ ChatColor.GREEN +"\n/pay <player> <montant>.");
+            if (args.length != 2 || amountOfTransaction == null) {
+                player.sendMessage(ChatColor.RED + "Utilisation de la commande :"+ ChatColor.YELLOW +"\n/pay <player> <montant>.");
             } else if (amountOfTransaction < 0.01) {
-                player.sendMessage(ChatColor.RED + "Le montant envoyer est incorrecte..");
+                player.sendMessage(ChatColor.RED + "Le montant envoyer est incorrecte.");
             } else {
                 _targetName = args[0];
-                if (Bukkit.getPlayer(_targetName) != null) {
-                    Player target = Bukkit.getPlayer(_targetName);
+                if (Bukkit.getPlayer(_targetName) != null && Bukkit.getPlayer(_targetName).isOnline() && !_targetName.equalsIgnoreCase(player.getName())) {
+                    Player targetPlayer = Bukkit.getPlayer(_targetName);
                     try {
-                        _plugin.api.databaseLink.getBalanceByName(args[1]);
                         Double senderBalance = _plugin.api.databaseLink.getPlayerBalanceByUUID(player);
                         if (senderBalance >= amountOfTransaction) {
                             // if the money of the sender is bigger than the amount of sent money
 
                             // Withdraw the amount of transaction to the sender
                             _plugin.api.databaseLink.setWithdrawBalanceByUUID(player, amountOfTransaction);
-                            _plugin.api.databaseLink.setAddBalanceByName(target, amountOfTransaction);
+                            _plugin.api.databaseLink.setAddBalanceByName(targetPlayer, amountOfTransaction);
 
-                            player.sendMessage("Transaction effectuée.");
-                            target.sendMessage(player.getDisplayName() + " vous a envoyé " + amountOfTransaction + " $.");
+                            player.sendMessage(ChatColor.GREEN + "Transaction effectuée.");
+                            targetPlayer.sendMessage( ChatColor.GREEN + player.getDisplayName() + " vous a envoyé " + amountOfTransaction + " $.");
                         } else {
                             player.sendMessage("Vous n'avez pas l'argent suffisante pour effecter la transaction.\nIl vous manque " + ChatColor.RED + (amountOfTransaction - senderBalance) + ChatColor.WHITE + " $.");
                         }
@@ -60,9 +59,13 @@ public class PayCommand implements CommandExecutor {
                         ValkyarVaultPlugin.OutputColoredText(ValkyarVaultPlugin.RED_OUTPUT, "[ValkyarVaultPlugin] - The player can't be found.");
                         System.out.println(e.getMessage());
                     }
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Le joueur ciblé n'est pas en ligne.");
+                    }
                 }
             }
-        }
+
+
 
 
         return true;

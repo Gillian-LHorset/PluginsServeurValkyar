@@ -18,7 +18,9 @@ public class PayTabCompletion implements TabCompleter {
 
             List<String> players = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                players.add(player.getDisplayName());
+                if (player != commandSender) {
+                    players.add(player.getDisplayName());
+                }
             }
             return players;
         } else if (args.length == 2) {

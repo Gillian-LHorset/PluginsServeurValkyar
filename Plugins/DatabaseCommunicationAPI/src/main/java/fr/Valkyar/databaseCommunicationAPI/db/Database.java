@@ -193,10 +193,10 @@ public class Database {
     public String getPlayerJob(Player player){
         try {
             PreparedStatement statement = getConnection()
-                    .prepareStatement("SELECT j.name " +
-                            "FROM t_players AS p " +
-                            "LEFT JOIN t_jobs AS j ON p.job_fk = j.job_id " +
-                            "WHERE p.uuid = ? ");
+                    .prepareStatement(  "SELECT j.name " +
+                                            "FROM t_players AS p " +
+                                            "LEFT JOIN t_jobs AS j ON p.job_fk = j.job_id " +
+                                            "WHERE p.uuid = ? ");
             statement.setString(1, player.getUniqueId().toString());
 
             ResultSet results = statement.executeQuery();
