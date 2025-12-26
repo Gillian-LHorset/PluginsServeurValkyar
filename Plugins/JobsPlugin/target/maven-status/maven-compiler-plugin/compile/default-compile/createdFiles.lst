@@ -1,1 +1,3 @@
+fr\Valkyar\jobsPlugin\Commands\JobCommand.class
+fr\Valkyar\jobsPlugin\TabCompletion\JobCommandCompletion.class
 fr\Valkyar\jobsPlugin\JobsPlugin.class

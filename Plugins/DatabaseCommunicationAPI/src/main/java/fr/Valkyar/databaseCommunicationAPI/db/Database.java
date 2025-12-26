@@ -1,8 +1,11 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
 import org.bukkit.entity.Player;
+import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private Connection _connection;
@@ -126,7 +129,6 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public void setWithdrawBalanceByUUID(Player player, Double amount) throws SQLException{
-
         Double currentBalance = getPlayerBalanceByUUID(player);
         currentBalance -= amount;
 
@@ -156,5 +158,58 @@ public class Database {
 
         statement.executeUpdate();
         statement.close();
+    }
+
+    public List<String> getAllJobs() {
+        try {
+            List<String> jobsList = new ArrayList<>();
+
+            PreparedStatement statement = getConnection()
+                    .prepareStatement("SELECT name FROM t_jobs");
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                String jobName = results.getString("name");
+                jobsList.add(jobName);
+            }
+
+            return jobsList;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobs()'");
+        }
+        return null;
+    }
+
+    public void setPlayerJob(Player player, String jobsId) throws SQLException{
+        PreparedStatement statement = getConnection()
+                .prepareStatement("UPDATE t_players SET job_fk = ? WHERE uuid = ?");
+        statement.setString(1, jobsId);
+        statement.setString(2, player.getUniqueId().toString());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public String getPlayerJob(Player player){
+        try {
+            PreparedStatement statement = getConnection()
+                    .prepareStatement("SELECT j.name " +
+                            "FROM t_players AS p " +
+                            "LEFT JOIN t_jobs AS j ON p.job_fk = j.job_id " +
+                            "WHERE p.uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getString("name");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJob()'");
+            return null;
+        }
+        return null;
     }
 }

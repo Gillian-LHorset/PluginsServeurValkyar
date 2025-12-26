@@ -1,5 +1,5 @@
 name: DatabaseCommunicationAPI
-version: '0.0.1'
+version: '0.0.2'
 main: fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI
 api-version: '1.21'
 load: STARTUP
