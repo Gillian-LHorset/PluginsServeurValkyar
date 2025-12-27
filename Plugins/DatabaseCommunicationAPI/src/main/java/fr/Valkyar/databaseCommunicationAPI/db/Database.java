@@ -1,5 +1,6 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
@@ -171,7 +172,7 @@ public class Database {
             List<String> jobsList = new ArrayList<>();
 
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT name FROM t_jobs");
+                    .prepareStatement("SELECT name FROM t_jobs ORDER BY job_id");
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
@@ -217,5 +218,67 @@ public class Database {
             return null;
         }
         return null;
+    }
+    public Integer getPlayerJobFk(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT job_fk " +
+                                            "FROM t_players " +
+                                            "WHERE uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("job_id");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJobFk()'");
+            return null;
+        }
+        return null;
+    }
+
+    public List<String> getAllBreakableBlocksByJobs(Player player) {
+        List<String> breakableBlocksList = new ArrayList<>();
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT minecraft_identifid " +
+                                            "FROM t_breakable_blocks AS b " +
+                                            "JOIN t_jobs AS j ON b.job_fk = j.job_id " +
+                                            "JOIN t_players AS p ON p.job_fk = j.job_id " +
+                                            "WHERE p.uuid = ?");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                breakableBlocksList.add(results.getString("minecraft_identifid"));
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getAllBreakableBlocksByJobs()'");
+            return null;
+        }
+
+        return breakableBlocksList;
+    }
+
+    public void setPlayerBalanceJob(Player player, String breakedBlock) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_players AS p " +
+                        "JOIN t_jobs AS j ON p.job_fk = j.job_id " +
+                        "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
+                        "SET p.balance = p.balance + b.money_bringing " +
+                        "WHERE p.uuid = ? " +
+                        "AND b.minecraft_identifid = ?");
+        statement.setString(1, player.getUniqueId().toString());
+        statement.setString(2, breakedBlock);
+
+        statement.executeUpdate();
+        statement.close();
     }
 }

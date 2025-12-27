@@ -30,8 +30,7 @@ public class JobCommand implements CommandExecutor {
                 if (_plugin.databaseApi.databaseLink.getPlayerJob(player) == null) {
 
                     jobs = _plugin.databaseApi.databaseLink.getAllJobs();
-                    _plugin.databaseApi.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[JobsPlugin] : Can't get jobs.");
-
+                    index = 1;
                     for (String job : jobs) {
                         if (args[1].equalsIgnoreCase(job)) {
                             try {
@@ -41,7 +40,6 @@ public class JobCommand implements CommandExecutor {
                                 System.err.println(e.getMessage());
                             }
                             player.sendMessage(ChatColor.BLUE + "Le métier " + job + " vous à été attribué.");
-                            break;
                         }
                         index++;
                     }
