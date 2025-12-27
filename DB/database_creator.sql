@@ -5,6 +5,7 @@ DROP DATABASE IF EXISTS db_valkyar_plugin;
 CREATE DATABASE IF NOT EXISTS db_valkyar_plugin CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE db_valkyar_plugin;
 
+
 CREATE TABLE t_jobs (
     job_id int NOT NULL AUTO_INCREMENT,
     name VARCHAR(21) NOT NULL,
@@ -21,8 +22,23 @@ CREATE TABLE t_players (
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
 );
 
+CREATE TABLE t_breakable_blocks (
+    block_id int NOT NULL AUTO_INCREMENT,
+    minecraft_identifid VARCHAR(51) NOT NULL,
+    money_bringing DOUBLE(5,2),
+    job_fk INT,
+    PRIMARY KEY (block_id),
+    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
+);
+
+
 INSERT INTO t_jobs (name) VALUES ('Mineur');
 INSERT INTO t_jobs (name) VALUES ('Bucheron');
 INSERT INTO t_jobs (name) VALUES ('Paysan');
+
+INSERT INTO t_breakable_blocks  (minecraft_identifid,       money_bringing,     job_fk) 
+                        VALUES  ('stone',                   1.00,                1),
+                                ('oak_log',                 1.00,                2),
+                                ('wheat[age=7]',            1.00,                3);
 
 COMMIT;
