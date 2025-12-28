@@ -1,0 +1,3 @@
+fr\Valkyar\displayingPlugin\DisplayingPlugin.class
+fr\Valkyar\displayingPlugin\Tasks\GetPlayerBalance.class
+fr\Valkyar\displayingPlugin\Listener\LeaveListener.class
