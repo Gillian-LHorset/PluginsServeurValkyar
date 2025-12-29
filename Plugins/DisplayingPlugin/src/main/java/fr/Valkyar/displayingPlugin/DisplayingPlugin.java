@@ -21,10 +21,11 @@ public final class DisplayingPlugin extends JavaPlugin {
 
     public DatabaseCommunicationAPI databaseApi = DatabaseCommunicationAPI.getApi();
 
-    public String moneyIcon = "\uE000";
-    public String mineurIcon = "\uE001";
-    public String bucheronIcon = "\uE002";
-    public String farmerIcon = "\uE003";
+    public String denugIcon = "\uE000";
+    public String moneyIcon = "\uE001";
+    public String mineurIcon = "\uE002";
+    public String bucheronIcon = "\uE003";
+    public String farmerIcon = "\uE004";
 
     public GetPlayerBalance balanceTask;
 
