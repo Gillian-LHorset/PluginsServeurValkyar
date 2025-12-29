@@ -1,6 +1,7 @@
 package fr.Valkyar.displayingPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import fr.Valkyar.displayingPlugin.Listener.JoinListener;
 import fr.Valkyar.displayingPlugin.Listener.LeaveListener;
 import fr.Valkyar.displayingPlugin.Tasks.GetPlayerBalance;
 import org.bukkit.Bukkit;
@@ -25,20 +26,16 @@ public final class DisplayingPlugin extends JavaPlugin {
     public String bucheronIcon = "\uE002";
     public String farmerIcon = "\uE003";
 
-    public String balance = "";
-    public BossBar mainDisplaying = Bukkit.createBossBar(moneyIcon, BarColor.PINK, BarStyle.SOLID);
-
-    public Player player;
-
     public GetPlayerBalance balanceTask;
 
     @Override
     public void onEnable() {
 
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
         balanceTask = new GetPlayerBalance(this);
-        balanceTask.runTaskTimer(this, 0, 100L);
+        balanceTask.runTaskTimer(this, 0, 40L);
 
 
         getConfig().options().copyDefaults();

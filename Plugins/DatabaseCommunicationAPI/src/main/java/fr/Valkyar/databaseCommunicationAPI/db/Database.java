@@ -230,7 +230,7 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-                return results.getInt("job_id");
+                return results.getInt("job_fk");
             }
 
             statement.close();

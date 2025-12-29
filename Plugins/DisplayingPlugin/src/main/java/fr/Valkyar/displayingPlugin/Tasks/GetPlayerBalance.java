@@ -8,6 +8,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class GetPlayerBalance extends BukkitRunnable {
 
     private DisplayingPlugin _plugin;
 
-    private final Map<UUID, BossBar> activeBossBars = new HashMap<>();
+    public final Map<UUID, BossBar> activeBossBars = new HashMap<>();
 
     public GetPlayerBalance(DisplayingPlugin plugin) {
         this._plugin = plugin;
@@ -29,8 +30,8 @@ public class GetPlayerBalance extends BukkitRunnable {
 
     public void removeBar(Player p) {
         if (activeBossBars.containsKey(p.getUniqueId())) {
-            activeBossBars.get(p.getUniqueId()).removeAll(); // Enlève la barre de l'écran
-            activeBossBars.remove(p.getUniqueId()); // Enlève de la mémoire
+            activeBossBars.get(p.getUniqueId()).removeAll();
+            activeBossBars.remove(p.getUniqueId());
         }
     }
 
@@ -42,8 +43,23 @@ public class GetPlayerBalance extends BukkitRunnable {
                     try {
                         String balance = _plugin.databaseApi.databaseLink.getPlayerBalanceByUUID(p).toString();
 
-
                         String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + balance;
+
+                        Integer playerJob = _plugin.databaseApi.databaseLink.getPlayerJobFk(p);
+
+                        if (playerJob != null) {
+                            switch (playerJob) {
+                                case 1:
+                                    title += "   " + _plugin.mineurIcon + ChatColor.RED + " " + "Mineur";
+                                    break;
+                                case 2:
+                                    title += "   " + _plugin.bucheronIcon + ChatColor.RED + " " + "Bucheron";
+                                    break;
+                                case 3:
+                                    title += "   " + _plugin.farmerIcon + ChatColor.RED + " " + "Paysan";
+                                    break;
+                            }
+                        }
 
                         UUID uuid = p.getUniqueId();
 
@@ -51,11 +67,11 @@ public class GetPlayerBalance extends BukkitRunnable {
                             BossBar currentBar = activeBossBars.get(uuid);
                             currentBar.setTitle(title);
                         } else {
-                            BossBar newBar = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
-                            newBar.setProgress(0);
-                            newBar.addPlayer(p);
+                            BossBar hudDisplay = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
+                            hudDisplay.setProgress(0);
+                            hudDisplay.addPlayer(p);
 
-                            activeBossBars.put(uuid, newBar);
+                            activeBossBars.put(uuid, hudDisplay);
                         }
                     } catch (SQLException err) {
                         System.out.println(RED_OUTPUT + "[ScreenDisplayingPlugin] - Error get balance from database." + ANSI_RESET);
