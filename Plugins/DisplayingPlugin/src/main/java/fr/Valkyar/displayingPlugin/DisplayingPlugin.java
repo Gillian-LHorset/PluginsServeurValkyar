@@ -26,6 +26,7 @@ public final class DisplayingPlugin extends JavaPlugin {
     public String mineurIcon = "\uE002";
     public String bucheronIcon = "\uE003";
     public String farmerIcon = "\uE004";
+    public String townIcon = "\uE005";
 
     public GetPlayerBalance balanceTask;
 

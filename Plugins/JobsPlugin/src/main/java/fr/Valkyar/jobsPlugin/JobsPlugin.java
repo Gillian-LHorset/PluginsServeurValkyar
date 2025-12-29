@@ -1,13 +1,10 @@
 package fr.Valkyar.jobsPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
-import fr.Valkyar.databaseCommunicationAPI.listeners.JoinListener;
 import fr.Valkyar.jobsPlugin.Commands.JobCommand;
 import fr.Valkyar.jobsPlugin.Listeners.MainListener;
 import fr.Valkyar.jobsPlugin.TabCompletion.JobCommandCompletion;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.ANSI_RESET;
 
 public final class JobsPlugin extends JavaPlugin {
 

@@ -5,6 +5,8 @@ api-version: '1.21'
 authors: [ GG5 ]
 description: GAMEPLAY - This plugin allow players to choise jobs for make money.
 
+depend: [DatabaseCommunicationAPI]
+
 commands:
   jobs:
     description: Use for get a job.

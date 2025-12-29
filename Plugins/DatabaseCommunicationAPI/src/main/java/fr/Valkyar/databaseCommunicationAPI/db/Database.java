@@ -1,6 +1,5 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
@@ -269,16 +268,124 @@ public class Database {
 
     public void setPlayerBalanceJob(Player player, String breakedBlock) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_players AS p " +
-                        "JOIN t_jobs AS j ON p.job_fk = j.job_id " +
-                        "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
-                        "SET p.balance = p.balance + b.money_bringing " +
-                        "WHERE p.uuid = ? " +
-                        "AND b.minecraft_identifid = ?");
+                .prepareStatement(  "UPDATE t_players AS p " +
+                                        "JOIN t_jobs AS j ON p.job_fk = j.job_id " +
+                                        "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
+                                        "SET p.balance = p.balance + b.money_bringing " +
+                                        "WHERE p.uuid = ? " +
+                                        "AND b.minecraft_identifid = ?");
         statement.setString(1, player.getUniqueId().toString());
         statement.setString(2, breakedBlock);
 
         statement.executeUpdate();
         statement.close();
+    }
+
+    public void setPlayerBalanceDecrease(Player player, Integer amount) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement(  "UPDATE t_players " +
+                                        "SET balance = balance - ? " +
+                                        "WHERE uuid = ? ");
+        statement.setInt(1, amount);
+        statement.setString(2, player.getUniqueId().toString());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void CreateTown(Player player, String name){
+        try {
+            PreparedStatement createTownStatement = _plugin.databaseLink._connection
+                    .prepareStatement(  "INSERT INTO t_town (name, major_player_fk) " +
+                                            "VALUE (?, ?)");
+
+            createTownStatement.setString(1, name);
+            createTownStatement.setInt(2, GetPlayerFk(player));
+
+            createTownStatement.executeUpdate();
+            createTownStatement.close();
+
+            setPlayerTownByName(player, name);
+
+        } catch (Exception err) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'CreateTown()' 'INSERT INTO t_town'");
+            System.out.println(err.getMessage());
+        }
+
+
+    }
+
+    public Integer GetPlayerFk(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT player_id " +
+                            "FROM t_players " +
+                            "WHERE uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("player_id");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'GetPlayerFk()'");
+        }
+        return null;
+    }
+
+    public String GetPlayerTown(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT t.name " +
+                            "FROM t_town AS t " +
+                            "JOIN t_players AS p " +
+                            "ON p.town_fk = t.town_id " +
+                            "WHERE uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getString("t.name");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'GetPlayerTown()'");
+        }
+        return null;
+    }
+
+    public void setPlayerTownByName(Player player, String name) {
+        try {
+            if (name != null) {
+                PreparedStatement statement = _plugin.databaseLink._connection
+                        .prepareStatement("UPDATE t_players AS p " +
+                                "JOIN t_town AS t " +
+                                "ON t.name = ?" +
+                                "SET p.town_fk = t.town_id " +
+                                "WHERE p.uuid = ? ");
+                statement.setString(1, name);
+                statement.setString(2, player.getUniqueId().toString());
+
+                statement.executeUpdate();
+                statement.close();
+            } else {
+                PreparedStatement statement = _plugin.databaseLink._connection
+                        .prepareStatement("UPDATE t_players AS p " +
+                                "SET p.town_fk = ? " +
+                                "WHERE p.uuid = ? ");
+                statement.setString(1, null);
+                statement.setString(2, player.getUniqueId().toString());
+
+                statement.executeUpdate();
+                statement.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

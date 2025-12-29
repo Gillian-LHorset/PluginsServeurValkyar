@@ -47,6 +47,8 @@ public class GetPlayerBalance extends BukkitRunnable {
 
                         Integer playerJob = _plugin.databaseApi.databaseLink.getPlayerJobFk(p);
 
+                        String playerTown = _plugin.databaseApi.databaseLink.GetPlayerTown(p);
+
                         if (playerJob != null) {
                             switch (playerJob) {
                                 case 1:
@@ -59,6 +61,10 @@ public class GetPlayerBalance extends BukkitRunnable {
                                     title += "   " + _plugin.farmerIcon + ChatColor.RED + " " + "Paysan";
                                     break;
                             }
+                        }
+
+                        if (playerTown != null) {
+                            title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown;
                         }
 
                         UUID uuid = p.getUniqueId();

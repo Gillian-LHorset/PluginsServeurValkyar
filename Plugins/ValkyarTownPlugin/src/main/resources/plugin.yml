@@ -4,3 +4,10 @@ main: fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin
 api-version: '1.21'
 authors: [ GG5 ]
 description: TOWN - This plugin add the possibility to create city and join it.
+
+depend: [DatabaseCommunicationAPI]
+
+commands:
+  town:
+    description: Use for manage your town.
+    usage: /<command> <argument> <argument>

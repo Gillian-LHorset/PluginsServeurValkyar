@@ -12,14 +12,25 @@ CREATE TABLE t_jobs (
     PRIMARY KEY (job_id)
 );
 
+
+CREATE TABLE t_town (
+    town_id int NOT NULL AUTO_INCREMENT,
+    name VARCHAR(51) NOT NULL UNIQUE,
+    balance DOUBLE(10,2) DEFAULT 0.0,
+    major_player_fk INT NOT NULL,
+    PRIMARY KEY (town_id)
+);
+
 CREATE TABLE t_players (
     player_id int NOT NULL AUTO_INCREMENT,
     uuid VARCHAR(36) NOT NULL,
     name VARCHAR(16) NOT NULL,
-    balance DOUBLE(10,2),
+    balance DOUBLE(10,2) DEFAULT 0.0,
     job_fk INT,
+    town_fk INT,
     PRIMARY KEY (player_id),
-    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
+    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id),
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id)
 );
 
 CREATE TABLE t_breakable_blocks (
@@ -31,6 +42,8 @@ CREATE TABLE t_breakable_blocks (
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
 );
 
+ALTER TABLE t_town
+ADD FOREIGN KEY (major_player_fk) REFERENCES t_players(player_id);
 
 INSERT INTO t_jobs (name) VALUES ('Mineur');
 INSERT INTO t_jobs (name) VALUES ('Bucheron');
