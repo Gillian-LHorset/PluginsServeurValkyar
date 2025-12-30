@@ -12,6 +12,7 @@ import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -35,15 +36,19 @@ public class GetPlayerBalance extends BukkitRunnable {
         }
     }
 
+    private DecimalFormat _df = new DecimalFormat("#,###.##");
     @Override
     public void run() {
+        //TODO : séparer le code en méthodes
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p != null && p.isOnline()) {
                     try {
-                        String balance = _plugin.databaseApi.databaseLink.getPlayerBalanceByUUID(p).toString();
+                        Double balance = _plugin.databaseApi.databaseLink.getPlayerBalanceByUUID(p);
 
-                        String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + balance;
+                        String formattedBalance = _df.format(balance);
+
+                        String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
                         Integer playerJob = _plugin.databaseApi.databaseLink.getPlayerJobFk(p);
 

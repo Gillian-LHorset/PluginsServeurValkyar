@@ -5,29 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/DatabaseCommunicationAPI_0_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/valkyartownplugin.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../DB/database_creator.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../DB/database_creator.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/JobsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/JobsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../JobsPlugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../JobsPlugin/target/JobsPlugin-0.1.0-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/target/JobsPlugin-0.1.0-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../JobsPlugin/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../JobsPlugin/target/original-JobsPlugin-0.1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/target/original-JobsPlugin-0.1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/src/main/java/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/src/main/java/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/DisplayingPlugin-0.0.1-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/DisplayingPlugin-0.0.1-shaded.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/classes/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/classes/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/original-DisplayingPlugin-0.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/original-DisplayingPlugin-0.0.1.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-valkyartownplugin-0.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-valkyartownplugin-0.0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/valkyartownplugin-0.0.1-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/valkyartownplugin-0.0.1-shaded.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,9 +34,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="37VzOaRbjOHtBIbKMLU29xJOcuz" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -56,26 +46,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.valkyartownplugin [package].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.valkyartownplugin [package].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -92,6 +82,8 @@
       <option name="presentableId" value="Default" />
       <updated>1767002995181</updated>
       <workItem from="1767002996114" duration="4399000" />
+      <workItem from="1767024059294" duration="5310000" />
+      <workItem from="1767093367783" duration="3668000" />
     </task>
     <servers />
   </component>

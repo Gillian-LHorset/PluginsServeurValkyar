@@ -388,4 +388,104 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public Integer getNumberOfPlayersInTown(String townName){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT COUNT(p.uuid) " +
+                            "FROM t_town AS t " +
+                            "JOIN t_players AS p " +
+                            "ON p.town_fk = t.town_id " +
+                            "WHERE t.name = ? ");
+            statement.setString(1, townName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("COUNT(p.uuid)");
+            }
+
+            statement.close();
+        } catch (SQLException err) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getNumberOfPlayersInTown()'");
+        }
+        return null;
+    }
+
+    public void deleteTownByName(String townName){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("DELETE FROM t_town " +
+                            "WHERE name = ? ");
+            statement.setString(1, townName);
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception err) {
+
+        }
+    }
+
+    public Integer getTownMajorNameByName (String townName){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT major_player_fk " +
+                            "FROM t_town " +
+                            "WHERE name = ?");
+            statement.setString(1, townName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("major_player_fk");
+            }
+
+            statement.close();
+        } catch (Exception err) {
+
+        }
+        return null;
+    }
+
+    public List<String> getAllPlayerOfTownByName (String townName){
+        List<String> allPlayers = new ArrayList<>();
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT p.name " +
+                            "FROM t_town AS t " +
+                            "JOIN t_players AS p " +
+                            "ON t.town_id = p.town_fk " +
+                            "WHERE t.name = ? " +
+                            "ORDER BY p.name");
+            statement.setString(1, townName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                allPlayers.add(results.getString("p.name"));
+            }
+
+            statement.close();
+        } catch (Exception err) {
+
+        }
+        return allPlayers;
+    }
+
+    public void setNewMajorPlayerName(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_town AS t " +
+                            "JOIN t_players AS p " +
+                            "ON t.town_id = p.town_fk " +
+                            "SET t.major_player_fk = p.player_id " +
+                            "WHERE p.uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception err) {
+
+        }
+    }
 }
