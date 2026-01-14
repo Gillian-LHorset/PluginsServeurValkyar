@@ -29,7 +29,7 @@ CREATE TABLE t_players (
     town_fk INT,
     PRIMARY KEY (player_id),
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id),
-    FOREIGN KEY (town_fk) REFERENCES t_town(town_id)
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
 );
 
 CREATE TABLE t_breakable_blocks (
