@@ -17,7 +17,6 @@ CREATE TABLE t_town (
     town_id int NOT NULL AUTO_INCREMENT,
     name VARCHAR(51) NOT NULL UNIQUE,
     balance DOUBLE(10,2) DEFAULT 0.0,
-    major_player_fk INT NOT NULL,
     PRIMARY KEY (town_id)
 );
 
@@ -35,21 +34,27 @@ CREATE TABLE t_players (
 
 CREATE TABLE t_breakable_blocks (
     block_id int NOT NULL AUTO_INCREMENT,
-    minecraft_identifid VARCHAR(51) NOT NULL,
+    minecraft_identifier VARCHAR(51) NOT NULL,
     money_bringing DOUBLE(5,2),
     job_fk INT,
     PRIMARY KEY (block_id),
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
 );
 
-ALTER TABLE t_town
-ADD FOREIGN KEY (major_player_fk) REFERENCES t_players(player_id);
+CREATE TABLE t_chunk_town (
+    chunk_id int NOT NULL AUTO_INCREMENT,
+    chunk_identifier_x INT NOT NULL,
+    chunk_identifier_z INT NOT NULL,
+    town_fk INT NOT NULL,
+    PRIMARY KEY (chunk_id),
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id)
+);
 
 INSERT INTO t_jobs (name) VALUES ('Mineur');
 INSERT INTO t_jobs (name) VALUES ('Bucheron');
 INSERT INTO t_jobs (name) VALUES ('Paysan');
 
-INSERT INTO t_breakable_blocks  (minecraft_identifid,       money_bringing,     job_fk) 
+INSERT INTO t_breakable_blocks  (minecraft_identifier,       money_bringing,     job_fk) 
                         VALUES  ('stone',                   1.00,                1),
                                 ('oak_log',                 1.00,                2),
                                 ('wheat[age=7]',            1.00,                3);
