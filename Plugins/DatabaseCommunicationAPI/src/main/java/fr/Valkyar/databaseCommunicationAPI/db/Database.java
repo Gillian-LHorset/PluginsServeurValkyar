@@ -244,7 +244,7 @@ public class Database {
         List<String> breakableBlocksList = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT minecraft_identifid " +
+                    .prepareStatement(  "SELECT minecraft_identifier " +
                                             "FROM t_breakable_blocks AS b " +
                                             "JOIN t_jobs AS j ON b.job_fk = j.job_id " +
                                             "JOIN t_players AS p ON p.job_fk = j.job_id " +
@@ -273,7 +273,7 @@ public class Database {
                                         "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
                                         "SET p.balance = p.balance + b.money_bringing " +
                                         "WHERE p.uuid = ? " +
-                                        "AND b.minecraft_identifid = ?");
+                                        "AND b.minecraft_identifier = ?");
         statement.setString(1, player.getUniqueId().toString());
         statement.setString(2, breakedBlock);
 
@@ -296,11 +296,10 @@ public class Database {
     public void CreateTown(Player player, String name){
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
-                    .prepareStatement(  "INSERT INTO t_town (name, major_player_fk) " +
-                                            "VALUE (?, ?)");
+                    .prepareStatement(  "INSERT INTO t_town (name) " +
+                                            "VALUE (?)");
 
             createTownStatement.setString(1, name);
-            createTownStatement.setInt(2, GetPlayerFk(player));
 
             createTownStatement.executeUpdate();
             createTownStatement.close();
@@ -426,27 +425,6 @@ public class Database {
         }
     }
 
-    public Integer getTownMajorNameByName (String townName){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT major_player_fk " +
-                            "FROM t_town " +
-                            "WHERE name = ?");
-            statement.setString(1, townName);
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("major_player_fk");
-            }
-
-            statement.close();
-        } catch (Exception err) {
-
-        }
-        return null;
-    }
-
     public List<String> getAllPlayerOfTownByName (String townName){
         List<String> allPlayers = new ArrayList<>();
         try {
@@ -470,22 +448,5 @@ public class Database {
 
         }
         return allPlayers;
-    }
-
-    public void setNewMajorPlayerName(Player player){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("UPDATE t_town AS t " +
-                            "JOIN t_players AS p " +
-                            "ON t.town_id = p.town_fk " +
-                            "SET t.major_player_fk = p.player_id " +
-                            "WHERE p.uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
-
-            statement.executeUpdate();
-            statement.close();
-        } catch (Exception err) {
-
-        }
     }
 }

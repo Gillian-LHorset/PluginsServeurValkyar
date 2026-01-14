@@ -1,8 +1,8 @@
 package fr.Valkyar.valkyarTownPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
-import fr.Valkyar.valkyarTownPlugin.CommandCompletion.CreateTownCommandCompletion;
-import fr.Valkyar.valkyarTownPlugin.Commands.CreateTownCommand;
+import fr.Valkyar.valkyarTownPlugin.CommandCompletion.TownCommandCompletion;
+import fr.Valkyar.valkyarTownPlugin.Commands.TownCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ValkyarTownPlugin extends JavaPlugin {
@@ -13,10 +13,10 @@ public final class ValkyarTownPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         // Register Commands
-        getCommand("town").setExecutor(new CreateTownCommand(this));
+        getCommand("town").setExecutor(new TownCommand(this));
 
         // Register tab completion
-        getCommand("town").setTabCompleter(new CreateTownCommandCompletion());
+        getCommand("town").setTabCompleter(new TownCommandCompletion());
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

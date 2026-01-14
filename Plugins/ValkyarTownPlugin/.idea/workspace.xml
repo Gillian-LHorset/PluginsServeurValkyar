@@ -9,13 +9,13 @@
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/src/main/java/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/src/main/java/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/DisplayingPlugin-0.0.1-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/DisplayingPlugin-0.0.1-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/classes/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/classes/fr/Valkyar/displayingPlugin/Tasks/GetPlayerBalance.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DisplayingPlugin/target/original-DisplayingPlugin-0.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DisplayingPlugin/target/original-DisplayingPlugin-0.0.1.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/CommandCompletion/CreateTownCommandCompletion.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-valkyartownplugin-0.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-valkyartownplugin-0.0.1.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/valkyartownplugin-0.0.1-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/valkyartownplugin-0.0.1-shaded.jar" afterDir="false" />
     </list>
@@ -83,7 +83,9 @@
       <updated>1767002995181</updated>
       <workItem from="1767002996114" duration="4399000" />
       <workItem from="1767024059294" duration="5310000" />
-      <workItem from="1767093367783" duration="3668000" />
+      <workItem from="1767093367783" duration="5614000" />
+      <workItem from="1768161684096" duration="70000" />
+      <workItem from="1768411252552" duration="8743000" />
     </task>
     <servers />
   </component>
