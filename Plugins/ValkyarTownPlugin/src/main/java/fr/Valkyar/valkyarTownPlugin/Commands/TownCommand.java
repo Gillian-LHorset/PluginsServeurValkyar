@@ -27,6 +27,9 @@ public class TownCommand implements CommandExecutor {
                 case "claim":
                     new ClaimTownCommand(_plugin, player, command, s, args);
                     break;
+                case "balance":
+                    new TownBalanceCommand(_plugin, player, args);
+                    break;
                 default:
                     sender.sendMessage("erreur");
                     break;

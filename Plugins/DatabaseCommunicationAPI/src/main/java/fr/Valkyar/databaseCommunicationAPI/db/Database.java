@@ -534,5 +534,15 @@ public class Database {
         return null;
     }
 
+    public void setTownBalanceDecreaseByName(String townName, Integer amount) throws SQLException {
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement(  "UPDATE t_town " +
+                        "SET balance = balance - ? " +
+                        "WHERE name = ? ");
+        statement.setInt(1, amount);
+        statement.setString(2, townName);
 
+        statement.executeUpdate();
+        statement.close();
+    }
 }

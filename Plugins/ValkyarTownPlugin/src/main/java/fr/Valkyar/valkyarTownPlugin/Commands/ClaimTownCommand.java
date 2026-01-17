@@ -34,6 +34,7 @@ public class ClaimTownCommand {
                         int[] claimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
                         if (db.getChunkById(claimedChunk) == null) {
                             db.registerChunk(claimedChunk, _playerTown);
+                            db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
                             p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
                         } else {
                             p.sendMessage(ChatColor.RED + "Ce chunk est déjà claim.");

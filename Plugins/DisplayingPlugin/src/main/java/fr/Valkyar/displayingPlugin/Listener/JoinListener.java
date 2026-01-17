@@ -1,7 +1,6 @@
 package fr.Valkyar.displayingPlugin.Listener;
 
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
-import fr.Valkyar.displayingPlugin.Tasks.GetPlayerBalance;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;

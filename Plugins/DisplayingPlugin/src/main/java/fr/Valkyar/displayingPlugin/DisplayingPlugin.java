@@ -3,14 +3,8 @@ package fr.Valkyar.displayingPlugin;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.displayingPlugin.Listener.JoinListener;
 import fr.Valkyar.displayingPlugin.Listener.LeaveListener;
-import fr.Valkyar.displayingPlugin.Tasks.GetPlayerBalance;
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Player;
+import fr.Valkyar.displayingPlugin.Tasks.DisplayTask;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public final class DisplayingPlugin extends JavaPlugin {
 
@@ -28,7 +22,7 @@ public final class DisplayingPlugin extends JavaPlugin {
     public String farmerIcon = "\uE004";
     public String townIcon = "\uE005";
 
-    public GetPlayerBalance balanceTask;
+    public DisplayTask balanceTask;
 
     @Override
     public void onEnable() {
@@ -36,7 +30,7 @@ public final class DisplayingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
-        balanceTask = new GetPlayerBalance(this);
+        balanceTask = new DisplayTask(this);
         balanceTask.runTaskTimer(this, 0, 40L);
 
 

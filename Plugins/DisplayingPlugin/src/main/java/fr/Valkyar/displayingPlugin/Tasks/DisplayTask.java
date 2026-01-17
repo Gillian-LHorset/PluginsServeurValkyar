@@ -1,14 +1,13 @@
 package fr.Valkyar.displayingPlugin.Tasks;
 
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
@@ -17,13 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class GetPlayerBalance extends BukkitRunnable {
+public class DisplayTask extends BukkitRunnable {
 
     private DisplayingPlugin _plugin;
+    private Database db;
 
     public final Map<UUID, BossBar> activeBossBars = new HashMap<>();
 
-    public GetPlayerBalance(DisplayingPlugin plugin) {
+    public DisplayTask(DisplayingPlugin plugin) {
         this._plugin = plugin;
     }
     public static final String ANSI_RESET = "\u001B[0m";
@@ -36,23 +36,28 @@ public class GetPlayerBalance extends BukkitRunnable {
         }
     }
 
+
+
     private DecimalFormat _df = new DecimalFormat("#,###.##");
     @Override
     public void run() {
         //TODO : séparer le code en méthodes
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
+            db = _plugin.databaseApi.databaseLink;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p != null && p.isOnline()) {
                     try {
-                        Double balance = _plugin.databaseApi.databaseLink.getPlayerBalanceByUUID(p);
+                        String playerTown = db.getPlayerTown(p);
+
+                        Double balance = db.getPlayerBalanceByUUID(p);
+                        Double townBalance = db.getBalanceTownByName(playerTown);
 
                         String formattedBalance = _df.format(balance);
 
                         String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
-                        Integer playerJob = _plugin.databaseApi.databaseLink.getPlayerJobFk(p);
+                        Integer playerJob = db.getPlayerJobFk(p);
 
-                        String playerTown = _plugin.databaseApi.databaseLink.getPlayerTown(p);
 
                         if (playerJob != null) {
                             switch (playerJob) {
@@ -70,6 +75,7 @@ public class GetPlayerBalance extends BukkitRunnable {
 
                         if (playerTown != null) {
                             title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown;
+                            title += "   " + _plugin.townIcon + ChatColor.YELLOW + " " + townBalance;
                         }
 
                         UUID uuid = p.getUniqueId();
