@@ -560,4 +560,51 @@ public class Database {
         statement.executeUpdate();
         statement.close();
     }
+
+    public Integer[][] getAllChunkOfTown(String townName) throws SQLException{
+
+        Integer[][] allChunks = new Integer[2][];
+        int i = 0;
+
+        PreparedStatement statement =  _plugin.databaseLink._connection
+                .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z " +
+                        "FROM t_chunk_town " +
+                        "WHERE town_fk = ? ");
+        statement.setInt(1, getTownFk(townName));
+
+        ResultSet results = statement.executeQuery();
+
+        while (results.next()) {
+            allChunks[0][i] = results.getInt("chunk_identifier_x");
+            allChunks[1][i] = results.getInt("chunk_identifier_z");
+
+            i++;
+        }
+
+        return allChunks;
+    }
+
+    public boolean isChunkFromTown(String townName, int[] chunk) {
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("SELECT * " +
+                            "FROM t_chunk_town " +
+                            "WHERE town_fk = ? " +
+                            "AND chunk_identifier_x = ? " +
+                            "AND chunk_identifier_z = ?");
+            statement.setInt(1, getTownFk(townName));
+            statement.setInt(2, chunk[0]);
+            statement.setInt(3, chunk[1]);
+
+            ResultSet results = statement.executeQuery();
+
+            return (results.next());
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

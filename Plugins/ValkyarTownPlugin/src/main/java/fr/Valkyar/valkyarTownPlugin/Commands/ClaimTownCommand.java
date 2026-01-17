@@ -42,7 +42,6 @@ public class ClaimTownCommand {
                     } else {
                         p.sendMessage(ChatColor.RED + "Vous n'avez pas l'argent suiffisante pour claim ce chunk.");
                     }
-
                 } catch (SQLException e) {
                     p.sendMessage(ChatColor.RED + "Une erreur s'est produite.");
                     throw new RuntimeException(e);

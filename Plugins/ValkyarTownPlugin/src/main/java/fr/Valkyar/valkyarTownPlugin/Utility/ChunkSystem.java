@@ -8,4 +8,10 @@ public class ChunkSystem {
 
         return new int[]{x ,z};
     }
+    public static int[] getChunkId2(Integer[] positions) {
+        positions[0] = Math.floorDiv(positions[0], 16) + 1;
+        positions[1] = Math.floorDiv(positions[1], 16) + 1;
+
+        return new int[]{positions[0] ,positions[1]};
+    }
 }

@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 public class TownCommand implements CommandExecutor {
 
     private ValkyarTownPlugin _plugin;
+
     public TownCommand(ValkyarTownPlugin  plugin) {
         _plugin = plugin;
     }
