@@ -1,6 +1,7 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
+import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +30,7 @@ public class CreateTownCommand {
 
                     db.setPlayerBalanceDecrease(player, createTownPrice);
                     db.CreateTown(player, args[1]);
+                    db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
                     Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Félicitation à " + player.getName() + " qui viens de créer la ville de "+args[1] + " !");
 
                 } else if (args.length == 1 && args[0].equalsIgnoreCase("leave") && playerTown != null) {

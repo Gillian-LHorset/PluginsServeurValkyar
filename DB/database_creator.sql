@@ -47,7 +47,7 @@ CREATE TABLE t_chunk_town (
     chunk_identifier_z INT NOT NULL,
     town_fk INT NOT NULL,
     PRIMARY KEY (chunk_id),
-    FOREIGN KEY (town_fk) REFERENCES t_town(town_id)
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
 );
 
 INSERT INTO t_jobs (name) VALUES ('Mineur');

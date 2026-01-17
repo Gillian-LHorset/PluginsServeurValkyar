@@ -24,7 +24,7 @@ public class DisbandTownCommand{
                 if (args.length == 1 && args[0].equalsIgnoreCase("disband") && playerTown != null) {
 
                     db.deleteTownByName(playerTown);
-                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " vient d'être dissous !");
+                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " vient d'être dissoute !");
                 } else {
                     player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
                     player.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument> <argument");

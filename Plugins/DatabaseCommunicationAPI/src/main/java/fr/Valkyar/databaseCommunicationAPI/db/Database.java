@@ -411,10 +411,25 @@ public class Database {
 
     public void deleteTownByName(String townName){
         try {
+            deleteChunksByTownName(townName);
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_town " +
                                             "WHERE name = ? ");
             statement.setString(1, townName);
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception err) {
+
+        }
+    }
+
+    public void deleteChunksByTownName(String townName){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "DELETE FROM t_chunk_town " +
+                                            "WHERE town_fk = ? ");
+            statement.setInt(1, getTownFk(townName));
 
             statement.executeUpdate();
             statement.close();
