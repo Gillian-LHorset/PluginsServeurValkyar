@@ -281,12 +281,12 @@ public class Database {
         statement.close();
     }
 
-    public void setPlayerBalanceDecrease(Player player, Integer amount) throws SQLException{
+    public void setPlayerBalanceDecrease(Player player, Double amount) throws SQLException {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement(  "UPDATE t_players " +
                                         "SET balance = balance - ? " +
                                         "WHERE uuid = ? ");
-        statement.setInt(1, amount);
+        statement.setDouble(1, amount);
         statement.setString(2, player.getUniqueId().toString());
 
         statement.executeUpdate();
@@ -411,7 +411,7 @@ public class Database {
 
     public void deleteTownByName(String townName){
         try {
-            deleteChunksByTownName(townName);
+            deleteAllChunksByTownName(townName);
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_town " +
                                             "WHERE name = ? ");
@@ -424,7 +424,7 @@ public class Database {
         }
     }
 
-    public void deleteChunksByTownName(String townName){
+    public void deleteAllChunksByTownName(String townName){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_chunk_town " +
@@ -549,12 +549,12 @@ public class Database {
         return null;
     }
 
-    public void setTownBalanceDecreaseByName(String townName, Integer amount) throws SQLException {
+    public void setTownBalanceDecreaseByName(String townName, Double amount) throws SQLException {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement(  "UPDATE t_town " +
                         "SET balance = balance - ? " +
                         "WHERE name = ? ");
-        statement.setInt(1, amount);
+        statement.setDouble(1, amount);
         statement.setString(2, townName);
 
         statement.executeUpdate();
@@ -606,5 +606,58 @@ public class Database {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void deleteOneChunksById(String townName, int[] chunk){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "DELETE FROM t_chunk_town " +
+                            "WHERE town_fk = ? " +
+                            "AND chunk_identifier_x = ? " +
+                            "AND chunk_identifier_z = ?");
+            statement.setInt(1, getTownFk(townName));
+            statement.setInt(2, chunk[0]);
+            statement.setInt(3, chunk[1]);
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception err) {
+
+        }
+    }
+
+    /** Withdraw money from the player for increase money of a town.
+     * @param townName Name of the town who receive money.
+     * @param amount Amount of the transaction.
+     * @param p The player who send money.
+     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
+     */
+    public void setWithdrawBalanceToTown(String townName, Double amount, Player p) throws SQLException{
+        Double currentBalance = getBalanceTownByName(townName);
+        currentBalance += amount;
+
+        setPlayerBalanceDecrease(p, amount);
+
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_town SET balance = ? WHERE name = ?");
+        statement.setDouble(1, currentBalance);
+        statement.setString(2, townName);
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void set(Player player, Double amount) throws SQLException{
+        Double currentBalance = getBalancePlayerByName(player.getDisplayName());
+        currentBalance += amount;
+
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_players SET balance = ? WHERE name = ?");
+
+        statement.setString(1, currentBalance.toString());
+        statement.setString(2, player.getDisplayName());
+
+        statement.executeUpdate();
+        statement.close();
     }
 }

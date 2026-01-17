@@ -17,7 +17,7 @@ public class ClaimTownCommand {
 
     private String _playerTown;
 
-    private Integer claimPrice = 1;
+    private Double claimPrice = 1.00;
     private Double _townBalance;
 
     public ClaimTownCommand(ValkyarTownPlugin plugin, Player p, Command command, String s, String[] args) {

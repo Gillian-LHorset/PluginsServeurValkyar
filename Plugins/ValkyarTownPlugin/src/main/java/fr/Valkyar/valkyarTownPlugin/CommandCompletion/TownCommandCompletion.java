@@ -22,6 +22,9 @@ public class TownCommandCompletion implements TabCompleter {
             list.add("disband");
             list.add("claim");
             list.add("balance");
+            list.add("unclaim");
+            list.add("deposit");
+            list.add("withdraw");
             return list;
         }
 

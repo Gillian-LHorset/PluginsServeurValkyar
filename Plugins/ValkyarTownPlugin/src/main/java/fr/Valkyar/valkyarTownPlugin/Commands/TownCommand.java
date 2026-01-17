@@ -2,6 +2,7 @@ package fr.Valkyar.valkyarTownPlugin.Commands;
 
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,11 +30,20 @@ public class TownCommand implements CommandExecutor {
                 case "claim":
                     new ClaimTownCommand(_plugin, player, command, s, args);
                     break;
+                case "unclaim":
+                    new UnclaimTownCommand(_plugin, player, args);
+                    break;
                 case "balance":
                     new TownBalanceCommand(_plugin, player, args);
                     break;
+                case "deposit":
+                    new TownDepositCommand(_plugin, player, args);
+                    break;
+                case "withdraw":
+                    new TownWithdrawCommand(_plugin, player, args);
+                    break;
                 default:
-                    sender.sendMessage("erreur");
+                    sender.sendMessage(ChatColor.RED + "Erreur de syntaxe.");
                     break;
             }
         }

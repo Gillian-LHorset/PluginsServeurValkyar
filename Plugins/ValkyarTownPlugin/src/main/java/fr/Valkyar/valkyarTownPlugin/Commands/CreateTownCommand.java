@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class CreateTownCommand {
 
-    private final int createTownPrice = 1;
+    private final Double createTownPrice = 1.00;
 
     private ValkyarTownPlugin _plugin;
     private Database db;
