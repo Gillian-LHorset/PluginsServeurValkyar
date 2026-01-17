@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.java" afterDir="false" />
-    </list>
+    <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,7 +72,7 @@
       <workItem from="1767093367783" duration="5614000" />
       <workItem from="1768161684096" duration="70000" />
       <workItem from="1768411252552" duration="8930000" />
-      <workItem from="1768582187191" duration="1210000" />
+      <workItem from="1768582187191" duration="24136000" />
     </task>
     <servers />
   </component>

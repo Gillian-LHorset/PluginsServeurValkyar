@@ -26,7 +26,7 @@ CREATE TABLE t_players (
     name VARCHAR(16) NOT NULL,
     balance DOUBLE(10,2) DEFAULT 0.0,
     job_fk INT,
-    town_fk INT,
+    town_fk INT NULL,
     PRIMARY KEY (player_id),
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id),
     FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
