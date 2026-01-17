@@ -90,7 +90,7 @@ public class Database {
      * @return In the case the player isn't be found, return null else return his balance
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
-    public Double getBalanceByName(String player) throws SQLException{
+    public Double getBalancePlayerByName(String player) throws SQLException{
 
         PreparedStatement statement =  _plugin.databaseLink._connection
                 .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
@@ -153,7 +153,7 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public void setAddBalanceByName(Player player, Double amount) throws SQLException{
-        Double currentBalance = getBalanceByName(player.getDisplayName());
+        Double currentBalance = getBalancePlayerByName(player.getDisplayName());
         currentBalance += amount;
 
         PreparedStatement statement = _plugin.databaseLink._connection
@@ -310,11 +310,9 @@ public class Database {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'CreateTown()' 'INSERT INTO t_town'");
             System.out.println(err.getMessage());
         }
-
-
     }
 
-    public Integer GetPlayerFk(Player player){
+    public Integer getPlayerFk(Player player){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT player_id " +
@@ -335,7 +333,7 @@ public class Database {
         return null;
     }
 
-    public String GetPlayerTown(Player player){
+    public String getPlayerTown(Player player){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT t.name " +
@@ -414,8 +412,8 @@ public class Database {
     public void deleteTownByName(String townName){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("DELETE FROM t_town " +
-                            "WHERE name = ? ");
+                    .prepareStatement(  "DELETE FROM t_town " +
+                                            "WHERE name = ? ");
             statement.setString(1, townName);
 
             statement.executeUpdate();
@@ -430,11 +428,11 @@ public class Database {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT p.name " +
-                            "FROM t_town AS t " +
-                            "JOIN t_players AS p " +
-                            "ON t.town_id = p.town_fk " +
-                            "WHERE t.name = ? " +
-                            "ORDER BY p.name");
+                                            "FROM t_town AS t " +
+                                            "JOIN t_players AS p " +
+                                            "ON t.town_id = p.town_fk " +
+                                            "WHERE t.name = ? " +
+                                            "ORDER BY p.name");
             statement.setString(1, townName);
 
             ResultSet results = statement.executeQuery();
@@ -449,4 +447,92 @@ public class Database {
         }
         return allPlayers;
     }
+
+    public void registerChunk(int[] chunks, String townName){
+        try {
+            PreparedStatement createTownStatement = _plugin.databaseLink._connection
+                    .prepareStatement(  "INSERT INTO t_chunk_town   (chunk_identifier_x, chunk_identifier_z, town_fk) " +
+                                            "VALUE                      (?, ?, ?)");
+
+            createTownStatement.setInt(1, chunks[0]);
+            createTownStatement.setInt(2, chunks[1]);
+            createTownStatement.setInt(3, getTownFk(townName));
+
+            createTownStatement.executeUpdate();
+            createTownStatement.close();
+        } catch (Exception err) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'registerChunk()'");
+            System.out.println(err.getMessage());
+        }
+    }
+
+    public Integer getTownFk(String townName){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT town_id " +
+                            "FROM t_town " +
+                            "WHERE name = ? ");
+
+            statement.setString(1, townName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("town_id");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getTownFk()'");
+        }
+        return null;
+    }
+
+    public Double getBalanceTownByName(String townName) throws SQLException{
+
+        PreparedStatement statement =  _plugin.databaseLink._connection
+                .prepareStatement("SELECT balance FROM t_town WHERE name = ?");
+        statement.setString(1, townName);
+
+        ResultSet results = statement.executeQuery();
+
+        if (results.next()) {
+            return results.getDouble("balance");
+        }
+
+
+        statement.close();
+
+        return null;
+    }
+
+    public Integer[] getChunkById(int[] giveId) throws SQLException{
+
+        Integer[] chunkProrities = new Integer[3];
+
+        PreparedStatement statement =  _plugin.databaseLink._connection
+                .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z, town_fk " +
+                        "FROM t_chunk_town " +
+                        "WHERE chunk_identifier_x = ? " +
+                        "AND chunk_identifier_z = ?");
+        statement.setString(1, String.valueOf(giveId[0]));
+        statement.setString(2, String.valueOf(giveId[1]));
+
+        ResultSet results = statement.executeQuery();
+
+        if (results.next()) {
+            chunkProrities[0] = results.getInt("chunk_identifier_x");
+            chunkProrities[1] = results.getInt("chunk_identifier_z");
+            chunkProrities[2] = results.getInt("town_fk");
+
+            return chunkProrities;
+        }
+
+
+        statement.close();
+
+        return null;
+    }
+
+
 }

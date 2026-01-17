@@ -5,7 +5,6 @@ import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -13,7 +12,7 @@ import java.sql.SQLException;
 
 public class CreateTownCommand {
 
-    private final int createTownPrice = 10000;
+    private final int createTownPrice = 1;
 
     private ValkyarTownPlugin _plugin;
     private Database db;
@@ -25,7 +24,7 @@ public class CreateTownCommand {
         if (sender instanceof Player player) {
             try {
                 Double playerBalance = db.getPlayerBalanceByUUID(player);
-                String playerTown = db.GetPlayerTown(player);
+                String playerTown = db.getPlayerTown(player);
                 if (args.length == 2 && args[0].equalsIgnoreCase("create") && playerBalance >= createTownPrice) {
 
                     db.setPlayerBalanceDecrease(player, createTownPrice);
@@ -50,8 +49,7 @@ public class CreateTownCommand {
                     player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
                     player.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument> <argument");
                 }
-
-            }catch (SQLException err) {
+            } catch (SQLException err) {
                 System.out.println("[ValkyarTownPlugin] - Erreur de connexion");
                 System.out.println(err.getMessage());
             }

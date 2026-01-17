@@ -4,6 +4,7 @@ import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class TownCommand implements CommandExecutor {
 
@@ -14,17 +15,22 @@ public class TownCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-
-        switch (args[0].toLowerCase()) {
-            case "create": case "leave":
-                new CreateTownCommand(_plugin, sender, command, s, args);
-                break;
-            case "disband":
-                new DisbandTownCommand(_plugin, sender, command, s, args);
-                break;
-            default:
-                sender.sendMessage("erreur");
-                break;
+        if (sender instanceof Player player) {
+            switch (args[0].toLowerCase()) {
+                case "create":
+                case "leave":
+                    new CreateTownCommand(_plugin, player, command, s, args);
+                    break;
+                case "disband":
+                    new DisbandTownCommand(_plugin, player, command, s, args);
+                    break;
+                case "claim":
+                    new ClaimTownCommand(_plugin, player, command, s, args);
+                    break;
+                default:
+                    sender.sendMessage("erreur");
+                    break;
+            }
         }
         return true;
     }

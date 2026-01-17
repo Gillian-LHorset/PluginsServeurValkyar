@@ -52,7 +52,7 @@ public class GetPlayerBalance extends BukkitRunnable {
 
                         Integer playerJob = _plugin.databaseApi.databaseLink.getPlayerJobFk(p);
 
-                        String playerTown = _plugin.databaseApi.databaseLink.GetPlayerTown(p);
+                        String playerTown = _plugin.databaseApi.databaseLink.getPlayerTown(p);
 
                         if (playerJob != null) {
                             switch (playerJob) {

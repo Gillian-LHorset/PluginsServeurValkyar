@@ -20,6 +20,7 @@ public class TownCommandCompletion implements TabCompleter {
             list.add("create");
             list.add("leave");
             list.add("disband");
+            list.add("claim");
             return list;
         }
 

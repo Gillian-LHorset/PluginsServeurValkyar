@@ -1,6 +1,7 @@
 fr\Valkyar\valkyarTownPlugin\Commands\TownCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\DisbandTownCommand.class
 fr\Valkyar\valkyarTownPlugin\CommandCompletion\TownCommandCompletion.class
+fr\Valkyar\valkyarTownPlugin\Commands\ClaimTownCommand.class
 fr\Valkyar\valkyarTownPlugin\Utility\ChunkSystem.class
 fr\Valkyar\valkyarTownPlugin\Commands\CreateTownCommand.class
 fr\Valkyar\valkyarTownPlugin\ValkyarTownPlugin.class
