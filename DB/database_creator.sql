@@ -50,6 +50,18 @@ CREATE TABLE t_chunk_town (
     FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
 );
 
+CREATE TABLE t_permission_list (
+    permission_id int NOT NULL AUTO_INCREMENT,
+    mayor       BOOLEAN DEFAULT FALSE,
+    claim       BOOLEAN DEFAULT FALSE,
+    unclaim     BOOLEAN DEFAULT FALSE,
+    withdraw    BOOLEAN DEFAULT FALSE,
+    disband     BOOLEAN DEFAULT FALSE,
+    player_fk INT NOT NULL,
+    PRIMARY KEY (permission_id),
+    FOREIGN KEY (player_fk) REFERENCES t_players(player_ID)
+);
+
 INSERT INTO t_jobs (name) VALUES ('Mineur');
 INSERT INTO t_jobs (name) VALUES ('Bucheron');
 INSERT INTO t_jobs (name) VALUES ('Paysan');
