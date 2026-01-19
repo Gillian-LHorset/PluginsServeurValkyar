@@ -57,7 +57,7 @@ CREATE TABLE t_permission_list (
     unclaim     BOOLEAN DEFAULT FALSE,
     withdraw    BOOLEAN DEFAULT FALSE,
     disband     BOOLEAN DEFAULT FALSE,
-    player_fk INT NOT NULL,
+    player_fk INT NOT NULL UNIQUE,
     PRIMARY KEY (permission_id),
     FOREIGN KEY (player_fk) REFERENCES t_players(player_ID)
 );

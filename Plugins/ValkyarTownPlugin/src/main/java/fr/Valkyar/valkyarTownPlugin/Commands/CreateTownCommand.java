@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.SimplePluginManager;
 
 import java.sql.SQLException;
 
@@ -27,11 +28,12 @@ public class CreateTownCommand {
                 Double playerBalance = db.getPlayerBalanceByUUID(player);
                 String playerTown = db.getPlayerTown(player);
                 if (args.length == 2 && args[0].equalsIgnoreCase("create") && playerBalance >= createTownPrice) {
-
+                    //TODO : implémenter joueur ne peux pas créer une ville sur un chunk claim
                     db.setPlayerBalanceDecrease(player, createTownPrice);
                     db.CreateTown(player, args[1]);
                     db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
                     Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Félicitation à " + player.getName() + " qui viens de créer la ville de "+args[1] + " !");
+
 
                 } else if (args.length == 1 && args[0].equalsIgnoreCase("leave") && playerTown != null) {
 

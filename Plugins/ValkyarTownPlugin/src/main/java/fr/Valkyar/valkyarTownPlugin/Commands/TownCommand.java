@@ -25,13 +25,25 @@ public class TownCommand implements CommandExecutor {
                     new CreateTownCommand(_plugin, player, command, s, args);
                     break;
                 case "disband":
-                    new DisbandTownCommand(_plugin, player, command, s, args);
+                    if (player.hasPermission("town.disband")) {
+                        new DisbandTownCommand(_plugin, player, command, s, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de disband la ville.");
+                    }
                     break;
                 case "claim":
-                    new ClaimTownCommand(_plugin, player, command, s, args);
+                    if (player.hasPermission("town.claim")) {
+                        new ClaimTownCommand(_plugin, player, command, s, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim la ville.");
+                    }
                     break;
                 case "unclaim":
-                    new UnclaimTownCommand(_plugin, player, args);
+                    if (player.hasPermission("town.unclaim")) {
+                        new UnclaimTownCommand(_plugin, player, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de unclaim la ville.");
+                    }
                     break;
                 case "balance":
                     new TownBalanceCommand(_plugin, player, args);
@@ -40,7 +52,11 @@ public class TownCommand implements CommandExecutor {
                     new TownDepositCommand(_plugin, player, args);
                     break;
                 case "withdraw":
-                    new TownWithdrawCommand(_plugin, player, args);
+                    if (player.hasPermission("town.withdraw")) {
+                        new TownWithdrawCommand(_plugin, player, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de retier de l'argent la ville.");
+                    }
                     break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Erreur de syntaxe.");

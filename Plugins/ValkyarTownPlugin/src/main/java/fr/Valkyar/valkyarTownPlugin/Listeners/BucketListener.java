@@ -1,0 +1,57 @@
+package fr.Valkyar.valkyarTownPlugin.Listeners;
+
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
+import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+
+import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.IsPlayerPermissionInClaim;
+
+public class BucketListener implements Listener {
+
+    private Database db;
+    private ValkyarTownPlugin _plugin;
+    public BucketListener(ValkyarTownPlugin  plugin) {
+        _plugin = plugin;
+        db = plugin.databaseApi.databaseLink;
+    }
+
+    private int[] _breakChunk;
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent e) {
+        Player p = e.getPlayer();
+
+        _breakChunk = new int[]{
+                (int) Math.floor(e.getBlock().getLocation().getX()),
+                (int) Math.floor(e.getBlock().getLocation().getZ())
+        };
+
+        if (!IsPlayerPermissionInClaim(p, _breakChunk, db)) {
+            e.setCancelled(true);
+            p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de vider un seau ici.");
+        } else {
+        }
+    }
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketFillEvent e) {
+        Player p = e.getPlayer();
+
+        _breakChunk = new int[]{
+                (int) Math.floor(e.getBlock().getLocation().getX()),
+                (int) Math.floor(e.getBlock().getLocation().getZ())
+        };
+
+        if (!IsPlayerPermissionInClaim(p, _breakChunk, db)) {
+            e.setCancelled(true);
+            p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de remplir un seau ici.");
+        } else {
+        }
+    }
+}

@@ -11,3 +11,25 @@ commands:
   town:
     description: Use for manage your town.
     usage: /<command> <argument> <argument>
+
+permissions:
+  town.mayor:
+    description: Allow you to do everything in the town.
+    default: op
+    children:
+      town.claim: true
+      town.unclaim: true
+      town.withdraw: true
+      town.disband: true
+  town.claim:
+    description: Allow you to claim a chunk.
+    default: op
+  town.unclaim:
+    description: Allow you to unclaim a chunk.
+    default: op
+  town.withdraw:
+    description: Allow you to withdraw money from the town bank.
+    default: op
+  town.disband:
+    description: Allow you to disband the town.
+    default: op

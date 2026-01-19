@@ -18,20 +18,20 @@ public class DisbandTownCommand{
         db = _plugin.databaseApi.databaseLink;
 
         if (sender instanceof Player player) {
-            try {
-                //TODO player a la permission de detruire la ville
-                String playerTown = db.getPlayerTown(player);
-                if (args.length == 1 && args[0].equalsIgnoreCase("disband") && playerTown != null) {
+                try {
+                    String playerTown = db.getPlayerTown(player);
+                    if (args.length == 1 && args[0].equalsIgnoreCase("disband") && playerTown != null) {
 
-                    db.deleteTownByName(playerTown);
-                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " vient d'être dissoute !");
-                } else {
-                    player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
-                    player.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument> <argument");
+                        db.deleteTownByName(playerTown);
+                        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " vient d'être dissoute !");
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
+                        player.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument> <argument");
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+
         }
     }
 }

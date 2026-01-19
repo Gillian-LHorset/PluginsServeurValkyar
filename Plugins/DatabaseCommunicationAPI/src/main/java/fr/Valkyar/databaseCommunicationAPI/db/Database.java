@@ -647,15 +647,69 @@ public class Database {
         statement.close();
     }
 
-    public void set(Player player, Double amount) throws SQLException{
-        Double currentBalance = getBalancePlayerByName(player.getDisplayName());
-        currentBalance += amount;
+    public void registerPermissionPlayer(Player player) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("INSERT INTO t_permission_list (mayor, claim, unclaim, withdraw, disband, player_fk) VALUE (?, ?, ?, ?, ?, ?)");
+
+        statement.setString(1, "FALSE");
+        statement.setString(2, "FALSE");
+        statement.setString(3, "FALSE");
+        statement.setString(4, "FALSE");
+        statement.setString(5, "FALSE");
+        statement.setInt(   6, getPlayerFk(player));
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public List<String> getAllPermissionOfAPlayer(Player p) throws SQLException{
+        List<String> permissions = new ArrayList<>();
 
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_players SET balance = ? WHERE name = ?");
+                .prepareStatement(  "SELECT mayor, claim, unclaim, withdraw, disband " +
+                                        "FROM t_permission_list " +
+                                        "WHERE player_fk = ? ");
 
-        statement.setString(1, currentBalance.toString());
-        statement.setString(2, player.getDisplayName());
+        statement.setInt(1, getPlayerFk(p));
+
+        ResultSet results = statement.executeQuery();
+
+        if (results.next()) {
+            if (results.getBoolean("mayor")) permissions.add("town.mayor");
+            if (results.getBoolean("claim")) permissions.add("town.claim");
+            if (results.getBoolean("unclaim")) permissions.add("town.unclaim");
+            if (results.getBoolean("withdraw")) permissions.add("town.withdraw");
+            if (results.getBoolean("disband")) permissions.add("town.disband");
+        }
+
+        return permissions;
+    }
+
+    public void deleteAllPermissionsOfAPlayer(Player p) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement(  "DELETE FROM t_permission_list " +
+                        "WHERE player_fk = ? ");
+        statement.setInt(1, getPlayerFk(p));
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void setPermissionOfAPlayerToTrue(Player p, String permissionToGive) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_permission_list SET ? = TRUE WHERE player_fk = ?");
+        statement.setString(1, permissionToGive);
+        statement.setInt(2, getPlayerFk(p));
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void setPermissionOfAPlayerToFalse(Player p, String permissionToGive) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_permission_list SET ? = FALSE WHERE player_fk = ?");
+        statement.setString(1, permissionToGive);
+        statement.setInt(2, getPlayerFk(p));
 
         statement.executeUpdate();
         statement.close();
