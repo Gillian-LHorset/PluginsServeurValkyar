@@ -11,16 +11,17 @@ commands:
   town:
     description: Use for manage your town.
     usage: /<command> <argument> <argument>
+  accept:
+    description: Use for accept an invitation to a town.
+    usage: /<command>
+  refuse:
+    description: Use for refuse an invitation to a town.
+    usage: /<command>
 
 permissions:
   town.mayor:
     description: Allow you to do everything in the town.
     default: op
-    children:
-      town.claim: true
-      town.unclaim: true
-      town.withdraw: true
-      town.disband: true
   town.claim:
     description: Allow you to claim a chunk.
     default: op
@@ -32,4 +33,7 @@ permissions:
     default: op
   town.disband:
     description: Allow you to disband the town.
+    default: op
+  town.kick:
+    description: Allow you to kick a player from the town.
     default: op

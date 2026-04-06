@@ -5,7 +5,9 @@ import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database {
     private Connection _connection;
@@ -649,24 +651,26 @@ public class Database {
 
     public void registerPermissionPlayer(Player player) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("INSERT INTO t_permission_list (mayor, claim, unclaim, withdraw, disband, player_fk) VALUE (?, ?, ?, ?, ?, ?)");
+                .prepareStatement("INSERT INTO t_permission_list (mayor, claim, unclaim, withdraw, disband, kick, player_fk) " +
+                                      "VALUE (?, ?, ?, ?, ?, ?, ?)");
 
-        statement.setString(1, "FALSE");
-        statement.setString(2, "FALSE");
-        statement.setString(3, "FALSE");
-        statement.setString(4, "FALSE");
-        statement.setString(5, "FALSE");
-        statement.setInt(   6, getPlayerFk(player));
+        statement.setBoolean(1, false);
+        statement.setBoolean(2, false);
+        statement.setBoolean(3, false);
+        statement.setBoolean(4, false);
+        statement.setBoolean(5, false);
+        statement.setBoolean(6, false);
+        statement.setInt(7, getPlayerFk(player));
 
         statement.executeUpdate();
         statement.close();
     }
 
-    public List<String> getAllPermissionOfAPlayer(Player p) throws SQLException{
-        List<String> permissions = new ArrayList<>();
+    public Map<String, Boolean> getAllPermissionOfAPlayer(Player p) throws SQLException{
+        Map<String, Boolean> permissions = new HashMap<>();
 
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "SELECT mayor, claim, unclaim, withdraw, disband " +
+                .prepareStatement(  "SELECT mayor, claim, unclaim, withdraw, disband, kick " +
                                         "FROM t_permission_list " +
                                         "WHERE player_fk = ? ");
 
@@ -674,20 +678,45 @@ public class Database {
 
         ResultSet results = statement.executeQuery();
 
-        if (results.next()) {
-            if (results.getBoolean("mayor")) permissions.add("town.mayor");
-            if (results.getBoolean("claim")) permissions.add("town.claim");
-            if (results.getBoolean("unclaim")) permissions.add("town.unclaim");
-            if (results.getBoolean("withdraw")) permissions.add("town.withdraw");
-            if (results.getBoolean("disband")) permissions.add("town.disband");
+        if (!results.next()) {
+            return null;
         }
+
+        permissions.put("mayor", results.getBoolean("mayor"));
+        permissions.put("claim", results.getBoolean("claim"));
+        permissions.put("unclaim", results.getBoolean("unclaim"));
+        permissions.put("withdraw", results.getBoolean("withdraw"));
+        permissions.put("disband", results.getBoolean("disband"));
+        permissions.put("kick", results.getBoolean("kick"));
 
         return permissions;
     }
 
-    public void deleteAllPermissionsOfAPlayer(Player p) throws SQLException{
+    public void setAllPermissionsOfAPlayerToFalse(Player p) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "DELETE FROM t_permission_list " +
+                .prepareStatement(  "UPDATE t_permission_list SET " +
+                        "mayor = FALSE, " +
+                        "claim = FALSE, " +
+                        "unclaim = FALSE, " +
+                        "withdraw = FALSE, " +
+                        "disband = FALSE, " +
+                        "kick = FALSE " +
+                        "WHERE player_fk = ? ");
+        statement.setInt(1, getPlayerFk(p));
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void setAllPermissionsOfAPlayerToTrue(Player p) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement(  "UPDATE t_permission_list SET " +
+                        "mayor = TRUE, " +
+                        "claim = TRUE, " +
+                        "unclaim = TRUE, " +
+                        "withdraw = TRUE, " +
+                        "disband = TRUE, " +
+                        "kick = TRUE " +
                         "WHERE player_fk = ? ");
         statement.setInt(1, getPlayerFk(p));
 
@@ -697,9 +726,8 @@ public class Database {
 
     public void setPermissionOfAPlayerToTrue(Player p, String permissionToGive) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_permission_list SET ? = TRUE WHERE player_fk = ?");
-        statement.setString(1, permissionToGive);
-        statement.setInt(2, getPlayerFk(p));
+                .prepareStatement("UPDATE t_permission_list SET " + permissionToGive + " = TRUE WHERE player_fk = ?");
+        statement.setInt(1, getPlayerFk(p));
 
         statement.executeUpdate();
         statement.close();
@@ -707,11 +735,72 @@ public class Database {
 
     public void setPermissionOfAPlayerToFalse(Player p, String permissionToGive) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_permission_list SET ? = FALSE WHERE player_fk = ?");
-        statement.setString(1, permissionToGive);
-        statement.setInt(2, getPlayerFk(p));
+                .prepareStatement("UPDATE t_permission_list SET " + permissionToGive +" = FALSE WHERE player_fk = ?");
+        statement.setInt(1, getPlayerFk(p));
 
         statement.executeUpdate();
         statement.close();
     }
+
+    public List<String> getAllTownsNames() {
+        List<String> townsNames  = new ArrayList<>();
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("SELECT name " +
+                            "FROM t_town ");
+
+            ResultSet results = statement.executeQuery();
+            int i = 1;
+            while(results.next()) {
+                townsNames.add(results.getString(i));
+                i++;
+            }
+
+            return townsNames;
+
+
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + e);
+        }
+        return null;
+    }
+
+    public void KickPlayerOfTown(Player p) {
+        try {
+            PreparedStatement setTownStatement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_players SET town_fk = null " +
+                            "WHERE uuid = ?");
+            setTownStatement.setString(1, p.getUniqueId().toString());
+
+            setAllPermissionsOfAPlayerToFalse(p);
+
+            setTownStatement.executeUpdate();
+            setTownStatement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + e);
+        }
+    }
+
+    public boolean HaveAPlayerAPerm(Player p, String permToCheck) {
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    .prepareStatement("SELECT " + permToCheck + " FROM t_permission_list WHERE player_fk = ?");
+            statement.setInt(1, getPlayerFk(p));
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getBoolean(permToCheck);
+            }
+
+
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "HaveAPlayerAPerm - " + e);
+        }
+        return false;
+    }
+
 }

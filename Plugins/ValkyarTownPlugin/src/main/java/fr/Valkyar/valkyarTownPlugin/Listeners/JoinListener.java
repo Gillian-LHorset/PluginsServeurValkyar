@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms.assignPerms;
+
 public class JoinListener implements Listener {
 
     private Database db;
@@ -24,17 +26,6 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        try {
-            List<String> permissionsList;
-            permissionsList = db.getAllPermissionOfAPlayer(p);
-            if (!permissionsList.isEmpty()) {
-                for (String permission : permissionsList) {
-                    PermissionAttachment attachment = p.addAttachment(_plugin);
-                    attachment.setPermission(permission, true);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+        assignPerms(p, db, _plugin);
     }
 }

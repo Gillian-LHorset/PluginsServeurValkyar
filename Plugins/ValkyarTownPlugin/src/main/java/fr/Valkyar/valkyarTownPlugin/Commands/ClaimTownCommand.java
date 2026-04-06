@@ -24,7 +24,7 @@ public class ClaimTownCommand {
 
         PermissionAttachment a = p.addAttachment(plugin);
 
-
+        // TODO : claim uniquement si le chunk est à coté d'un chunk déjà possedé
         _plugin = plugin;
         db = _plugin.databaseApi.databaseLink;
 
