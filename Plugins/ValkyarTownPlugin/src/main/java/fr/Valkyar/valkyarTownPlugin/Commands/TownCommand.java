@@ -1,13 +1,11 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
-import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
 public class TownCommand implements CommandExecutor {
 
@@ -22,12 +20,15 @@ public class TownCommand implements CommandExecutor {
         if (sender instanceof Player player) {
             switch (args[0].toLowerCase()) {
                 case "create":
-                case "leave":
                     new CreateTownCommand(_plugin, player, command, s, args);
                     break;
 
+                case "leave":
+                    new LeaveTownCommand(_plugin, player, args);
+                    break;
+
                 case "disband":
-                    if (player.hasPermission("town.disband") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.mayor")) {
                         new DisbandTownCommand(_plugin, player, command, s, args);
                     } else {
                         player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de disband la ville.");
@@ -35,15 +36,15 @@ public class TownCommand implements CommandExecutor {
                     break;
 
                 case "claim":
-                    if (player.hasPermission("town.claim") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.claim") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new ClaimTownCommand(_plugin, player, command, s, args);
                     } else {
-                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim pour votre ville.");
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim pour votre ville1.");
                     }
                     break;
 
                 case "unclaim":
-                    if (player.hasPermission("town.unclaim") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.unclaim") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new UnclaimTownCommand(_plugin, player, args);
                     } else {
                         player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de unclaim pour votre ville.");
@@ -59,7 +60,7 @@ public class TownCommand implements CommandExecutor {
                     break;
 
                 case "withdraw":
-                    if (player.hasPermission("town.withdraw") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.withdraw") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new TownWithdrawCommand(_plugin, player, args);
                     } else {
                         player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de retier de l'argent à la ville.");
@@ -75,22 +76,25 @@ public class TownCommand implements CommandExecutor {
                     break;
 
                 case "invite":
-                    //if (player.hasPermission("town.invite") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.invite") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new InviteCommand(_plugin, player, args);
-                    //}
+                    }
                     break;
 
                 case "kick":
-                    if (player.hasPermission("town.kick") || player.hasPermission("town.mayor")) {
+                    if (player.hasPermission("town.kick") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new KickTownCommand(_plugin, player, args);
                     }
                     break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Erreur de syntaxe.");
                     break;
-                    //TODO : ajouter : permission par chunk, permission pour joueurs externe à la ville, ajouter des outposts, limite de membres, paliers de ville, chat de ville
-                    // permissions à ajouter : invite, second (hierachiquement)
-                    // permissions à retirer : disband
+                    //TODO : ajouter : permission par chunk,
+                    // permission pour joueurs externe à la ville,
+                    // ajouter des outposts,
+                    // limite de membres,
+                    // paliers de ville,
+                    // chat de ville
             }
         }
         return true;

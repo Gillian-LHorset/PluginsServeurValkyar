@@ -45,7 +45,7 @@ CREATE TABLE t_chunk_town (
     chunk_id int NOT NULL AUTO_INCREMENT,
     chunk_identifier_x INT NOT NULL,
     chunk_identifier_z INT NOT NULL,
-    town_fk INT NOT NULL,
+    town_fk INT,
     PRIMARY KEY (chunk_id),
     FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
 );
@@ -53,12 +53,13 @@ CREATE TABLE t_chunk_town (
 CREATE TABLE t_permission_list (
     permission_id int NOT NULL AUTO_INCREMENT,
     mayor       BOOLEAN DEFAULT FALSE,
+    second      BOOLEAN DEFAULT FALSE,
     claim       BOOLEAN DEFAULT FALSE,
-    unclaim     BOOLEAN DEFAULT FALSE,
     withdraw    BOOLEAN DEFAULT FALSE,
-    disband     BOOLEAN DEFAULT FALSE,
+    unclaim     BOOLEAN DEFAULT FALSE,
+    invite      BOOLEAN DEFAULT FALSE,
     kick        BOOLEAN DEFAULT FALSE,
-    player_fk INT NOT NULL UNIQUE,
+    player_fk INT UNIQUE,
     PRIMARY KEY (permission_id),
     FOREIGN KEY (player_fk) REFERENCES t_players(player_ID)
 );

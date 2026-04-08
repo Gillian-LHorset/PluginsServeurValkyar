@@ -1,6 +1,7 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
+import fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms;
 import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
@@ -32,7 +33,7 @@ public class CreateTownCommand {
             try {
                 Double playerBalance = db.getPlayerBalanceByUUID(player);
                 String playerTown = db.getPlayerTown(player);
-                if (args.length == 2 && args[0].equalsIgnoreCase("create") && playerBalance >= createTownPrice) {
+                if (args.length == 2 && playerBalance >= createTownPrice) {
                     // if the player didn't have a town
                     if (playerTown == null) {
                         // if the town name don't exist already
@@ -52,6 +53,8 @@ public class CreateTownCommand {
                                 // register the chunk in the db
                                 db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
 
+                                AssignPerms.assignPerms(player, db, _plugin);
+
                                 Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Félicitation à " + player.getName() + " qui viens de créer la ville de " + args[1] + " !");
                                 player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
                             } else {
@@ -63,36 +66,7 @@ public class CreateTownCommand {
                     } else {
                         player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville, vous êtes déjà une ville.");
                     }
-                //  if the player has a town, and he wants to leave
-                } else if (args.length == 1 && args[0].equalsIgnoreCase("leave") && playerTown != null) {
-                    // revoke the player town fk from the db
-                    db.setPlayerTownByName(player, null);
-                    player.sendMessage("Vous avez quitté votre ville.");
-
-                    // set all permissions to false
-                    db.setAllPermissionsOfAPlayerToFalse(player);
-                    // TODO implémenter logique de sortie de ville (destruction, role, si le maire quitte)
-                    // if the town has no player anymore
-                    if (db.getNumberOfPlayersInTown(playerTown) < 1) {
-                        // delete the town
-                        db.deleteTownByName(playerTown);
-                        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " viens d'être détruite par faute de membres !");
-                    // if the player is the major of his town
-                    } else if (player.hasPermission("town.major")) {
-                        List<String> allPlayers = db.getAllPlayerOfTownByName(playerTown);
-                        // set a new major
-                        Player newMajor = Bukkit.getPlayer(allPlayers.getFirst());
-                        // inform all player about the change
-                        for (String pName : allPlayers) {
-                            Bukkit.getPlayer(pName).sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Le joueur " + newMajor + " est désormait le maire de votre ville.");
-                        }
-                        // set all permission to true to the new major
-                        db.setPermissionOfAPlayerToTrue(newMajor, "town.major");
-                    }
-                // if the player is town less
-                } else if (args.length == 1 && args[0].equalsIgnoreCase("leave") && playerTown == null) {
-                    player.sendMessage(ChatColor.RED + "Vous n'avez aucune ville.");
-                } else if (args.length == 2 && args[0].equalsIgnoreCase("create") && db.getPlayerBalanceByUUID(player) <= createTownPrice) {
+                } else if (args.length == 2 && db.getPlayerBalanceByUUID(player) <= createTownPrice) {
                     player.sendMessage(ChatColor.RED + "Vous n'avez pas assez d'argent pour créer une ville.");
                 } else {
                     player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");

@@ -21,19 +21,22 @@ commands:
 permissions:
   town.mayor:
     description: Allow you to do everything in the town.
-    default: op
+    default: false
   town.claim:
     description: Allow you to claim a chunk.
-    default: op
+    default: false
   town.unclaim:
     description: Allow you to unclaim a chunk.
-    default: op
+    default: false
   town.withdraw:
     description: Allow you to withdraw money from the town bank.
-    default: op
-  town.disband:
-    description: Allow you to disband the town.
-    default: op
+    default: false
   town.kick:
-    description: Allow you to kick a player from the town.
-    default: op
+    description: Allow you to kick a player from your town.
+    default: false
+  town.invite:
+    description: Allow you to invite some people to your town
+    default: false
+  town.second:
+    description: Allow you to do everything in the town
+    default: false

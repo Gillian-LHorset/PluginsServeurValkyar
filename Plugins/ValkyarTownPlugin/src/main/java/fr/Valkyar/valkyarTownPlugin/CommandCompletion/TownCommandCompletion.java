@@ -29,30 +29,41 @@ public class TownCommandCompletion implements TabCompleter {
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
+            list.add("balance");
             if (db.getPlayerTown((Player) sender) == null) {
                 list.add("create");
                 list.add("join");
             } else {
                 list.add("leave");
-                list.add("balance");
                 list.add("deposit");
-                if (sender.hasPermission("town.claim")) {
+                if (sender.hasPermission("town.claim")
+                        || sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.second")) {
                     list.add("claim");
                 }
-                if (sender.hasPermission("town.unclaim")) {
+                if (sender.hasPermission("town.unclaim")
+                        || sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.second")) {
                     list.add("unclaim");
                 }
-                if (sender.hasPermission("town.withdraw")) {
+                if (sender.hasPermission("town.withdraw")
+                        || sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.second")) {
                     list.add("withdraw");
                 }
-                if (sender.hasPermission("town.mayor")) {
+                if (sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.mayor")) {
                     list.add("disband");
                     list.add("permission");
                 }
-                if (sender.hasPermission("town.invite")) {
+                if (sender.hasPermission("town.invite")
+                        || sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.second")) {
                     list.add("invite");
                 }
-                if (sender.hasPermission("town.kick")) {
+                if (sender.hasPermission("town.kick")
+                        || sender.hasPermission("town.mayor")
+                        || sender.hasPermission("town.second")) {
                     list.add("kick");
                 }
             }
@@ -65,6 +76,16 @@ public class TownCommandCompletion implements TabCompleter {
                 list.add("remove");
             } else if (args[0].equalsIgnoreCase("balance")) {
                 return db.getAllTownsNames();
+            } else if (args[0].equalsIgnoreCase("invite") && sender.hasPermission("town.invite")) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (!p.getName().equalsIgnoreCase(sender.getName())) {
+                        list.add(p.getName());
+                    }
+                }
+            } else if (sender.hasPermission("town.kick")
+                    || sender.hasPermission("town.mayor")
+                    || sender.hasPermission("town.second") && args[0].equalsIgnoreCase("kick")){
+                return db.getAllPlayerOfTownByName(db.getPlayerTown((Player) sender));
             }
             return list;
         }
@@ -75,6 +96,16 @@ public class TownCommandCompletion implements TabCompleter {
                         list.add(perm.getName().substring(5));
                     }
                 }
+            }
+            return list;
+        }
+        if (args.length == 4) {
+            if (args[0].equalsIgnoreCase("permission") && sender.hasPermission("town.mayor")) {
+               for (String pName : db.getAllPlayerOfTownByName(db.getPlayerTown((Player)  sender))) {
+                   if (!pName.equalsIgnoreCase(sender.getName())) {
+                       list.add(pName);
+                   }
+               }
             }
             return list;
         }

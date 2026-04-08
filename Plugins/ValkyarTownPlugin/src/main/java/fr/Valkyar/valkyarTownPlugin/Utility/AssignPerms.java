@@ -3,7 +3,6 @@ package fr.Valkyar.valkyarTownPlugin.Utility;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -16,8 +15,6 @@ public class AssignPerms {
         try {
 
             Map<String, Boolean> permissionsMap = db.getAllPermissionOfAPlayer(p);
-
-            System.out.println(permissionsMap);
 
             if (permissionsMap == null) {
                 db.registerPermissionPlayer(p);
@@ -43,7 +40,6 @@ public class AssignPerms {
 
                 for (Map.Entry<String, Boolean> entry : permissionsMap.entrySet()) {
                     attachment.setPermission(("town." + entry.getKey().toString()), entry.getValue());
-                    System.out.println(entry.getKey() + ": " + entry.getValue());
                 }
             }
 

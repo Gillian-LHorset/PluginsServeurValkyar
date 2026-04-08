@@ -6,7 +6,6 @@ import fr.Valkyar.valkyarTownPlugin.Commands.TownCommand;
 import fr.Valkyar.valkyarTownPlugin.JoinInvitationCommand.AcceptCommand;
 import fr.Valkyar.valkyarTownPlugin.JoinInvitationCommand.RefuseCommand;
 import fr.Valkyar.valkyarTownPlugin.Listeners.*;
-import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -17,7 +16,10 @@ public final class ValkyarTownPlugin extends JavaPlugin {
 
     public DatabaseCommunicationAPI databaseApi = DatabaseCommunicationAPI.getApi();
     /// the first UUID corresponds to the player invited UUID, and the second UUID corresponds to the player who invite
-    public final Map<UUID, UUID> sendedInvitations = new HashMap<>();
+    public final Map<UUID, UUID> sentInvitations = new HashMap<>();
+    public final Map<UUID, Boolean> leaveTown = new HashMap<>();
+    public final Map<UUID, Boolean> newMayor = new HashMap<>();
+
 
     @Override
     public void onEnable() {
@@ -30,7 +32,7 @@ public final class ValkyarTownPlugin extends JavaPlugin {
         // Register tab completion
         getCommand("town").setTabCompleter(new TownCommandCompletion(this));
 
-        // TODO : ajouter la protection contre les explosions
+        // TODO : ajouter la protection contre les explosions et les dégats aux entités
         getServer().getPluginManager().registerEvents(new BreakBlockListenener(this), this);
         getServer().getPluginManager().registerEvents(new PlaceBlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);

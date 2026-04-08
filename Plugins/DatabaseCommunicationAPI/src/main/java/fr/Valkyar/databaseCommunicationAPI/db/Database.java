@@ -448,13 +448,12 @@ public class Database {
                                             "FROM t_town AS t " +
                                             "JOIN t_players AS p " +
                                             "ON t.town_id = p.town_fk " +
-                                            "WHERE t.name = ? " +
-                                            "ORDER BY p.name");
+                                            "WHERE t.name = ? ");
             statement.setString(1, townName);
 
             ResultSet results = statement.executeQuery();
 
-            if (results.next()) {
+            while (results.next()) {
                 allPlayers.add(results.getString("p.name"));
             }
 
@@ -651,8 +650,8 @@ public class Database {
 
     public void registerPermissionPlayer(Player player) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("INSERT INTO t_permission_list (mayor, claim, unclaim, withdraw, disband, kick, player_fk) " +
-                                      "VALUE (?, ?, ?, ?, ?, ?, ?)");
+                .prepareStatement("INSERT INTO t_permission_list (mayor, second, claim, withdraw, unclaim, invite, kick, player_fk) " +
+                                      "VALUE (?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setBoolean(1, false);
         statement.setBoolean(2, false);
@@ -660,7 +659,8 @@ public class Database {
         statement.setBoolean(4, false);
         statement.setBoolean(5, false);
         statement.setBoolean(6, false);
-        statement.setInt(7, getPlayerFk(player));
+        statement.setBoolean(7, false);
+        statement.setInt(8, getPlayerFk(player));
 
         statement.executeUpdate();
         statement.close();
@@ -670,7 +670,7 @@ public class Database {
         Map<String, Boolean> permissions = new HashMap<>();
 
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "SELECT mayor, claim, unclaim, withdraw, disband, kick " +
+                .prepareStatement(  "SELECT mayor, second, claim, withdraw, unclaim, invite, kick " +
                                         "FROM t_permission_list " +
                                         "WHERE player_fk = ? ");
 
@@ -683,10 +683,11 @@ public class Database {
         }
 
         permissions.put("mayor", results.getBoolean("mayor"));
+        permissions.put("second", results.getBoolean("second"));
         permissions.put("claim", results.getBoolean("claim"));
-        permissions.put("unclaim", results.getBoolean("unclaim"));
         permissions.put("withdraw", results.getBoolean("withdraw"));
-        permissions.put("disband", results.getBoolean("disband"));
+        permissions.put("unclaim", results.getBoolean("unclaim"));
+        permissions.put("invite", results.getBoolean("invite"));
         permissions.put("kick", results.getBoolean("kick"));
 
         return permissions;
@@ -696,10 +697,11 @@ public class Database {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement(  "UPDATE t_permission_list SET " +
                         "mayor = FALSE, " +
+                        "second = FALSE, " +
                         "claim = FALSE, " +
-                        "unclaim = FALSE, " +
                         "withdraw = FALSE, " +
-                        "disband = FALSE, " +
+                        "unclaim = FALSE, " +
+                        "invite = FALSE, " +
                         "kick = FALSE " +
                         "WHERE player_fk = ? ");
         statement.setInt(1, getPlayerFk(p));
@@ -712,10 +714,11 @@ public class Database {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement(  "UPDATE t_permission_list SET " +
                         "mayor = TRUE, " +
+                        "second = TRUE, " +
                         "claim = TRUE, " +
-                        "unclaim = TRUE, " +
                         "withdraw = TRUE, " +
-                        "disband = TRUE, " +
+                        "unclaim = TRUE, " +
+                        "invite = TRUE, " +
                         "kick = TRUE " +
                         "WHERE player_fk = ? ");
         statement.setInt(1, getPlayerFk(p));
@@ -803,4 +806,32 @@ public class Database {
         return false;
     }
 
+    public List<String> getAllSecondFromTown(String townName) {
+        List<String> seconds = new ArrayList<>();
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    .prepareStatement("SELECT p.name " +
+                            "FROM t_permission_list AS pl " +
+                            "JOIN t_players AS p ON p.player_id = pl.player_fk " +
+                            "JOIN t_town AS t ON t.town_id = p.town_fk " +
+                            "WHERE t.name = ?  " +
+                            "AND pl.second = true");
+            statement.setString(1, townName);
+
+            ResultSet results = statement.executeQuery();
+
+            int i = 1;
+            while(results.next()) {
+                seconds.add(results.getString(i));
+                i++;
+            }
+
+            return seconds;
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "getAllSecondFromTown - " + e);
+        }
+        return null;
+    }
 }

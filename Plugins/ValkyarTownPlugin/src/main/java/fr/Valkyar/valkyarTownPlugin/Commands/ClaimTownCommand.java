@@ -6,7 +6,6 @@ import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
 
 import java.sql.SQLException;
 
@@ -19,27 +18,26 @@ public class ClaimTownCommand {
 
     private Double claimPrice = 1.00;
     private Double _townBalance;
-
+    // TODO : le joueur ne dois pouvoir claim qu'en monde ville
     public ClaimTownCommand(ValkyarTownPlugin plugin, Player p, Command command, String s, String[] args) {
-
-        PermissionAttachment a = p.addAttachment(plugin);
-
-        // TODO : claim uniquement si le chunk est à coté d'un chunk déjà possedé
         _plugin = plugin;
         db = _plugin.databaseApi.databaseLink;
 
         if (args.length == 1) {
                 _playerTown = db.getPlayerTown(p);
                 if (_playerTown != null) {
-                    if (p.hasPermission("town.claim")) {
                     try {
                         _townBalance = db.getBalanceTownByName(_playerTown);
                         if (_townBalance > claimPrice) {
                             int[] claimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
                             if (db.getChunkById(claimedChunk) == null) {
-                                db.registerChunk(claimedChunk, _playerTown);
-                                db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
-                                p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
+                                if (ChunkSystem.IsChunkNextToAnother(p, db, claimedChunk)) {
+                                    db.registerChunk(claimedChunk, _playerTown);
+                                    db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
+                                    p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
+                                } else {
+                                    p.sendMessage(ChatColor.RED + "Le chunk ciblé doit être adjacent à un autre chunk de la ville.");
+                                }
                             } else {
                                 p.sendMessage(ChatColor.RED + "Ce chunk est déjà claim.");
                             }
@@ -51,9 +49,6 @@ public class ClaimTownCommand {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    p.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim.");
-                }
-            }  else {
                 p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
             }
         }

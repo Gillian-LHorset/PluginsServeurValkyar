@@ -20,13 +20,13 @@ public class RefuseCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player p) {
-            if (_plugin.sendedInvitations.containsKey(p.getUniqueId())) {
-                Player pSender = Bukkit.getPlayer(_plugin.sendedInvitations.get(p.getUniqueId()));
+            if (_plugin.sentInvitations.containsKey(p.getUniqueId())) {
+                Player pSender = Bukkit.getPlayer(_plugin.sentInvitations.get(p.getUniqueId()));
                 if (pSender != null && pSender.isOnline()) {
                     pSender.sendMessage(ChatColor.RED + p.getName() + " a refusé votre invitation.");
                 }
 
-                _plugin.sendedInvitations.remove(p.getUniqueId());
+                _plugin.sentInvitations.remove(p.getUniqueId());
                 p.sendMessage("Vous avez refusé l'invitation.");
 
             } else {

@@ -1,4 +1,6 @@
+fr\Valkyar\valkyarTownPlugin\Commands\GivePermissionCommand$1.class
 fr\Valkyar\valkyarTownPlugin\Utility\PlayerPermissionLogic.class
+fr\Valkyar\valkyarTownPlugin\Commands\DisbandTownCommand$1.class
 fr\Valkyar\valkyarTownPlugin\CommandCompletion\TownCommandCompletion.class
 fr\Valkyar\valkyarTownPlugin\Listeners\PlaceBlockListener.class
 fr\Valkyar\valkyarTownPlugin\ValkyarTownPlugin.class
@@ -10,9 +12,11 @@ fr\Valkyar\valkyarTownPlugin\Listeners\BreakBlockListenener.class
 fr\Valkyar\valkyarTownPlugin\Commands\TownCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\UnclaimTownCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\DisbandTownCommand.class
+fr\Valkyar\valkyarTownPlugin\Commands\LeaveTownCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\ClaimTownCommand.class
 fr\Valkyar\valkyarTownPlugin\Listeners\JoinListener.class
 fr\Valkyar\valkyarTownPlugin\Utility\ChunkSystem.class
+fr\Valkyar\valkyarTownPlugin\Commands\LeaveTownCommand$1.class
 fr\Valkyar\valkyarTownPlugin\Commands\CreateTownCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\InviteCommand$1.class
 fr\Valkyar\valkyarTownPlugin\Listeners\BucketListener.class
