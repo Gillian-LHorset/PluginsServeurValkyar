@@ -834,4 +834,54 @@ public class Database {
         }
         return null;
     }
+
+    public Integer[] getSpawnTown(String tName) {
+        Integer[] spawnTown = new Integer[3];
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    .prepareStatement("SELECT spawn_x, spawn_y, spawn_z " +
+                            "FROM t_town " +
+                            "WHERE name = ?  ");
+            statement.setString(1, tName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+
+                spawnTown[0] = results.getObject("spawn_x", Integer.class);
+                spawnTown[1] = results.getObject("spawn_y", Integer.class);
+                spawnTown[2] = results.getObject("spawn_z", Integer.class);
+
+            }
+
+            return spawnTown;
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "getSpawnTown - " + e);
+        }
+        return null;
+    }
+
+    public void setSpawnTown(String tName, Integer[]spawnPos) {
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    .prepareStatement("UPDATE t_town SET spawn_x = ?, " +
+                            "spawn_y = ?, " +
+                            "spawn_z = ? " +
+                            "WHERE name = ?  ");
+            statement.setInt(1, spawnPos[0]);
+            statement.setInt(2, spawnPos[1]);
+            statement.setInt(3, spawnPos[2]);
+            statement.setString(4, tName);
+
+            statement.executeUpdate();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "setSpawnTown - " + e);
+        }
+    }
+
 }

@@ -17,6 +17,9 @@ CREATE TABLE t_town (
     town_id int NOT NULL AUTO_INCREMENT,
     name VARCHAR(51) NOT NULL UNIQUE,
     balance DOUBLE(10,2) DEFAULT 0.0,
+    spawn_x INT DEFAULT NULL,
+    spawn_y INT DEFAULT NULL,
+    spawn_z INT DEFAULT NULL,
     PRIMARY KEY (town_id)
 );
 

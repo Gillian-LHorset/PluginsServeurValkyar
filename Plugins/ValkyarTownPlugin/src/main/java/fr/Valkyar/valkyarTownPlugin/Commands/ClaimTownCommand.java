@@ -18,7 +18,6 @@ public class ClaimTownCommand {
 
     private Double claimPrice = 1.00;
     private Double _townBalance;
-    // TODO : le joueur ne dois pouvoir claim qu'en monde ville
     public ClaimTownCommand(ValkyarTownPlugin plugin, Player p, Command command, String s, String[] args) {
         _plugin = plugin;
         db = _plugin.databaseApi.databaseLink;
@@ -29,14 +28,18 @@ public class ClaimTownCommand {
                     try {
                         _townBalance = db.getBalanceTownByName(_playerTown);
                         if (_townBalance > claimPrice) {
-                            int[] claimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
-                            if (db.getChunkById(claimedChunk) == null) {
-                                if (ChunkSystem.IsChunkNextToAnother(p, db, claimedChunk)) {
-                                    db.registerChunk(claimedChunk, _playerTown);
-                                    db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
-                                    p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
+                            if (p.getWorld().getName().equalsIgnoreCase("world")) {
+                                int[] claimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+                                if (db.getChunkById(claimedChunk) == null) {
+                                    if (ChunkSystem.IsChunkNextToAnother(p, db, claimedChunk)) {
+                                        db.registerChunk(claimedChunk, _playerTown);
+                                        db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
+                                        p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
+                                    } else {
+                                        p.sendMessage(ChatColor.RED + "Le chunk ciblé doit être adjacent à un autre chunk de la ville.");
+                                    }
                                 } else {
-                                    p.sendMessage(ChatColor.RED + "Le chunk ciblé doit être adjacent à un autre chunk de la ville.");
+                                    p.sendMessage(ChatColor.RED + "Vous ne pouvez pas claim dans ce monde.");
                                 }
                             } else {
                                 p.sendMessage(ChatColor.RED + "Ce chunk est déjà claim.");

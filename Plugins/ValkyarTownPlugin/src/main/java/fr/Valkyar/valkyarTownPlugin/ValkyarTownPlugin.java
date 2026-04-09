@@ -26,11 +26,13 @@ public final class ValkyarTownPlugin extends JavaPlugin {
         // Plugin startup logic
         // Register Commands
         getCommand("town").setExecutor(new TownCommand(this));
+        getCommand("t").setExecutor(new TownCommand(this));
         getCommand("accept").setExecutor(new AcceptCommand(this));
         getCommand("refuse").setExecutor(new RefuseCommand(this));
 
         // Register tab completion
         getCommand("town").setTabCompleter(new TownCommandCompletion(this));
+        getCommand("t").setTabCompleter(new TownCommandCompletion(this));
 
         // TODO : ajouter la protection contre les explosions et les dégats aux entités
         getServer().getPluginManager().registerEvents(new BreakBlockListenener(this), this);

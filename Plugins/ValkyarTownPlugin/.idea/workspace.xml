@@ -5,48 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../DB/database_creator.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../DB/database_creator.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/CommandCompletion/TownCommandCompletion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/CommandCompletion/TownCommandCompletion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/GivePermissionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/GivePermissionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/AcceptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/AcceptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/RefuseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/RefuseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Listeners/JoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Listeners/JoinListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/AssignPerms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/AssignPerms.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/ChunkSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/ChunkSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/CommandCompletion/TownCommandCompletion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/CommandCompletion/TownCommandCompletion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/PlayerPermissionLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Utility/PlayerPermissionLogic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/ClaimTownCommand.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/CreateTownCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/DisbandTownCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/GivePermissionCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/GivePermissionCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/InviteCommand.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Commands/TownCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/AcceptCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/AcceptCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/RefuseCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/JoinInvitationCommand/RefuseCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Listeners/JoinListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Listeners/JoinListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/AssignPerms.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/AssignPerms.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/ChunkSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/ChunkSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/PlayerPermissionLogic.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fr/Valkyar/valkyarTownPlugin/Utility/PlayerPermissionLogic.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-valkyartownplugin-0.1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-valkyartownplugin-0.1.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/valkyartownplugin-0.1.0-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/valkyartownplugin-0.1.0-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ValkyarVaultPlugin/src/main/java/fr/Valkyar/valkyarVaultPlugin/Commands/BalanceCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ValkyarVaultPlugin/src/main/java/fr/Valkyar/valkyarVaultPlugin/Commands/BalanceCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +34,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -173,7 +148,8 @@
       <workItem from="1775547915581" duration="11751000" />
       <workItem from="1775571612159" duration="9865000" />
       <workItem from="1775647173448" duration="3707000" />
-      <workItem from="1775669066739" duration="4897000" />
+      <workItem from="1775669066739" duration="5309000" />
+      <workItem from="1775724639926" duration="2207000" />
     </task>
     <servers />
   </component>

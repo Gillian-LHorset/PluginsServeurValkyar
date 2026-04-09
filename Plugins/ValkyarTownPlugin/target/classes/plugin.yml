@@ -11,6 +11,9 @@ commands:
   town:
     description: Use for manage your town.
     usage: /<command> <argument> <argument>
+  t:
+    description: Use for manage your town.
+    usage: /<command> <argument> <argument>
   accept:
     description: Use for accept an invitation to a town.
     usage: /<command>

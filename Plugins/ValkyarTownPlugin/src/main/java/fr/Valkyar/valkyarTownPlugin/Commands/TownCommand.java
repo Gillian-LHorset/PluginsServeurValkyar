@@ -39,7 +39,7 @@ public class TownCommand implements CommandExecutor {
                     if (player.hasPermission("town.claim") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new ClaimTownCommand(_plugin, player, command, s, args);
                     } else {
-                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim pour votre ville1.");
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de claim pour votre ville.");
                     }
                     break;
 
@@ -71,20 +71,27 @@ public class TownCommand implements CommandExecutor {
                     if (player.hasPermission("town.mayor")) {
                         new GivePermissionCommand(_plugin, player, args);
                     } else {
-                        player.sendMessage(ChatColor.RED + "Vous n'avez pas la permission d'accorder cette permission.");
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas les permissions pour en accorder.");
                     }
                     break;
 
                 case "invite":
                     if (player.hasPermission("town.invite") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new InviteCommand(_plugin, player, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas les permissions d'inviter des gens à rejoindre la ville.");
                     }
                     break;
 
                 case "kick":
                     if (player.hasPermission("town.kick") || player.hasPermission("town.second") || player.hasPermission("town.mayor")) {
                         new KickTownCommand(_plugin, player, args);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas les permissions d'expulser quelqu'un de la ville.");
                     }
+                    break;
+                case "spawn":
+                    new SpawnTown(_plugin, player, args);
                     break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Erreur de syntaxe.");
@@ -95,6 +102,7 @@ public class TownCommand implements CommandExecutor {
                     // limite de membres,
                     // paliers de ville,
                     // chat de ville
+                    // town spawn
             }
         }
         return true;

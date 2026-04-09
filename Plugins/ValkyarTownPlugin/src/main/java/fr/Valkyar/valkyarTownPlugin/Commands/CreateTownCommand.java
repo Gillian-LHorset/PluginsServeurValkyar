@@ -38,33 +38,38 @@ public class CreateTownCommand {
                     if (playerTown == null) {
                         // if the town name don't exist already
                         if (!db.getAllTownsNames().contains(args[1])) {
-                            // check if the chunk is already claimed
-                            int[] claimedChunk = ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ());
-                            if (db.getChunkById(claimedChunk) == null) {
-                                // the player pay the creation of the town
-                                db.setPlayerBalanceDecrease(player, createTownPrice);
+                            // check if it's in the town world
+                            if (player.getWorld().getName().equalsIgnoreCase("world")) {
+                                    // check if the chunk is already claimed
+                                    int[] claimedChunk = ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ());
+                                    if (db.getChunkById(claimedChunk) == null) {
+                                        // the player pay the creation of the town
+                                        db.setPlayerBalanceDecrease(player, createTownPrice);
 
-                                // insert the town in the db
-                                db.CreateTown(player, args[1]);
+                                        // insert the town in the db
+                                        db.CreateTown(player, args[1]);
 
-                                // give him all permissions
-                                db.setAllPermissionsOfAPlayerToTrue(player);
+                                        // give him all permissions
+                                        db.setAllPermissionsOfAPlayerToTrue(player);
 
-                                // register the chunk in the db
-                                db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
+                                        // register the chunk in the db
+                                        db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
 
-                                AssignPerms.assignPerms(player, db, _plugin);
+                                        AssignPerms.assignPerms(player, db, _plugin);
 
-                                Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Félicitation à " + player.getName() + " qui viens de créer la ville de " + args[1] + " !");
-                                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
-                            } else {
-                                player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville sur un chunk déjà claim !");
-                            }
+                                        Bukkit.broadcastMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Félicitation à " + player.getName() + " qui viens de créer la ville de " + args[1] + " !");
+                                        player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
+                                    } else {
+                                        player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville sur un chunk déjà claim !");
+                                    }
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville dans ce monde.");
+                                }
                         } else {
                             player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer une ville avec ce nom.");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville, vous êtes déjà une ville.");
+                        player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville, vous êtes déjà dans une ville.");
                     }
                 } else if (args.length == 2 && db.getPlayerBalanceByUUID(player) <= createTownPrice) {
                     player.sendMessage(ChatColor.RED + "Vous n'avez pas assez d'argent pour créer une ville.");

@@ -1,6 +1,7 @@
 fr\Valkyar\valkyarTownPlugin\Commands\GivePermissionCommand$1.class
 fr\Valkyar\valkyarTownPlugin\Utility\PlayerPermissionLogic.class
 fr\Valkyar\valkyarTownPlugin\Commands\DisbandTownCommand$1.class
+fr\Valkyar\valkyarTownPlugin\Commands\SpawnTown.class
 fr\Valkyar\valkyarTownPlugin\CommandCompletion\TownCommandCompletion.class
 fr\Valkyar\valkyarTownPlugin\Listeners\PlaceBlockListener.class
 fr\Valkyar\valkyarTownPlugin\ValkyarTownPlugin.class

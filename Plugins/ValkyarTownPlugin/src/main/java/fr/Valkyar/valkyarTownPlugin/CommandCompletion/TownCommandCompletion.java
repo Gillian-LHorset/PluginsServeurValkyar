@@ -24,16 +24,14 @@ public class TownCommandCompletion implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 
-
-
         List<String> list = new ArrayList<String>();
 
         if (args.length == 1) {
-            list.add("balance");
             if (db.getPlayerTown((Player) sender) == null) {
                 list.add("create");
                 list.add("join");
             } else {
+                list.addFirst("spawn");
                 list.add("leave");
                 list.add("deposit");
                 if (sender.hasPermission("town.claim")
@@ -67,6 +65,7 @@ public class TownCommandCompletion implements TabCompleter {
                     list.add("kick");
                 }
             }
+            list.add("balance");
             return list;
         }
 
@@ -82,10 +81,14 @@ public class TownCommandCompletion implements TabCompleter {
                         list.add(p.getName());
                     }
                 }
-            } else if (sender.hasPermission("town.kick")
+            } else if (args[0].equalsIgnoreCase("kick") &&
+                    (sender.hasPermission("town.kick")
                     || sender.hasPermission("town.mayor")
-                    || sender.hasPermission("town.second") && args[0].equalsIgnoreCase("kick")){
+                    || sender.hasPermission("town.second"))){
                 return db.getAllPlayerOfTownByName(db.getPlayerTown((Player) sender));
+            } else if (args[0].equalsIgnoreCase("spawn")
+                    && (sender.hasPermission("town.mayor") || sender.hasPermission("town.second"))) {
+                list.add("set");
             }
             return list;
         }
