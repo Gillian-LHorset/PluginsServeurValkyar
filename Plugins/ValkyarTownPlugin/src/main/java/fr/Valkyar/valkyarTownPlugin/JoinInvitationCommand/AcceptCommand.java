@@ -46,7 +46,7 @@ public class AcceptCommand implements CommandExecutor {
                     p.sendMessage(ChatColor.RED + "Vous n'avez pas d'invitation en cours.");
                 }
             } else {
-                p.sendMessage(ChatColor.RED + "Vous ne pouvez pas accepter cette invitation, car vous appartenez déjà à une ville.");
+                p.sendMessage(ChatColor.RED + "Vous ne pouvez pas accepter d'invitation, car vous appartenez déjà à une ville.");
             }
 
             return true;

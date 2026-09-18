@@ -22,5 +22,8 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         assignPerms(p, db, _plugin);
+
+        // define the player to talk by default to the global chat
+        _plugin.playerChat.put(p.getUniqueId(), "globale");
     }
 }

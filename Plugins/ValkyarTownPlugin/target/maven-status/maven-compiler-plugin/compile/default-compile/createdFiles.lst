@@ -3,8 +3,11 @@ fr\Valkyar\valkyarTownPlugin\Utility\PlayerPermissionLogic.class
 fr\Valkyar\valkyarTownPlugin\Commands\DisbandTownCommand$1.class
 fr\Valkyar\valkyarTownPlugin\Commands\SpawnTown.class
 fr\Valkyar\valkyarTownPlugin\CommandCompletion\TownCommandCompletion.class
+fr\Valkyar\valkyarTownPlugin\Commands\ChatCommand.class
 fr\Valkyar\valkyarTownPlugin\Listeners\PlaceBlockListener.class
+fr\Valkyar\valkyarTownPlugin\CommandCompletion\ChatCommandCompletion.class
 fr\Valkyar\valkyarTownPlugin\ValkyarTownPlugin.class
+fr\Valkyar\valkyarTownPlugin\Commands\AvantGardeCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\TownBalanceCommand.class
 fr\Valkyar\valkyarTownPlugin\JoinInvitationCommand\RefuseCommand.class
 fr\Valkyar\valkyarTownPlugin\Commands\TownDepositCommand.class
@@ -26,4 +29,5 @@ fr\Valkyar\valkyarTownPlugin\Commands\GivePermissionCommand.class
 fr\Valkyar\valkyarTownPlugin\JoinInvitationCommand\AcceptCommand.class
 fr\Valkyar\valkyarTownPlugin\Utility\AssignPerms.class
 fr\Valkyar\valkyarTownPlugin\Commands\InviteCommand.class
+fr\Valkyar\valkyarTownPlugin\Listeners\PlayerTalkListener.class
 fr\Valkyar\valkyarTownPlugin\Commands\KickTownCommand.class

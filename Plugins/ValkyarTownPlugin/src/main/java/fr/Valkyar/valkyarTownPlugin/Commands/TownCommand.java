@@ -93,16 +93,19 @@ public class TownCommand implements CommandExecutor {
                 case "spawn":
                     new SpawnTown(_plugin, player, args);
                     break;
+                case "avant-garde":
+                    new AvantGardeCommand(_plugin, player, args);
+                    break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Erreur de syntaxe.");
                     break;
-                    //TODO : ajouter : permission par chunk,
-                    // permission pour joueurs externe à la ville,
+                    //TODO : ajouter :
                     // ajouter des outposts,
                     // limite de membres,
                     // paliers de ville,
-                    // chat de ville
-                    // town spawn
+                    // toggle spawn mobs
+                    // grades
+                    // nombre de claim
             }
         }
         return true;

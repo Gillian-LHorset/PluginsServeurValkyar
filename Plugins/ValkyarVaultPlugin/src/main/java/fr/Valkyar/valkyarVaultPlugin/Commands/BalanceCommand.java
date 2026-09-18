@@ -24,8 +24,10 @@ public class BalanceCommand implements CommandExecutor {
                 if (args.length == 1) {
                     player.sendMessage("Votre compte : " + _plugin.api.databaseLink.getPlayerBalanceByUUID(player));
                 } else if (args.length == 2 && _plugin.api.databaseLink.getPlayerFk(Bukkit.getPlayer(args[0])) != null) {
-                    player.sendMessage("Le joueur " + );
-                } else
+                    player.sendMessage("Le joueur " + "");
+                } else{
+
+                }
                 } catch (SQLException e) {
                 ValkyarVaultPlugin.OutputColoredText(ValkyarVaultPlugin.RED_OUTPUT, "The player cannot be found.");
             }

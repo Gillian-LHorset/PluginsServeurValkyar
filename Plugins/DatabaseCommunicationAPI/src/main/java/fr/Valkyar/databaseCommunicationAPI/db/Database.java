@@ -1,9 +1,13 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
+import fr.Valkyar.databaseCommunicationAPI.BlockData;
+import fr.Valkyar.databaseCommunicationAPI.Job;
+import fr.Valkyar.databaseCommunicationAPI.JobProgression;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +17,6 @@ public class Database {
     private Connection _connection;
 
     //TODO need to be changed for the final server
-    private String _urlConnexion = "jdbc:mysql://localhost:6033/db_valkyar_plugin";
-    private String _username = "root";
-    private String _password = "root";
 
     private DatabaseCommunicationAPI _plugin;
 
@@ -28,6 +29,10 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public Connection getConnection() throws SQLException {
+
+        final String _urlConnexion = "jdbc:mysql://localhost:6033/db_valkyar_plugin";
+        final String _username = "root";
+        final String _password = "root";
 
         if (_connection != null) {
             System.out.println("[DatabaseCommunicationPlugin] : Connection is already established");
@@ -168,7 +173,7 @@ public class Database {
         statement.close();
     }
 
-    public List<String> getAllJobs() {
+    public List<String> getAllJobsName() {
         try {
             List<String> jobsList = new ArrayList<>();
 
@@ -183,27 +188,180 @@ public class Database {
 
             return jobsList;
         }  catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobs()'");
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobsName()'");
+        }
+        return null;
+    }
+    
+    public List<Job> getAllJobsInfos() {
+        try {
+            List<Job> jobsList = new ArrayList<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT * FROM t_jobs ORDER BY job_id");
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                jobsList.add(new Job(
+                        results.getInt("job_id"),
+                        results.getString("name"),
+                        results.getBoolean("isMain")));
+            }
+
+            return jobsList;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobsInfos()'");
+        }
+        return null;
+    }
+    
+    public Job getJobInfos(int jobId) {
+        try {
+            Job job = null;
+            
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT * FROM t_jobs WHERE job_id = ? ORDER BY job_id");
+            statement.setInt(1, jobId);
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                job = new Job(
+                        results.getInt("job_id"),
+                        results.getString("name"),
+                        results.getBoolean("isMain"));
+            }
+
+            return job;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getJobInfos()'");
         }
         return null;
     }
 
-    public void setPlayerJob(Player player, String jobsId) throws SQLException{
+    public List<Job> getPlayerJobs(Player p) {
+        try {
+            List<Job> job = new ArrayList<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT * FROM t_jobs WHERE job_id = ? OR job_id = ? ORDER BY job_id");
+            statement.setInt(1, getPlayerMainJobFk(p));
+            statement.setInt(2, getPlayerSecondJobFk(p));
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                job.add(new Job(
+                        results.getInt("job_id"),
+                        results.getString("name"),
+                        results.getBoolean("isMain")));
+            }
+
+            return job;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJobs()'");
+        }
+        return null;
+    }
+
+
+
+    public List<String> getAllMainJobsName() {
+        try {
+            List<String> jobsList = new ArrayList<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT name FROM t_jobs WHERE ismain = TRUE ORDER BY job_id");
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                String jobName = results.getString("name");
+                jobsList.add(jobName);
+            }
+
+            return jobsList;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllMainJobsName()'");
+        }
+        return null;
+    }
+
+    public List<String> getAllSecondJobsName() {
+        try {
+            List<String> jobsList = new ArrayList<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT name FROM t_jobs WHERE ismain = FALSE ORDER BY job_id");
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                String jobName = results.getString("name");
+                jobsList.add(jobName);
+            }
+
+            return jobsList;
+        }  catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllSecondJobsName()'");
+        }
+        return null;
+    }
+
+    public void setPlayerMainJob(Player player, Integer jobsId) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_players SET job_fk = ? WHERE uuid = ?");
-        statement.setString(1, jobsId);
+                .prepareStatement("UPDATE t_players SET main_job_fk = ? WHERE uuid = ?");
+        if (jobsId == null) {
+            statement.setNull(1, Types.INTEGER);
+        } else {
+            statement.setInt(1, jobsId);
+        }
         statement.setString(2, player.getUniqueId().toString());
 
         statement.executeUpdate();
         statement.close();
     }
 
-    public String getPlayerJob(Player player){
+
+
+    public void setPlayerSecondJob(Player player, Integer jobsId) throws SQLException{
+        PreparedStatement statement = _plugin.databaseLink._connection
+                .prepareStatement("UPDATE t_players SET second_job_fk = ? WHERE uuid = ?");
+        if (jobsId == null) {
+            statement.setNull(1, Types.INTEGER);
+        } else {
+            statement.setInt(1, jobsId);
+        }
+        statement.setString(2, player.getUniqueId().toString());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public Integer findJobIdByJobName(String jobName) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT job_id " +
+                            "FROM t_jobs " +
+                            "WHERE name = ? ");
+            statement.setString(1, jobName);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("job_id");
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+
+            return null;
+        }
+        return null;
+    }
+
+    public String getPlayerMainJobName(Player player){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT j.name " +
                                             "FROM t_players AS p " +
-                                            "LEFT JOIN t_jobs AS j ON p.job_fk = j.job_id " +
+                                            "LEFT JOIN t_jobs AS j ON p.main_job_fk = j.job_id " +
                                             "WHERE p.uuid = ? ");
             statement.setString(1, player.getUniqueId().toString());
 
@@ -215,15 +373,39 @@ public class Database {
 
             statement.close();
         } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJob()'");
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerMainJobName()'");
             return null;
         }
         return null;
     }
-    public Integer getPlayerJobFk(Player player){
+
+    public String getPlayerSecondJobName(Player player){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT job_fk " +
+                    .prepareStatement(  "SELECT j.name " +
+                                            "FROM t_players AS p " +
+                                            "LEFT JOIN t_jobs AS j ON p.second_job_fk = j.job_id " +
+                                            "WHERE p.uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getString("name");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerSecondJobName()'");
+            return null;
+        }
+        return null;
+    }
+
+    public Integer getPlayerMainJobFk(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT main_job_fk " +
                                             "FROM t_players " +
                                             "WHERE uuid = ? ");
             statement.setString(1, player.getUniqueId().toString());
@@ -231,25 +413,49 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-                return results.getInt("job_fk");
+                return results.getInt("main_job_fk");
             }
 
             statement.close();
         } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJobFk()'");
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerMainJobFk()'");
             return null;
         }
         return null;
     }
 
-    public List<String> getAllBreakableBlocksByJobs(Player player) {
+
+
+    public Integer getPlayerSecondJobFk(Player player){
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT second_job_fk " +
+                                            "FROM t_players " +
+                                            "WHERE uuid = ? ");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return results.getInt("second_job_fk");
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerSecondJobFk()'");
+            return null;
+        }
+        return null;
+    }
+
+    public List<String> getAllBreakableBlocksByMainJob(Player player) {
         List<String> breakableBlocksList = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT minecraft_identifier " +
                                             "FROM t_breakable_blocks AS b " +
                                             "JOIN t_jobs AS j ON b.job_fk = j.job_id " +
-                                            "JOIN t_players AS p ON p.job_fk = j.job_id " +
+                                            "JOIN t_players AS p ON p.main_job_fk = j.job_id " +
                                             "WHERE p.uuid = ?");
             statement.setString(1, player.getUniqueId().toString());
 
@@ -261,26 +467,131 @@ public class Database {
 
             statement.close();
         } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getAllBreakableBlocksByJobs()'");
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getAllBreakableBlocksByMainJob()'");
             return null;
         }
 
         return breakableBlocksList;
     }
 
-    public void setPlayerBalanceJob(Player player, String breakedBlock) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "UPDATE t_players AS p " +
-                                        "JOIN t_jobs AS j ON p.job_fk = j.job_id " +
-                                        "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
-                                        "SET p.balance = p.balance + b.money_bringing " +
-                                        "WHERE p.uuid = ? " +
-                                        "AND b.minecraft_identifier = ?");
-        statement.setString(1, player.getUniqueId().toString());
-        statement.setString(2, breakedBlock);
 
-        statement.executeUpdate();
-        statement.close();
+
+    public List<String> getAllBreakableBlocksBySecondJob(Player player) {
+        List<String> breakableBlocksList = new ArrayList<>();
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT minecraft_identifier " +
+                                            "FROM t_breakable_blocks AS b " +
+                                            "JOIN t_jobs AS j ON b.job_fk = j.job_id " +
+                                            "JOIN t_players AS p ON p.second_job_fk = j.job_id " +
+                                            "WHERE p.uuid = ?");
+            statement.setString(1, player.getUniqueId().toString());
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                breakableBlocksList.add(results.getString("minecraft_identifid"));
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getAllBreakableBlocksByMainJob()'");
+            return null;
+        }
+
+        return breakableBlocksList;
+    }
+
+    public List<String> getBreakableBlocksNameByJob(int jobFk) {
+        List<String> breakableBlocksList = new ArrayList<>();
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT minecraft_identifier " +
+                            "FROM t_breakable_blocks " +
+                            "WHERE job_fk = ?");
+            statement.setInt(1, jobFk);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                breakableBlocksList.add(results.getString("minecraft_identifier"));
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getBreakableBlocksNameByJob()'");
+            return null;
+        }
+
+        return breakableBlocksList;
+    }
+
+    public List<BlockData> getBreakableBlocksByJob(int jobFk) {
+        List<BlockData> breakableBlocksList = new ArrayList<>();
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "SELECT block_id, minecraft_identifier, money_bringing, exp_bringing, job_fk " +
+                            "FROM t_breakable_blocks " +
+                            "WHERE job_fk = ?");
+            statement.setInt(1, jobFk);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                breakableBlocksList.add( new BlockData(results.getInt("block_id"),
+                        results.getString("minecraft_identifier"),
+                        results.getDouble("money_bringing"),
+                        results.getDouble("exp_bringing"),
+                        results.getInt("job_fk")));
+            }
+
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getBreakableBlocksNameByJob()'");
+            return null;
+        }
+
+        return breakableBlocksList;
+    }
+
+    public void setPlayerBalanceMainJob(Player player, String breakedBlock) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_players AS p " +
+                            "JOIN t_jobs AS j ON p.main_job_fk = j.job_id " +
+                            "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
+                            "SET p.balance = p.balance + b.money_bringing " +
+                            "WHERE p.uuid = ? " +
+                            "AND b.minecraft_identifier = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, breakedBlock);
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'setPlayerBalanceMainJob()'");
+        }
+    }
+
+
+
+    public void setPlayerBalanceSecondJob(Player player, String breakedBlock) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement(  "UPDATE t_players AS p " +
+                                            "JOIN t_jobs AS j ON p.second_job_fk = j.job_id " +
+                                            "JOIN t_breakable_blocks AS b ON b.job_fk = j.job_id " +
+                                            "SET p.balance = p.balance + b.money_bringing " +
+                                            "WHERE p.uuid = ? " +
+                                            "AND b.minecraft_identifier = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, breakedBlock);
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'setPlayerBalanceSecondJob()'");
+        }
     }
 
     public void setPlayerBalanceDecrease(Player player, Double amount) throws SQLException {
@@ -360,29 +671,27 @@ public class Database {
 
     public void setPlayerTownByName(Player player, String name) {
         try {
+            PreparedStatement statement;
             if (name != null) {
-                PreparedStatement statement = _plugin.databaseLink._connection
+                statement = _plugin.databaseLink._connection
                         .prepareStatement("UPDATE t_players AS p " +
                                 "JOIN t_town AS t " +
                                 "ON t.name = ?" +
                                 "SET p.town_fk = t.town_id " +
                                 "WHERE p.uuid = ? ");
                 statement.setString(1, name);
-                statement.setString(2, player.getUniqueId().toString());
 
-                statement.executeUpdate();
-                statement.close();
             } else {
-                PreparedStatement statement = _plugin.databaseLink._connection
+                statement = _plugin.databaseLink._connection
                         .prepareStatement("UPDATE t_players AS p " +
                                 "SET p.town_fk = ? " +
                                 "WHERE p.uuid = ? ");
                 statement.setString(1, null);
-                statement.setString(2, player.getUniqueId().toString());
 
-                statement.executeUpdate();
-                statement.close();
             }
+            statement.setString(2, player.getUniqueId().toString());
+            statement.executeUpdate();
+            statement.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -866,7 +1175,7 @@ public class Database {
     public void setSpawnTown(String tName, Integer[]spawnPos) {
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
-                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    // there no sql injection possible, because of the string is checked for to be in the perms list
                     .prepareStatement("UPDATE t_town SET spawn_x = ?, " +
                             "spawn_y = ?, " +
                             "spawn_z = ? " +
@@ -882,6 +1191,168 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("[Database API] - " + "setSpawnTown - " + e);
         }
+    }
+
+    public void CreatePlayerJobInDb(Player p, int jobFk) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("INSERT INTO t_player_jobs (player_fk, job_fk) VALUES (?, ?)");
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "CreatePlayerJobInDb - " + e);
+        }
+    }
+
+    public void IncreasePlayerJobExp(Player p, int jobFk, Double exp) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET current_exp = current_exp + ? WHERE player_fk = ? AND job_fk = ?");
+            statement.setDouble(1, exp);
+            statement.setInt(2, playerId);
+            statement.setInt(3, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "IncreasePlayerJobExp - " + e);
+        }
+    }
+
+    public void IncreasePlayerJobLvl(Player p, int jobFk) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET level = level + 1 WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "IncreasePlayerJobLvl - " + e);
+        }
+    }
+
+    public void ResetPlayerJobExp(Player p, int jobFk) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET current_exp = 0 WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "ResetPlayerJobExp - " + e);
+        }
+    }
+
+    public void SetPlayerJobLvl(Player p, int jobFk, int level) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET level = ? WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, level);
+            statement.setInt(2, playerId);
+            statement.setInt(3, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "SetPlayerJobLvl - " + e);
+        }
+    }
+
+    public JobProgression getJobProgression(Player p, int jobFk) {
+        int playerId = getPlayerFk(p);
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("SELECT level, current_exp FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                int level = results.getInt("level");
+                double currentExp = results.getDouble("current_exp");
+
+                return new JobProgression(jobFk, currentExp, level);
+            }
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "FindJobPlayerInfo - " + e);
+        }
+        return null;
+    }
+
+
+    public void setProgress(Player p,JobProgression jobProgression) {
+        int playerId = getPlayerFk(p);
+
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET current_exp = ?, level = ? WHERE player_fk = ? AND job_fk = ?");
+            statement.setDouble(1, jobProgression.getExperience());
+            statement.setInt(2, jobProgression.getLevel());
+            statement.setInt(3, playerId);
+            statement.setInt(4, jobProgression.getJobId());
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "UpdateLastLeaveJob - " + e);
+        }
+    }
+
+    public void UpdateLastLeaveJob(Player p, int jobFk) {
+        int playerId = getPlayerFk(p);
+
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET last_leave = NOW() WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "UpdateLastLeaveJob - " + e);
+        }
+    }
+
+    public LocalDateTime getLastLeaveTime(Player p, int jobFk) {
+
+        int playerId = getPlayerFk(p);
+
+        try (PreparedStatement statement = _connection.prepareStatement("SELECT last_leave FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?")) {
+            statement.setInt(1, playerId);
+            statement.setInt(2, jobFk);
+
+            try (ResultSet results = statement.executeQuery()) {
+                if (results.next()) {
+                    return results.getObject("last_leave", LocalDateTime.class);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "getLastLeaveTime - " + e);
+        }
+        return null;
     }
 
 }

@@ -56,9 +56,11 @@ public class DisplayTask extends BukkitRunnable {
 
                         String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
-                        Integer playerJob = db.getPlayerJobFk(p);
+                        Integer playerJob = db.getPlayerMainJobFk(p);
+                        // TODO : AJOUTER job secondaire
 
 
+                        // TODO : mettre ce système au propre
                         if (playerJob != null) {
                             switch (playerJob) {
                                 case 1:

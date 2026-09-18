@@ -20,6 +20,9 @@ commands:
   refuse:
     description: Use for refuse an invitation to a town.
     usage: /<command>
+  chat:
+    description: Use for talk in a specify chat.
+    usage: /<command> <argument>
 
 permissions:
   town.mayor:

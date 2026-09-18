@@ -16,6 +16,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
     private DatabaseCommunicationAPI _plugin;
 
     public Database databaseLink;
+    public Job job;
 
     public static DatabaseCommunicationAPI getApi() {
 

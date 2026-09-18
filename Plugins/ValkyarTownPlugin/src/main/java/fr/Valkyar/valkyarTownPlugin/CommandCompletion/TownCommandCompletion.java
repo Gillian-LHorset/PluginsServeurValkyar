@@ -68,7 +68,6 @@ public class TownCommandCompletion implements TabCompleter {
             list.add("balance");
             return list;
         }
-
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("permission") && sender.hasPermission("town.mayor")) {
                 list.add("add");

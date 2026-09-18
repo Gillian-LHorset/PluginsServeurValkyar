@@ -1,6 +1,7 @@
 package fr.Valkyar.jobsPlugin.TabCompletion;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,14 +16,17 @@ import java.util.List;
 public class JobCommandCompletion implements TabCompleter {
 
     private JobsPlugin _plugin;
-    public List <String> jobsList;
+    private Database db;
+
+
     public JobCommandCompletion(JobsPlugin plugin) {
-        this._plugin = plugin;
-        jobsList = _plugin.databaseApi.databaseLink.getAllJobs();
+        _plugin = plugin;
+        db = _plugin.databaseApi.databaseLink;
     }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         // add the argument "list" to the tab completer in game
+        List <String> jobsList = new ArrayList<>();
 
         List<String> arguments = new ArrayList<>();
         if (args.length == 1) {
@@ -30,9 +34,40 @@ public class JobCommandCompletion implements TabCompleter {
             arguments.add("leave");
 
             return arguments;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
-            return jobsList;
+        } else if (args[0].equalsIgnoreCase("join")) {
+            if (args.length == 2) {
+                arguments.add("principal");
+                arguments.add("secondaire");
+                return arguments;
+            } else if (args.length == 3) {
+                if (args[1].equalsIgnoreCase("principal")) {
+                    _plugin.jobsList.values().forEach(job -> {
+                        if (job.isPrimary()) {
+                            jobsList.add(job.getDisplayName());
+                        }
+                    });
+                    return jobsList;
+
+                } else if (args[1].equalsIgnoreCase("secondaire")) {
+                    _plugin.jobsList.values().forEach(job -> {
+                        if (!job.isPrimary()) {
+                            jobsList.add(job.getDisplayName());
+                        }
+                    });
+                    return jobsList;
+
+                }
+            }
+        } else if (args[0].equalsIgnoreCase("leave")) {
+            if (args.length == 2) {
+                arguments.add("principal");
+                arguments.add("secondaire");
+                return arguments;
+            }
         }
+
+
+
         return null;
     }
 }

@@ -1,3 +1,6 @@
+fr\Valkyar\databaseCommunicationAPI\BlockData.class
 fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.class
+fr\Valkyar\databaseCommunicationAPI\JobProgression.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI.class
 fr\Valkyar\databaseCommunicationAPI\db\Database.class
+fr\Valkyar\databaseCommunicationAPI\Job.class
