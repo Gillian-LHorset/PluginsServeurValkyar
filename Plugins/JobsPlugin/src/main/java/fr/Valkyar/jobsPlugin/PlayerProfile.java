@@ -65,7 +65,6 @@ public class PlayerProfile {
         return null;
     }
 
-//TODO : set dans la db à la déconnexion
     public void setPrimaryJob(Job primaryJob) {
         this.primaryJob = primaryJob;
     }

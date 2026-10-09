@@ -68,7 +68,6 @@ public class BlockBreakListener implements Listener {
             Ageable ageable = (Ageable) block.getBlockData();
 
             if (ageable.getAge() < ageable.getMaximumAge()) {
-                p.sendMessage("debug3");
                 return;
             }
         }
@@ -76,13 +75,19 @@ public class BlockBreakListener implements Listener {
         Job requiredJob = _materialToJobMap.get(materialName);
         if (requiredJob == null) return;
 
-        if (pProfile.hasJob(requiredJob.getId())) {
-            BlockData blockData = _materialToBlockDataMap.get(materialName);
-
-            if (blockData != null) {
-                pProfile.increaseExp(requiredJob.getId(), blockData.expBringing());
-            }
+        if (!pProfile.hasJob(requiredJob.getId())) {
+            return;
         }
+
+        BlockData blockData = _materialToBlockDataMap.get(materialName);
+
+        if (blockData == null) {
+            return;
+        }
+
+        pProfile.increaseExp(requiredJob.getId(), blockData.expBringing());
+
+
 
             // TODO : ajouter système d'exp et lvl et argent
     }
