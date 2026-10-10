@@ -1,6 +1,6 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
-import fr.Valkyar.databaseCommunicationAPI.BlockData;
+import fr.Valkyar.databaseCommunicationAPI.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.Job;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
@@ -19,7 +19,7 @@ public class BlockCookListener implements Listener {
     private Database db;
 
     private final Map<String, Job> _materialToJobMap = new HashMap<>();
-    private final Map<String, BlockData> _materialToBlockDataMap = new HashMap<>();
+    private final Map<String, ResourceData> _materialToResourceDataaMap = new HashMap<>();
 
     public BlockCookListener(JobsPlugin plugin) {
         _plugin = plugin;
@@ -32,13 +32,13 @@ public class BlockCookListener implements Listener {
         for (Job job : concernedJobs) {
             if (job == null) continue;
 
-            List<BlockData> jobBlocks = db.getBreakableBlocksByJob(job.getId());
-            for (BlockData block : jobBlocks) {
-                String materialKey = block.getDisplayName().toLowerCase();
-
-                _materialToJobMap.put(materialKey, job);
-                _materialToBlockDataMap.put(materialKey, block);
-            }
+            //List<ResourceData> jobBlocks = db.getBreakableBlocksByJob(job.getId());
+            //for (ResourceData block : jobBlocks) {
+            //    String materialKey = block.getDisplayName().toLowerCase();
+//
+            //    _materialToJobMap.put(materialKey, job);
+            //    _materialToBlockDataMap.put(materialKey, block);
+            //}
         }
     }
 
