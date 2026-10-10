@@ -12,13 +12,15 @@ public class PlayerProfile {
     private UUID playerUuid;
     private Job primaryJob;
     private Job secondaryJob;
+    private Double currentMoney;
+
+    public PlayerProfile(UUID playerUuid, Double CurrentMoney) {
+        this.playerUuid = playerUuid;
+        currentMoney = CurrentMoney;
+    }
 
     // Integer is the job id
     private final Map<Integer, JobProgression> progressions = new HashMap<>();
-
-    public PlayerProfile(UUID playerUuid) {
-        this.playerUuid = playerUuid;
-    }
 
     public boolean hasJob(Job job) {
         return (primaryJob.getId().equals(job.getId()))
@@ -56,6 +58,7 @@ public class PlayerProfile {
     public Job getSecondaryJob() {
         return secondaryJob;
     }
+    public Double getCurrentMoney() {return currentMoney;}
 
 
     public JobProgression getProgression(Integer jobId) {
@@ -82,5 +85,13 @@ public class PlayerProfile {
 
     public void addProgression(JobProgression progression) {
         this.progressions.put(progression.getJobId() ,progression);
+    }
+
+    public void increaseMoney(Double amount) {
+        currentMoney += amount;
+    }
+
+    public void decreaseMoney(Double amount) {
+        currentMoney -= amount;
     }
 }

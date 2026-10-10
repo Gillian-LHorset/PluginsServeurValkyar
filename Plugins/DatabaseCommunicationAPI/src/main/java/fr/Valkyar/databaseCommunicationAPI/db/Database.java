@@ -97,21 +97,23 @@ public class Database {
      * @return In the case the player isn't be found, return null else return his balance
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
-    public Double getBalancePlayerByName(String player) throws SQLException{
+    public Double getBalancePlayerByName(String player) {
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
+            statement.setString(1, player);
 
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
-        statement.setString(1, player);
+            ResultSet results = statement.executeQuery();
 
-        ResultSet results = statement.executeQuery();
+            if (results.next()) {
+                return results.getDouble("balance");
+            }
+            statement.close();
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
+                    "[DatabaseCommunicationAPI] : Erreur de connexion 'getBalancePlayerByName()'");
 
-        if (results.next()) {
-            return results.getDouble("balance");
         }
-
-
-        statement.close();
-
         return null;
     }
 
@@ -121,18 +123,22 @@ public class Database {
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
     public Double getPlayerBalanceByUUID(Player player) throws SQLException{
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT balance FROM t_players WHERE uuid = ?");
-        statement.setString(1, player.getUniqueId().toString());
+        try {
+            PreparedStatement statement =  _plugin.databaseLink._connection
+                    .prepareStatement("SELECT balance FROM t_players WHERE uuid = ?");
+            statement.setString(1, player.getUniqueId().toString());
 
-        ResultSet results = statement.executeQuery();
+            ResultSet results = statement.executeQuery();
 
-        if (results.next()) {
-            return results.getDouble("balance");
+            if (results.next()) {
+                return results.getDouble("balance");
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
+                    "[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerBalanceByUUID()'");
         }
-
-        statement.close();
-
         return null;
     }
 

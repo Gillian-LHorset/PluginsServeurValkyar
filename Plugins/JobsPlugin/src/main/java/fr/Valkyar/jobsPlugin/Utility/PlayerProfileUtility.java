@@ -13,7 +13,7 @@ import java.util.List;
 public class PlayerProfileUtility {
 
     public static PlayerProfile CreatePlayerProfile(Player p, Database db) {
-        PlayerProfile pP = new PlayerProfile(p.getUniqueId());
+        PlayerProfile pP = new PlayerProfile(p.getUniqueId(), db.getBalancePlayerByName(p.getName()));
         List<Job> playerJobs = db.getPlayerJobs(p);
 
         // if the player didn't have jobs
