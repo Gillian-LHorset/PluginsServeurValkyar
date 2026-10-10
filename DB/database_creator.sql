@@ -50,9 +50,10 @@ CREATE TABLE t_player_jobs (
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id) ON DELETE CASCADE
 );
 
-CREATE TABLE t_breakable_blocks (
+CREATE TABLE t_action_type (
     block_id int NOT NULL AUTO_INCREMENT,
     minecraft_identifier VARCHAR(51) NOT NULL,
+    action VARCHAR(51) NOT NULL,
     money_bringing DOUBLE(5,2),
     exp_bringing DOUBLE(5,2),
     job_fk INT,
@@ -97,10 +98,13 @@ INSERT INTO t_jobs (name, ismain) VALUES ('Mineur', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Bucheron', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Fermier', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Pecheur', FALSE);
+INSERT INTO t_jobs (name, ismain) VALUES ('Cuisinier', FALSE);
 
-INSERT INTO t_breakable_blocks  (minecraft_identifier,       money_bringing,    exp_bringing,       job_fk) 
-                        VALUES  ('stone',                   1.00,               1.00,               1),
-                                ('oak_log',                 1.00,               1.00,               2),
-                                ('wheat[age=7]',            1.00,               1.00,               3);
+INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_bringing, job_fk) 
+                    VALUES  ('stone',              "break", 1.00,           1.00,         1),
+                            ('oak_log',            "break", 1.00,           1.00,         2),
+                            ('wheat[age=7]',       "break", 1.00,           1.00,         3),
+                            ('salmon',              "fish", 1.00,           1.00,         3),
+                            ('cooked_beef',       "cook", 1.00,           1.00,         3);
 
 COMMIT;
