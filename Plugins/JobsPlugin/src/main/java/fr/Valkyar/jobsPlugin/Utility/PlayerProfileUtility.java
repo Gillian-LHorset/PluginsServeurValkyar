@@ -51,5 +51,6 @@ public class PlayerProfileUtility {
         if (pProfile.hasSecondJobs()) {
             db.setProgress(p, pProfile.getProgression(pProfile.getSecondaryJob().getId()));
         }
+        db.setPlayerBalance(p, pProfile.getCurrentMoney());
     }
 }

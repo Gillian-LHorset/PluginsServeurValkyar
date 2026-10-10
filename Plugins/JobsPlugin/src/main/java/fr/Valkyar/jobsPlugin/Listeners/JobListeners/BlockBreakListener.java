@@ -86,10 +86,10 @@ public class BlockBreakListener implements Listener {
         }
 
         pProfile.increaseExp(requiredJob.getId(), blockData.expBringing());
+        pProfile.increaseMoney(blockData.moneyBringing());
 
 
-
-            // TODO : ajouter système d'exp et lvl et argent
+            // TODO : ajouter système lvl
     }
 
 }

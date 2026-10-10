@@ -142,6 +142,21 @@ public class Database {
         return null;
     }
 
+    public void setPlayerBalance(Player player, Double amount) {
+        try {
+         PreparedStatement statement = _plugin.databaseLink._connection
+                 .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
+             statement.setString(1, amount.toString());
+             statement.setString(2, player.getUniqueId().toString());
+
+             statement.executeUpdate();
+             statement.close();
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
+                    "[DatabaseCommunicationAPI] : Erreur de connexion 'setPlayerBalance()'");
+        }
+    }
+
     /** Decrease the balance of the player to the specify amount.
      * @param player This is the player who pay.
      * @param amount This is how many the player pay for the transaction.
