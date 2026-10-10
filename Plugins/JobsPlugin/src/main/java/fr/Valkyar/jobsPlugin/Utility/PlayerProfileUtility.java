@@ -47,9 +47,11 @@ public class PlayerProfileUtility {
         PlayerProfile pProfile = plugin.playerProfiles.get(p.getUniqueId());
         if (pProfile.hasMainJobs()) {
             db.setProgress(p, pProfile.getProgression(pProfile.getPrimaryJob().getId()));
+            db.SetPlayerJobLvl(p, pProfile.getPrimaryJob().getId(), pProfile.getProgression(pProfile.getPrimaryJob().getId()).getLevel());
         }
         if (pProfile.hasSecondJobs()) {
             db.setProgress(p, pProfile.getProgression(pProfile.getSecondaryJob().getId()));
+            db.SetPlayerJobLvl(p, pProfile.getSecondaryJob().getId(), pProfile.getProgression(pProfile.getSecondaryJob().getId()).getLevel());
         }
         db.setPlayerBalance(p, pProfile.getCurrentMoney());
     }

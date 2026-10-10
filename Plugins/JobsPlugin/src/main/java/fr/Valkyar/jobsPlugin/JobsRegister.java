@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JobsRegister {
-    private final Map<String, Job> loadedJobs = new HashMap<>();
+    private static final Map<String, Job> loadedJobs = new HashMap<>();
+    private static List<Job> jobsList;
 
     public void loadJobsFromDatabase(Database db) {
         loadedJobs.clear();
@@ -25,9 +26,10 @@ public class JobsRegister {
         return loadedJobs;
     }
 
-    public Job getJob(String jobName) {
+    public static Job getJob(String jobName) {
         return loadedJobs.get(jobName);
     }
+
 
     public boolean exists(String jobName) {
         return loadedJobs.containsKey(jobName);

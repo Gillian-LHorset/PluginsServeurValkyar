@@ -1,6 +1,8 @@
 package fr.Valkyar.jobsPlugin;
 import fr.Valkyar.databaseCommunicationAPI.Job;
 import fr.Valkyar.databaseCommunicationAPI.JobProgression;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -81,10 +83,23 @@ public class PlayerProfile {
             return;
         }
         progressions.get(jobId).increaseExperience(amount);
+
+        // TODO : implementer les réel valeurs d'exp nécéssaire pour lvl up
+        if (progressions.get(jobId).getExperience() < 100) {
+            return;
+        }
+
+        progressions.get(jobId).setExperience(0);
+        progressions.get(jobId).increaseLevel();
+        Bukkit.getPlayer(playerUuid).sendMessage("Vous venez de passer au niveau " +
+                ChatColor.BOLD + progressions.get(jobId).getLevel() + ChatColor.RESET +
+                " dans le métier de " +
+                ChatColor.BOLD + progressions.get(jobId).getJob().getDisplayName() + ChatColor.RESET + ".");
+
     }
 
     public void addProgression(JobProgression progression) {
-        this.progressions.put(progression.getJobId() ,progression);
+        this.progressions.put(progression.getJobId(), progression);
     }
 
     public void increaseMoney(Double amount) {

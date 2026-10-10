@@ -1310,7 +1310,7 @@ public class Database {
                 int level = results.getInt("level");
                 double currentExp = results.getDouble("current_exp");
 
-                return new JobProgression(jobFk, currentExp, level);
+                return new JobProgression(jobFk, currentExp, level, getJobInfos(jobFk));
             }
             statement.close();
 
@@ -1358,10 +1358,10 @@ public class Database {
     }
 
     public LocalDateTime getLastLeaveTime(Player p, int jobFk) {
-
         int playerId = getPlayerFk(p);
 
-        try (PreparedStatement statement = _connection.prepareStatement("SELECT last_leave FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?")) {
+        try (PreparedStatement statement = _connection
+                .prepareStatement("SELECT last_leave FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?")) {
             statement.setInt(1, playerId);
             statement.setInt(2, jobFk);
 

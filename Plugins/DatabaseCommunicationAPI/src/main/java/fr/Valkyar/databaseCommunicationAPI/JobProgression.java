@@ -1,20 +1,23 @@
 package fr.Valkyar.databaseCommunicationAPI;
 
 public class JobProgression {
+    private final Job job;
     private final int jobId;
     private double experience;
     private int level;
     private boolean isMain;
 
-    public JobProgression(int jobId, double experience, int level) {
+    public JobProgression(int jobId, double experience, int level, Job job) {
         this.jobId = jobId;
         this.experience = experience;
         this.level = level;
+        this.job = job;
     }
 
     public int getJobId() {return jobId;}
     public Double getExperience() { return experience; }
     public Integer getLevel() { return level; }
+    public Job getJob() { return job; }
     public boolean isMain() { return isMain; }
 
     public void setMain(boolean isMain) { this.isMain = isMain; }
