@@ -103,8 +103,8 @@ INSERT INTO t_jobs (name, ismain) VALUES ('Cuisinier', FALSE);
 INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_bringing, job_fk) 
                     VALUES  ('stone',              "break", 1.00,           1.00,         1),
                             ('oak_log',            "break", 1.00,           1.00,         2),
-                            ('wheat[age=7]',       "break", 1.00,           1.00,         3),
-                            ('salmon',              "fish", 1.00,           1.00,         3),
-                            ('cooked_beef',       "cook", 1.00,           1.00,         3);
+                            ('wheat',              "break", 1.00,           1.00,         3),
+                            ('salmon',             "fish", 1.00,            1.00,         4),
+                            ('cooked_beef',        "cook", 1.00,            1.00,         5);
 
 COMMIT;

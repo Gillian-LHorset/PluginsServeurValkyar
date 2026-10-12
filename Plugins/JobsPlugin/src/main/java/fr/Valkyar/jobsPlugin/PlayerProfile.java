@@ -32,13 +32,13 @@ public class PlayerProfile {
         return this.progressions.containsKey(jobId);
     }
 
-    public Integer hasJobInList(List<Job> job) {
+    public boolean hasJobInList(List<Job> job) {
         for (Job j : job) {
-            if (primaryJob == j || secondaryJob == j) {
-                return j.getId();
+            if (primaryJob.getId() == j.getId() || secondaryJob.getId() == j.getId()) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public boolean hasAnyJobs() {

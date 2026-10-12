@@ -17,6 +17,7 @@ import java.util.UUID;
 public final class JobsPlugin extends JavaPlugin {
 
     public DatabaseCommunicationAPI databaseApi = DatabaseCommunicationAPI.getApi();
+    // attention : case-sensitive
     public Map<String, Job> jobsList;
 
     public final JobsRegister jobsRegister = new JobsRegister();

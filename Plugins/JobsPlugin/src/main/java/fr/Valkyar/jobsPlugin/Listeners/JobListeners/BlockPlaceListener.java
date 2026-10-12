@@ -9,7 +9,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class BlockPlaceListener implements Listener {
 
     private JobsPlugin _plugin;
-
     private Database db;
 
     public BlockPlaceListener(JobsPlugin plugin) {
