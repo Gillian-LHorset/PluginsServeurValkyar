@@ -75,7 +75,6 @@ public class EntityBreedListener implements Listener {
         if (ResourceData == null) {
             return;
         }
-        p.sendMessage("argent");
 
         pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
         pProfile.increaseMoney(ResourceData.moneyBringing());
