@@ -130,8 +130,6 @@ public class SmeltListener implements Listener {
         }
         PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
 
-        p.sendMessage("argent");
-
         pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
         pProfile.increaseMoney(ResourceData.moneyBringing());
     }
