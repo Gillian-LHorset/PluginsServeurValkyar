@@ -57,7 +57,6 @@ public class BlockBreakListener implements Listener {
 
         Player p = event.getPlayer();
 
-
         PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 

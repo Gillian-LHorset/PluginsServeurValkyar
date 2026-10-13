@@ -4,6 +4,10 @@ import fr.Valkyar.databaseCommunicationAPI.Job;
 import fr.Valkyar.databaseCommunicationAPI.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
+import fr.Valkyar.jobsPlugin.PlayerProfile;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -49,6 +53,27 @@ public class BlockPlaceListener implements Listener {
         // pour fermier (planter graine)
         // pour builder
 
+        Player p = e.getPlayer();
 
+        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        if (pProfile == null || !pProfile.hasAnyJobs()) return;
+
+        String materialName = e.getBlock().getType().name().toLowerCase();
+
+        Job requiredJob = _materialToJobMap.get(materialName);
+        if (requiredJob == null) return;
+
+        if (!pProfile.hasJob(requiredJob.getId())) {
+            return;
+        }
+
+        ResourceData ResourceData = _materialToResourceDataMap.get(materialName);
+
+        if (ResourceData == null) {
+            return;
+        }
+
+        pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
+        pProfile.increaseMoney(ResourceData.moneyBringing());
     }
 }

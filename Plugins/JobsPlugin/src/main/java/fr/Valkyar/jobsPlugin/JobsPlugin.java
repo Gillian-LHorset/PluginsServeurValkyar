@@ -41,6 +41,7 @@ public final class JobsPlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockCookListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         getServer().getPluginManager().registerEvents(new BrewListener(this), this);
         getServer().getPluginManager().registerEvents(new CraftItemListener(this), this);
         getServer().getPluginManager().registerEvents(new EnchantItemListener(this), this);

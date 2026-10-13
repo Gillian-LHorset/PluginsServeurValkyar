@@ -108,6 +108,6 @@ INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_
                             ('salmon',             "fish",  1.00,           1.00,         4),
                             ('cooked_beef',        "cook",  1.00,           1.00,         5),
                             ('stone',              "place", 1.00,           1.00,         6),
-                            ('wheat_seeds',        "place", 1.00,           1.00,         3);
+                            ('wheat',              "place", 1.00,           1.00,         3);
 
 COMMIT;
