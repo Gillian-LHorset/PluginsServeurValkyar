@@ -5,23 +5,16 @@ import fr.Valkyar.databaseCommunicationAPI.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
 import fr.Valkyar.jobsPlugin.PlayerProfile;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class CraftItemListener implements Listener {
-
-    private final HashMap<Location, UUID> furnaceCrafters = new HashMap<>();
 
     private JobsPlugin _plugin;
     private Database db;
