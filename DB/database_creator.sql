@@ -102,6 +102,7 @@ INSERT INTO t_jobs (name, ismain) VALUES ('Cuisinier', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Constructeur', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Alchimiste', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Forgemage', FALSE);
+INSERT INTO t_jobs (name, ismain) VALUES ('Chasseur', TRUE);
 
 INSERT INTO t_action_type   (minecraft_identifier, action,    money_bringing, exp_bringing, job_fk) 
                     VALUES  ('stone',              "break",   1.00,           1.00,         1),
@@ -115,6 +116,7 @@ INSERT INTO t_action_type   (minecraft_identifier, action,    money_bringing, ex
                             ('iron_chestplate',    "craft",   1.00,           1.00,         8),
                             ('cake',               "craft",   1.00,           1.00,         5),
                             ('iron_chestplate',    "enchant", 1.00,           1.00,         8),
-                            ('sheep',              "breed",   1.00,           1.00,         3);
+                            ('sheep',              "breed",   1.00,           1.00,         3),
+                            ('sheep',              "kill",    1.00,           1.00,         9);
 
 COMMIT;
