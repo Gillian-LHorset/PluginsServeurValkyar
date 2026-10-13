@@ -34,7 +34,7 @@ public class PlayerProfile {
 
     public boolean hasJobInList(List<Job> job) {
         for (Job j : job) {
-            if (primaryJob.getId() == j.getId() || secondaryJob.getId() == j.getId()) {
+            if ((primaryJob != null && primaryJob.getId() == j.getId()) || (secondaryJob != null && secondaryJob.getId() == j.getId())) {
                 return true;
             }
         }
