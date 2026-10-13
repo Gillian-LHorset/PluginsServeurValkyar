@@ -113,6 +113,7 @@ INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_
                             ('wheat',              "place", 1.00,           1.00,         3),
                             ('weakness',           "brew",  1.00,           1.00,         7),
                             ('iron_chestplate',    "craft", 1.00,           1.00,         8),
-                            ('cake',               "craft", 1.00,           1.00,         5);
+                            ('cake',               "craft", 1.00,           1.00,         5),
+                            ('iron_chestplate',    "enchant", 1.00,           1.00,         8);
 
 COMMIT;
