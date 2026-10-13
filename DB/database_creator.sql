@@ -103,17 +103,18 @@ INSERT INTO t_jobs (name, ismain) VALUES ('Constructeur', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Alchimiste', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Forgemage', FALSE);
 
-INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_bringing, job_fk) 
-                    VALUES  ('stone',              "break", 1.00,           1.00,         1),
-                            ('oak_log',            "break", 1.00,           1.00,         2),
-                            ('wheat',              "break", 1.00,           1.00,         3),
-                            ('salmon',             "fish",  1.00,           1.00,         4),
-                            ('cooked_beef',        "cook",  1.00,           1.00,         5),
-                            ('stone',              "place", 1.00,           1.00,         6),
-                            ('wheat',              "place", 1.00,           1.00,         3),
-                            ('weakness',           "brew",  1.00,           1.00,         7),
-                            ('iron_chestplate',    "craft", 1.00,           1.00,         8),
-                            ('cake',               "craft", 1.00,           1.00,         5),
-                            ('iron_chestplate',    "enchant", 1.00,           1.00,         8);
+INSERT INTO t_action_type   (minecraft_identifier, action,    money_bringing, exp_bringing, job_fk) 
+                    VALUES  ('stone',              "break",   1.00,           1.00,         1),
+                            ('oak_log',            "break",   1.00,           1.00,         2),
+                            ('wheat',              "break",   1.00,           1.00,         3),
+                            ('salmon',             "fish",    1.00,           1.00,         4),
+                            ('cooked_beef',        "cook",    1.00,           1.00,         5),
+                            ('stone',              "place",   1.00,           1.00,         6),
+                            ('wheat',              "place",   1.00,           1.00,         3),
+                            ('weakness',           "brew",    1.00,           1.00,         7),
+                            ('iron_chestplate',    "craft",   1.00,           1.00,         8),
+                            ('cake',               "craft",   1.00,           1.00,         5),
+                            ('iron_chestplate',    "enchant", 1.00,           1.00,         8),
+                            ('sheep',              "bread",   1.00,           1.00,         3);
 
 COMMIT;
