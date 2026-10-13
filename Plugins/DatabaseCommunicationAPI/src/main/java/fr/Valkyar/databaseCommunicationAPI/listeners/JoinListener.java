@@ -61,9 +61,5 @@ public class JoinListener implements Listener {
         };
 
         _plugin.playerProfiles.put(p.getUniqueId(), playerProfile);
-
-        _plugin.playerProfiles.forEach((uuid, playerProfiles) -> {
-            OutputColoredText(RED_OUTPUT, "Profil de "+uuid + ": "+playerProfiles.getPlayerUuid());
-        });
     }
 }

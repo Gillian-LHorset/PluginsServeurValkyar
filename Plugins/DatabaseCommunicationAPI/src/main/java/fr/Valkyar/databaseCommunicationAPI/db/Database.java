@@ -1218,7 +1218,7 @@ public class Database {
             statement.close();
 
         } catch (SQLException e) {
-            System.out.println("[Database API] - " + "UpdateLastLeaveJob - " + e);
+            System.out.println("[Database API] - " + "setProgress - " + e);
         }
     }
 
