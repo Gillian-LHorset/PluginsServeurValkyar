@@ -10,7 +10,6 @@ import fr.Valkyar.jobsPlugin.TabCompletion.JobCommandCompletion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,6 +38,7 @@ public final class JobsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
 
+        getServer().getPluginManager().registerEvents(new AnvilListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockCookListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);

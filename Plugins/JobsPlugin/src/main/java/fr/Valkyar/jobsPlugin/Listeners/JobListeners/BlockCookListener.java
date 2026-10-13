@@ -67,8 +67,6 @@ public class BlockCookListener implements Listener {
             return;
         }
 
-
-
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
