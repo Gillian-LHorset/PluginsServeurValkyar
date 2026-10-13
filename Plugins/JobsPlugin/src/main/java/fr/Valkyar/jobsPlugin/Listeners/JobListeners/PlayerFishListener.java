@@ -1,20 +1,50 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
+import fr.Valkyar.databaseCommunicationAPI.Job;
+import fr.Valkyar.databaseCommunicationAPI.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
+import fr.Valkyar.jobsPlugin.PlayerProfile;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PlayerFishListener implements Listener {
 
     private JobsPlugin _plugin;
-
     private Database db;
+
+    private final Map<String, Job> _materialToJobMap = new HashMap<>();
+    private final Map<String, ResourceData> _materialToResourceDataMap = new HashMap<>();
+
+    List<Job> concernedJobs;
 
     public PlayerFishListener(JobsPlugin plugin) {
         _plugin = plugin;
         db = _plugin.databaseApi.databaseLink;
+
+        concernedJobs = List.of(
+                _plugin.jobsList.get("Pecheur")
+        );
+
+        for (Job job : concernedJobs) {
+            if (job == null) continue;
+
+            List<ResourceData> jobBlocks = db.getResourceByJob(job.getId(), "fish");
+            for (ResourceData block : jobBlocks) {
+
+                String materialKey = block.getDisplayName().toLowerCase();
+
+                _materialToJobMap.put(materialKey, job);
+                _materialToResourceDataMap.put(materialKey, block);
+            }
+        }
     }
 
 
@@ -22,5 +52,35 @@ public class PlayerFishListener implements Listener {
     public void onPlayerFish(PlayerFishEvent event) {
         // pour pecheur
 
+        if (event.getCaught() == null || event.getPlayer() == null) return;
+
+        Player p = event.getPlayer();
+
+        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        if (pProfile == null || !pProfile.hasAnyJobs()) return;
+
+        if (!(event.getCaught() instanceof Item)) {
+            return;
+        }
+
+        String materialName = ((Item) event.getCaught()).getItemStack().getType().name().toLowerCase();
+        System.out.println(materialName);
+
+
+        Job requiredJob = _materialToJobMap.get(materialName);
+        if (requiredJob == null) return;
+
+        if (!pProfile.hasJob(requiredJob.getId())) {
+            return;
+        }
+
+        ResourceData ResourceData = _materialToResourceDataMap.get(materialName);
+
+        if (ResourceData == null) {
+            return;
+        }
+
+        pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
+        pProfile.increaseMoney(ResourceData.moneyBringing());
     }
 }
