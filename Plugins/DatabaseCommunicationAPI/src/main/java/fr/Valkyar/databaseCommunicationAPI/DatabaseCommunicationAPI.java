@@ -1,10 +1,15 @@
 package fr.Valkyar.databaseCommunicationAPI;
 
-import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.databaseCommunicationAPI.listeners.JoinListener;
+import fr.Valkyar.databaseCommunicationAPI.listeners.LeaveListener;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.UUID;
 
 public final class DatabaseCommunicationAPI extends JavaPlugin {
 
@@ -23,19 +28,25 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         return JavaPlugin.getPlugin(DatabaseCommunicationAPI.class);
     }
 
+    public static HashMap<UUID, PlayerProfile> playerProfiles = new HashMap<>();
+
     @Override
     public void onEnable() {
-
         // Plugin startup logic
         try {
             databaseLink = new Database(this);
+
             databaseLink.getConnection();
+
         } catch (SQLException error) {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion");
             System.err.println("[DatabaseCommunicationAPI] : " + error.getMessage());
+            getServer().getPluginManager().disablePlugin(this);
         }
 
+        // Register listeners
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

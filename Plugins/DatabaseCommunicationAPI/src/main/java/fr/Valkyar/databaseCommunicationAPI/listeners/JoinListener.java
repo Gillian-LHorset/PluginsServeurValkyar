@@ -1,6 +1,7 @@
 package fr.Valkyar.databaseCommunicationAPI.listeners;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +10,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.sql.SQLException;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.*;
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.RED_OUTPUT;
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.GREEN_OUTPUT;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.CreatePlayerProfile;
 
 public class JoinListener implements Listener {
 
@@ -48,5 +52,18 @@ public class JoinListener implements Listener {
         }
 
 
+        Player p = e.getPlayer();
+
+        PlayerProfile playerProfile = CreatePlayerProfile(p, _plugin.databaseLink);
+
+        if (playerProfiles == null) {
+            OutputColoredText(RED_OUTPUT, "Erreur création profil");
+        };
+
+        _plugin.playerProfiles.put(p.getUniqueId(), playerProfile);
+
+        _plugin.playerProfiles.forEach((uuid, playerProfiles) -> {
+            OutputColoredText(RED_OUTPUT, "Profil de "+uuid + ": "+playerProfiles.getPlayerUuid());
+        });
     }
 }

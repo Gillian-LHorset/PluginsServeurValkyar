@@ -1,14 +1,17 @@
-package fr.Valkyar.jobsPlugin.Utility;
+package fr.Valkyar.databaseCommunicationAPI.Utilities;
 
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
-import fr.Valkyar.jobsPlugin.JobsPlugin;
-import fr.Valkyar.jobsPlugin.PlayerProfile;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.*;
 
 public class PlayerProfileUtility {
 
@@ -35,16 +38,15 @@ public class PlayerProfileUtility {
         return pP;
     }
 
-    public static void ResetPlayerProfile(Player p, JobsPlugin plugin) {
-        plugin.playerProfiles.remove(p.getUniqueId());
-        PlayerProfile pP = CreatePlayerProfile(p, plugin.databaseApi.databaseLink);
+    public static void ResetPlayerProfile(Player p, Database db, HashMap<UUID, PlayerProfile> playerProfiles) {
+        playerProfiles.remove(p.getUniqueId());
+        PlayerProfile pP = CreatePlayerProfile(p, db);
 
-        plugin.playerProfiles.put(p.getUniqueId(), pP);
+        playerProfiles.put(p.getUniqueId(), pP);
     }
 
-    public static void UpdatePlayerProfileInDB(JobsPlugin plugin, Player p) {
-        Database db = plugin.databaseApi.databaseLink;
-        PlayerProfile pProfile = plugin.playerProfiles.get(p.getUniqueId());
+    public static void UpdatePlayerProfileInDB(Player p, Database db, HashMap<UUID, PlayerProfile> playerProfiles) {
+        PlayerProfile pProfile = playerProfiles.get(p.getUniqueId());
         if (pProfile.hasMainJobs()) {
             db.setProgress(p, pProfile.getProgression(pProfile.getPrimaryJob().getId()));
             db.SetPlayerJobLvl(p, pProfile.getPrimaryJob().getId(), pProfile.getProgression(pProfile.getPrimaryJob().getId()).getLevel());

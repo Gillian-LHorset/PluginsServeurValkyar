@@ -1,6 +1,6 @@
-package fr.Valkyar.jobsPlugin;
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.JobProgression;
+package fr.Valkyar.databaseCommunicationAPI.Models;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

@@ -119,6 +119,7 @@ INSERT INTO t_action_type   (minecraft_identifier, action,    money_bringing, ex
                             ('iron_chestplate',    "enchant", 1.00,           1.00,         8),
                             ('sheep',              "breed",   1.00,           1.00,         3),
                             ('sheep',              "kill",    1.00,           1.00,         9),
-                            ('iron_ingot',         "smelt",   1.00,           1.00,         10);
+                            ('iron_ingot',         "smelt",   1.00,           1.00,         10),
+                            ('iron_chestplate',    "repaire", 1.00,           1.00,         8);
 
 COMMIT;

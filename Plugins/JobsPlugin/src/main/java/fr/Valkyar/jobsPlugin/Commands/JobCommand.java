@@ -1,11 +1,10 @@
 package fr.Valkyar.jobsPlugin.Commands;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
-import fr.Valkyar.jobsPlugin.PlayerProfile;
-import fr.Valkyar.jobsPlugin.Utility.PlayerProfileUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,7 +19,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static fr.Valkyar.jobsPlugin.Utility.PlayerProfileUtility.*;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.ResetPlayerProfile;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.UpdatePlayerProfileInDB;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -51,7 +51,7 @@ public class JobCommand implements CommandExecutor {
                 return true;
             }
 
-            PlayerProfile pProfile = _plugin.playerProfiles.get(player.getUniqueId());
+            PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(player.getUniqueId());
 
             switch (args[0]) {
                 case "join":
@@ -175,7 +175,7 @@ public class JobCommand implements CommandExecutor {
     private void RegisterJob(Player p, Job job) {
         try {
             // update the jobs progress in db
-            UpdatePlayerProfileInDB(_plugin, p);
+            UpdatePlayerProfileInDB(p, db, _plugin.databaseApi.playerProfiles);
             if (job.isPrimary()) {
                 db.setPlayerMainJob(p, job.getId());
                 p.sendMessage(ChatColor.GREEN + "Vous avez adopté métier principal de " + job.getDisplayName() + ".");
@@ -189,7 +189,7 @@ public class JobCommand implements CommandExecutor {
             }
 
             // reset dynamically the PlayerProfile
-            ResetPlayerProfile(p, _plugin);
+            ResetPlayerProfile(p, db, _plugin.databaseApi.playerProfiles);
         } catch (SQLException e) {
             _plugin.databaseApi.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[JobsPlugin] : Cannot register job.");
         }
@@ -198,7 +198,7 @@ public class JobCommand implements CommandExecutor {
     private void LeaveJob(Player p, boolean primary) {
         try {
             // update the jobs progress in db
-            UpdatePlayerProfileInDB(_plugin, p);
+            UpdatePlayerProfileInDB(p, db, _plugin.databaseApi.playerProfiles);
             if (primary) {
                 ResetJobInfoCheckpoint(p, db.getPlayerMainJobFk(p));
                 db.setPlayerMainJob(p, null);
@@ -210,7 +210,7 @@ public class JobCommand implements CommandExecutor {
             }
 
             // reset dynamically the PlayerProfile
-            ResetPlayerProfile(p, _plugin);
+            ResetPlayerProfile(p, db, _plugin.databaseApi.playerProfiles);
         } catch (SQLException e) {
             _plugin.databaseApi.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[JobsPlugin] : Can't leave job.");
         }

@@ -1,6 +1,10 @@
-fr\Valkyar\databaseCommunicationAPI\ResourceData.class
+fr\Valkyar\databaseCommunicationAPI\Models\Job.class
+fr\Valkyar\databaseCommunicationAPI\Models\PlayerProfile.class
+fr\Valkyar\databaseCommunicationAPI\Models\ResourceData.class
+fr\Valkyar\databaseCommunicationAPI\Models\JobProgression.class
 fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.class
-fr\Valkyar\databaseCommunicationAPI\JobProgression.class
+fr\Valkyar\databaseCommunicationAPI\Utilities\PlayerProfileUtility.class
+fr\Valkyar\databaseCommunicationAPI\listeners\LeaveListener.class
+fr\Valkyar\databaseCommunicationAPI\Utilities\JobsRegister.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI.class
 fr\Valkyar\databaseCommunicationAPI\db\Database.class
-fr\Valkyar\databaseCommunicationAPI\Job.class

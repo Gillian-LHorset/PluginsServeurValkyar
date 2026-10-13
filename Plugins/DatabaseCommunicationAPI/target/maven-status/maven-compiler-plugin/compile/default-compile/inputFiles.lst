@@ -1,6 +1,10 @@
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\db\Database.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Job.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\JobProgression.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\ResourceData.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\listeners\LeaveListener.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\Job.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\JobProgression.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\PlayerProfile.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\ResourceData.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\JobsRegister.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\PlayerProfileUtility.java

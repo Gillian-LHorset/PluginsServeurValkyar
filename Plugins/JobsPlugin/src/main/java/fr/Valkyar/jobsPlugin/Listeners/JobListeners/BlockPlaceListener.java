@@ -1,12 +1,10 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.ResourceData;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
-import fr.Valkyar.jobsPlugin.PlayerProfile;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,7 +53,7 @@ public class BlockPlaceListener implements Listener {
 
         Player p = e.getPlayer();
 
-        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 
         String materialName = e.getBlock().getType().name().toLowerCase();

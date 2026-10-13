@@ -1,10 +1,10 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
-import fr.Valkyar.databaseCommunicationAPI.ResourceData;
-import fr.Valkyar.databaseCommunicationAPI.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
+import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
-import fr.Valkyar.jobsPlugin.PlayerProfile;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
@@ -53,11 +53,11 @@ public class BlockBreakListener implements Listener {
         // pour mineur
         // pour bucheron
         // pour fermier (casser plantation)
-        //TODO : verifier le block cassé seulement si le block est différent du dernier cassé
+        //TODO : verifier si le block cassé n'à été posé à la main
 
         Player p = event.getPlayer();
 
-        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 
         Block block = event.getBlock();

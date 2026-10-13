@@ -1,6 +1,6 @@
-package fr.Valkyar.jobsPlugin;
+package fr.Valkyar.databaseCommunicationAPI.Utilities;
 
-import fr.Valkyar.databaseCommunicationAPI.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class JobsRegister {
     private static final Map<String, Job> loadedJobs = new HashMap<>();
     private static List<Job> jobsList;
 
-    public void loadJobsFromDatabase(Database db) {
+    public static void loadJobsFromDatabase(Database db) {
         loadedJobs.clear();
 
             for (Job job : db.getAllJobsInfos()) {
@@ -22,7 +22,7 @@ public class JobsRegister {
             System.out.println(loadedJobs.size() + " métiers chargés depuis la DB.");
     }
 
-    public Map<String, Job> getAllJobs() {
+    public static Map<String, Job> getAllJobs() {
         return loadedJobs;
     }
 

@@ -1,7 +1,5 @@
-fr\Valkyar\jobsPlugin\JobsRegister.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\BlockBreakListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\SmeltListener.class
-fr\Valkyar\jobsPlugin\Listeners\JoinListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\EntityDeathListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\EntityBreedListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\BlockCookListener.class
@@ -11,9 +9,6 @@ fr\Valkyar\jobsPlugin\Listeners\JobListeners\BrewListener.class
 fr\Valkyar\jobsPlugin\Commands\JobCommand.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\CraftItemListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\PlayerFishListener.class
-fr\Valkyar\jobsPlugin\Utility\PlayerProfileUtility.class
 fr\Valkyar\jobsPlugin\JobsPlugin.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\AnvilListener.class
-fr\Valkyar\jobsPlugin\Listeners\LeaveListener.class
-fr\Valkyar\jobsPlugin\PlayerProfile.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\EnchantItemListener.class

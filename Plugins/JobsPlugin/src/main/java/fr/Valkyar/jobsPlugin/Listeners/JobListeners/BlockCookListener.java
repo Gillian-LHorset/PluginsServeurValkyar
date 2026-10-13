@@ -1,10 +1,10 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.ResourceData;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
+import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
-import fr.Valkyar.jobsPlugin.PlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -73,7 +73,7 @@ public class BlockCookListener implements Listener {
 
         Player p = (Player) event.getWhoClicked();
 
-        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 
         if (!pProfile.hasJobInList(concernedJobs)) {
@@ -128,7 +128,7 @@ public class BlockCookListener implements Listener {
         if (ResourceData == null) {
             return;
         }
-        PlayerProfile pProfile = _plugin.playerProfiles.get(p.getUniqueId());
+        PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
 
         pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
         pProfile.increaseMoney(ResourceData.moneyBringing());

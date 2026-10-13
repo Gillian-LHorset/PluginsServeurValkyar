@@ -1,8 +1,8 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
-import fr.Valkyar.databaseCommunicationAPI.ResourceData;
-import fr.Valkyar.databaseCommunicationAPI.Job;
-import fr.Valkyar.databaseCommunicationAPI.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
+import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 

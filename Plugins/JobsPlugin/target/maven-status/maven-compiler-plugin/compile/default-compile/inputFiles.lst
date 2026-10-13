@@ -1,6 +1,5 @@
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Commands\JobCommand.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\JobsPlugin.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\JobsRegister.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\AnvilListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\BlockBreakListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\BlockCookListener.java
@@ -12,8 +11,4 @@ C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValk
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\EntityDeathListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\PlayerFishListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\SmeltListener.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JoinListener.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\LeaveListener.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\PlayerProfile.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\TabCompletion\JobCommandCompletion.java
-C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Utility\PlayerProfileUtility.java

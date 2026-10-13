@@ -1,4 +1,4 @@
-package fr.Valkyar.databaseCommunicationAPI;
+package fr.Valkyar.databaseCommunicationAPI.Models;
 
 public class JobProgression {
     private final Job job;
