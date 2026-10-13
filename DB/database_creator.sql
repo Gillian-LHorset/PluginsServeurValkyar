@@ -100,6 +100,7 @@ INSERT INTO t_jobs (name, ismain) VALUES ('Fermier', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Pecheur', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Cuisinier', FALSE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Constructeur', FALSE);
+INSERT INTO t_jobs (name, ismain) VALUES ('Alchimiste', FALSE);
 
 INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_bringing, job_fk) 
                     VALUES  ('stone',              "break", 1.00,           1.00,         1),
@@ -108,6 +109,7 @@ INSERT INTO t_action_type   (minecraft_identifier, action,  money_bringing, exp_
                             ('salmon',             "fish",  1.00,           1.00,         4),
                             ('cooked_beef',        "cook",  1.00,           1.00,         5),
                             ('stone',              "place", 1.00,           1.00,         6),
-                            ('wheat',              "place", 1.00,           1.00,         3);
+                            ('wheat',              "place", 1.00,           1.00,         3),
+                            ('weakness',           "brew",  1.00,           1.00,         7);
 
 COMMIT;

@@ -19,7 +19,7 @@ public class BrewListener implements Listener {
 
 
     @EventHandler
-    public void onBrewComplete(BrewEvent event) {
+    public void onBrewComplete(BrewEvent e) {
         // pour alchimiste
 
     }
