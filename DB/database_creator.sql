@@ -94,6 +94,17 @@ CREATE TABLE t_permission_list (
     FOREIGN KEY (player_fk) REFERENCES t_players(player_ID)
 );
 
+CREATE TABLE IF NOT EXISTS player_placed_blocks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_uuid VARCHAR(36) NOT NULL,
+    world VARCHAR(64) NOT NULL,
+    x INT NOT NULL,
+    y INT NOT NULL,
+    z INT NOT NULL,
+    block_type VARCHAR(64) NOT NULL,
+    placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT INTO t_jobs (name, ismain) VALUES ('Mineur', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Bucheron', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Fermier', TRUE);
