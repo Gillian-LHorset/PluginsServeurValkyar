@@ -1,8 +1,11 @@
 package fr.Valkyar.jobsPlugin.Listeners.JobListeners;
 
+import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
+import fr.Valkyar.databaseCommunicationAPI.Utilities.PlacedBlockUtilites;
+import fr.Valkyar.databaseCommunicationAPI.Utilities.PlacedBlockUtilites.*;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.jobsPlugin.JobsPlugin;
 import org.bukkit.block.Block;
@@ -12,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,36 +60,42 @@ public class BlockBreakListener implements Listener {
         //TODO : verifier si le block cassé n'à été posé à la main
 
         Player p = event.getPlayer();
-
         PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 
         Block block = event.getBlock();
+
         String materialName = event.getBlock().getType().name().toLowerCase();
 
-        if (block.getBlockData() instanceof Ageable) {
-            Ageable ageable = (Ageable) block.getBlockData();
+        PlacedBlockUtilites.isThisBlockPlaced(block).thenAccept(isPlaced -> {
+           if (isPlaced) {
+               return;
+           }
 
-            if (ageable.getAge() < ageable.getMaximumAge()) {
+            if (block.getBlockData() instanceof Ageable) {
+                Ageable ageable = (Ageable) block.getBlockData();
+
+                if (ageable.getAge() < ageable.getMaximumAge()) {
+                    return;
+                }
+            }
+
+            Job requiredJob = _materialToJobMap.get(materialName);
+            if (requiredJob == null) return;
+
+            if (!pProfile.hasJob(requiredJob.getId())) {
                 return;
             }
-        }
 
-        Job requiredJob = _materialToJobMap.get(materialName);
-        if (requiredJob == null) return;
+            ResourceData ResourceData = _materialToResourceDataMap.get(materialName);
 
-        if (!pProfile.hasJob(requiredJob.getId())) {
-            return;
-        }
+            if (ResourceData == null) {
+                return;
+            }
 
-        ResourceData ResourceData = _materialToResourceDataMap.get(materialName);
-
-        if (ResourceData == null) {
-            return;
-        }
-
-        pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
-        pProfile.increaseMoney(ResourceData.moneyBringing());
+            pProfile.increaseExp(requiredJob.getId(), ResourceData.expBringing());
+            pProfile.increaseMoney(ResourceData.moneyBringing());
+        });
     }
 
 }

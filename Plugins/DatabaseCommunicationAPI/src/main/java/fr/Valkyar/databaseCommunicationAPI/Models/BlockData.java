@@ -13,14 +13,13 @@ public class BlockData {
     private String blockType;
     private Timestamp date;
 
-    public BlockData(UUID Player, String World, int X, int Y, int Z, String BlockType, Timestamp Date) {
+    public BlockData(UUID Player, String World, int X, int Y, int Z, String BlockType) {
         player = Player;
         world = World;
         x = X;
         y = Y;
         z = Z;
         blockType = BlockType;
-        date = Date;
     }
 
     public UUID getPlayer() {return player;}

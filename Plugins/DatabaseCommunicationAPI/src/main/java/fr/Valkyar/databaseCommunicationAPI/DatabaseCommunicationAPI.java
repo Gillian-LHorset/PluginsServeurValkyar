@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public final class DatabaseCommunicationAPI extends JavaPlugin {
@@ -68,6 +69,10 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public static Map<BlockPosition, BlockData> getPlacedBlocks() {
+        return PlacedBlocks;
     }
 
     public static void OutputColoredText (String color, String message) {

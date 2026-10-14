@@ -1,24 +1,28 @@
 package fr.Valkyar.databaseCommunicationAPI.Utilities;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
-import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import org.bukkit.block.Block;
+
+import java.util.concurrent.CompletableFuture;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.PlacedBlocks;
 
 public class PlacedBlockUtilites {
 
-    public static boolean isThisBlockPlaced(Block block) {
+    public static CompletableFuture<Boolean> isThisBlockPlaced(Block block) {
         if (block == null) {
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
 
         DatabaseCommunicationAPI.BlockPosition blockPosition = new DatabaseCommunicationAPI.BlockPosition(
                 block.getWorld().getName(), block.getX(), block.getY(), block.getZ()
         );
 
+        if (DatabaseCommunicationAPI.getPlacedBlocks().containsKey(blockPosition)) {
+            return CompletableFuture.completedFuture(true);
+        }
 
-        return PlacedBlocks.get(blockPosition) != null
-                || DatabaseCommunicationAPI.getApi().databaseLink.getPlacedBlockByLocation(blockPosition) != null;
+        return DatabaseCommunicationAPI.getApi().databaseLink.getPlacedBlockByLocation(blockPosition)
+                .thenApply(blockData -> blockData != null);
     }
 }
