@@ -1329,8 +1329,8 @@ public class Database {
                                 results.getInt("x"),
                                 results.getInt("y"),
                                 results.getInt("z"),
-                                results.getString("block_type"),
-                                results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
+                                results.getString("block_type")
+                                //results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
                         );
                     }
                 }
@@ -1361,8 +1361,8 @@ public class Database {
                                 results.getInt("x"),
                                 results.getInt("y"),
                                 results.getInt("z"),
-                                results.getString("block_type"),
-                                results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
+                                results.getString("block_type")
+                                //results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
                         );
                     }
                 }
