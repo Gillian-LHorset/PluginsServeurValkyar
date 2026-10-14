@@ -1,10 +1,13 @@
 package fr.Valkyar.databaseCommunicationAPI;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.BlockData;
 import fr.Valkyar.databaseCommunicationAPI.listeners.JoinListener;
 import fr.Valkyar.databaseCommunicationAPI.listeners.LeaveListener;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
+import fr.Valkyar.databaseCommunicationAPI.tasks.StockPlacedBlockTask;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -28,7 +31,12 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         return JavaPlugin.getPlugin(DatabaseCommunicationAPI.class);
     }
 
+    public record BlockPosition(String worldName, int x, int y, int z) {}
+
     public static HashMap<UUID, PlayerProfile> playerProfiles = new HashMap<>();
+    public static HashMap<BlockPosition, BlockData> PlacedBlocks = new HashMap<>();
+
+    public StockPlacedBlockTask stockPlacedBlockTask;
 
     @Override
     public void onEnable() {
@@ -47,6 +55,11 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+
+        stockPlacedBlockTask = new StockPlacedBlockTask(this);
+        // attend 1 minute (1200 ticks) avant la première exécution
+        // puis se répète toutes les 10 minutes (12000 ticks)
+        stockPlacedBlockTask.runTaskTimer(this, 1200L, 12000L);
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
