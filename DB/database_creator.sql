@@ -105,6 +105,8 @@ CREATE TABLE IF NOT EXISTS t_player_placed_blocks (
     placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX index_block_location ON t_player_placed_blocks (world, x, y, z);
+
 INSERT INTO t_jobs (name, ismain) VALUES ('Mineur', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Bucheron', TRUE);
 INSERT INTO t_jobs (name, ismain) VALUES ('Fermier', TRUE);
