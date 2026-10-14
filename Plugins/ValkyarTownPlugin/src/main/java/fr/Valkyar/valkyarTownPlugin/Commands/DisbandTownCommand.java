@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -21,7 +22,7 @@ public class DisbandTownCommand{
 
         if (sender instanceof Player player) {
                 try {
-                    String playerTown = db.getPlayerTown(player);
+                    Town playerTown = db.getPlayerTown(player);
                     if (args.length == 1 && args[0].equalsIgnoreCase("disband") && playerTown != null) {
                         if (!_plugin.leaveTown.containsKey(player.getUniqueId())) {
                             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Êtes vous sûr de vouloir supprimer la ville ?\nRéexécutez la commande dans les 10 secondes pour confirmer.");
@@ -44,7 +45,7 @@ public class DisbandTownCommand{
 
 
                             // disable all permission of players
-                            for (String pTown : db.getAllPlayerOfTownByName(playerTown)) {
+                            for (String pTown : db.getAllPlayerOfTown(playerTown)) {
                                 db.setAllPermissionsOfAPlayerToFalse(Bukkit.getPlayer(pTown));
 
                                 // refresh perms

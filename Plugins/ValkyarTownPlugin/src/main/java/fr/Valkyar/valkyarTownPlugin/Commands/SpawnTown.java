@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -11,13 +12,13 @@ import org.bukkit.entity.Player;
 public class SpawnTown {
     public SpawnTown(ValkyarTownPlugin plugin, Player p, String[] args) {
         Database db = plugin.databaseApi.databaseLink;
-        String tName = db.getPlayerTown(p);
+        Town town = db.getPlayerTown(p);
         Integer[] townSpawn;
-        if (tName != null) {
+        if (town.getName() != null) {
             if (args.length == 1 && args[0].equalsIgnoreCase("Spawn")) {
                 // tp to the town spawn
 
-                townSpawn = db.getSpawnTown(tName);
+                townSpawn = db.getSpawnTown(town);
                 if (townSpawn[0] != null && townSpawn[1] != null && townSpawn[2] != null) {
 
                     World w = p.getWorld();
@@ -37,9 +38,9 @@ public class SpawnTown {
                 }
             } else if (args.length == 2 && args[0].equalsIgnoreCase("Spawn") && args[1].equalsIgnoreCase("set")) {
                 // set the town spawn
-                if (db.isChunkFromTown(tName, ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ()))) {
+                if (db.isChunkFromTown(town, ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ()))) {
                     townSpawn = new Integer[]{p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ()};
-                    db.setSpawnTown(tName, townSpawn);
+                    db.setSpawnTown(town, townSpawn);
                     p.sendMessage(ChatColor.GREEN + "Nouveau town spawn défini.");
                 } else {
                     p.sendMessage(ChatColor.RED + "Error");

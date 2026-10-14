@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms;
 import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
+
 public class CreateTownCommand {
 
     private final Double createTownPrice = 1.00;
@@ -31,29 +34,38 @@ public class CreateTownCommand {
 
         if (sender instanceof Player player) {
             try {
-                Double playerBalance = db.getPlayerBalanceByUUID(player);
-                String playerTown = db.getPlayerTown(player);
+                Double playerBalance = playerProfiles.get(player.getUniqueId()).getCurrentMoney();
+                Town playerTown = db.getPlayerTown(player);
                 if (args.length == 2 && playerBalance >= createTownPrice) {
                     // if the player didn't have a town
                     if (playerTown == null) {
                         // if the town name don't exist already
-                        if (!db.getAllTownsNames().contains(args[1])) {
+                        boolean temp = false;
+
+                        for (Town town : db.getAllTowns()) {
+                            if (town.getName().equalsIgnoreCase(args[1])) {
+                                temp = true;
+                                break;
+                            }
+                        }
+                        //!db.getAllTowns().contains(args[1])
+                        if (!temp) {
                             // check if it's in the town world
                             if (player.getWorld().getName().equalsIgnoreCase("world")) {
                                     // check if the chunk is already claimed
                                     int[] claimedChunk = ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ());
                                     if (db.getChunkById(claimedChunk) == null) {
                                         // the player pay the creation of the town
-                                        db.setPlayerBalanceDecrease(player, createTownPrice);
+                                        playerProfiles.get(player.getUniqueId()).decreaseMoney(createTownPrice);
 
                                         // insert the town in the db
                                         db.CreateTown(player, args[1]);
-
+                                        Town _playerTown = db.getPlayerTown(player);
                                         // give him all permissions
                                         db.setAllPermissionsOfAPlayerToTrue(player);
 
                                         // register the chunk in the db
-                                        db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), args[1]);
+                                        db.registerChunk(ChunkSystem.getChunkId(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), _playerTown);
 
                                         AssignPerms.assignPerms(player, db, _plugin);
 
@@ -71,7 +83,7 @@ public class CreateTownCommand {
                     } else {
                         player.sendMessage(ChatColor.RED + "Vous ne pouvez pas créer de ville, vous êtes déjà dans une ville.");
                     }
-                } else if (args.length == 2 && db.getPlayerBalanceByUUID(player) <= createTownPrice) {
+                } else if (args.length == 2 && playerProfiles.get(player.getUniqueId()).getCurrentMoney() <= createTownPrice) {
                     player.sendMessage(ChatColor.RED + "Vous n'avez pas assez d'argent pour créer une ville.");
                 } else {
                     player.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");

@@ -26,33 +26,12 @@ public class JoinListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
-        Player player = e.getPlayer();
-
-        if (!player.hasPlayedBefore()) {
-            try {
-                // add the player to the db
-                this._plugin.databaseLink.firstTimeJoinStatement(player);
-                System.out.println(GREEN_OUTPUT + "[DatabaseCommunicationAPI] : The player is correctly registered in the DB");
-            } catch (SQLException err) {
-                OutputColoredText(RED_OUTPUT,"[DatabaseCommunicationAPI] : L'insersion du nouveau joueur dans la DATABASE à échouée");
-                System.out.println("[DatabaseCommunicationAPI] : " + err.getMessage());
-            }
-        }
-
-        try {
-            if (this._plugin.databaseLink.getUUIDofPlayer(player) == null) {
-                // if the player has been detected like he already played, but he's not in the DB
-
-                // add the player to the db
-                this._plugin.databaseLink.firstTimeJoinStatement(player);
-                OutputColoredText(RED_OUTPUT, "[DatabaseCommunicationAPI] : A player who has already played wasn't in the database.");
-            }
-        } catch (SQLException err) {
-            OutputColoredText(RED_OUTPUT,"[DatabaseCommunicationAPI] : Exception detected");
-        }
-
-
         Player p = e.getPlayer();
+
+        if (!p.hasPlayedBefore()) {
+            // add the player to the db
+            this._plugin.databaseLink.RegisterPlayerInDB(p);
+        }
 
         RegisterPlayerProfile(p, _plugin);
 

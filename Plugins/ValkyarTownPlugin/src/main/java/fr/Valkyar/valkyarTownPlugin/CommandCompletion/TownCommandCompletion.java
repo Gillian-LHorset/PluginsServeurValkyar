@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.CommandCompletion;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
@@ -73,7 +74,10 @@ public class TownCommandCompletion implements TabCompleter {
                 list.add("add");
                 list.add("remove");
             } else if (args[0].equalsIgnoreCase("balance")) {
-                return db.getAllTownsNames();
+                for (Town town : db.getAllTowns()) {
+                    list.add(town.getName());
+                }
+                return list;
             } else if (args[0].equalsIgnoreCase("invite") && sender.hasPermission("town.invite")) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (!p.getName().equalsIgnoreCase(sender.getName())) {
@@ -84,7 +88,7 @@ public class TownCommandCompletion implements TabCompleter {
                     (sender.hasPermission("town.kick")
                     || sender.hasPermission("town.mayor")
                     || sender.hasPermission("town.second"))){
-                return db.getAllPlayerOfTownByName(db.getPlayerTown((Player) sender));
+                return db.getAllPlayerOfTown(db.getPlayerTown((Player) sender));
             } else if (args[0].equalsIgnoreCase("spawn")
                     && (sender.hasPermission("town.mayor") || sender.hasPermission("town.second"))) {
                 list.add("set");
@@ -103,7 +107,7 @@ public class TownCommandCompletion implements TabCompleter {
         }
         if (args.length == 4) {
             if (args[0].equalsIgnoreCase("permission") && sender.hasPermission("town.mayor")) {
-               for (String pName : db.getAllPlayerOfTownByName(db.getPlayerTown((Player)  sender))) {
+               for (String pName : db.getAllPlayerOfTown(db.getPlayerTown((Player)  sender))) {
                    if (!pName.equalsIgnoreCase(sender.getName())) {
                        list.add(pName);
                    }

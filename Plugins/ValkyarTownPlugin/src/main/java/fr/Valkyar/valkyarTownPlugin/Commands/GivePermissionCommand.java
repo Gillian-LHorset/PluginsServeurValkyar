@@ -40,7 +40,7 @@ public class GivePermissionCommand {
                             // Check if the target exist
                             if (Bukkit.getOnlinePlayers().contains(pTarget)) {
                                 // Check if the target is in the same town as the sender
-                                if (db.getAllPlayerOfTownByName(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
+                                if (db.getAllPlayerOfTown(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
                                     // check if the player targeted already have the perm
                                     if (!db.HaveAPlayerAPerm(pTarget, permToGive)) {
                                         // set the permission to true in the db
@@ -67,7 +67,7 @@ public class GivePermissionCommand {
                             // Check if the target exist
                             if (Bukkit.getOnlinePlayers().contains(pTarget)) {
                                 // Check if the target is in the same town as the sender
-                                if (db.getAllPlayerOfTownByName(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
+                                if (db.getAllPlayerOfTown(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
 
                                     if (!plugin.newMayor.containsKey(p.getUniqueId())) {
                                         p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Êtes vous sûr de vouloir abdiquer de votre rôle de chef de la ville au profit de " + pTarget.getName() + " ?\nRéexécutez la commande dans la minute pour confirmer.");
@@ -95,7 +95,7 @@ public class GivePermissionCommand {
                                         AssignPerms.assignPerms(p, db, _plugin);
                                         pTarget.sendMessage(ChatColor.GREEN + "Vous êtes désormais chef de la ville.");
                                         p.sendMessage(ChatColor.GREEN + "Vous avez abdiquer avec succès.");
-                                        for (String pTown : db.getAllPlayerOfTownByName(db.getPlayerTown(pTarget))) {
+                                        for (String pTown : db.getAllPlayerOfTown(db.getPlayerTown(pTarget))) {
                                             Bukkit.getPlayer(pTown).sendMessage(ChatColor.GREEN + p.getName() + " viens d'abdiquer de son rôle de chef au profit de " + pTarget.getName() + ".");
                                         }
                                     }
@@ -119,7 +119,7 @@ public class GivePermissionCommand {
                             // Check if the target exist
                             if (Bukkit.getOnlinePlayers().contains(pTarget)) {
                                 // Check if the target is in the same town as the sender
-                                if (db.getAllPlayerOfTownByName(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
+                                if (db.getAllPlayerOfTown(db.getPlayerTown(pTarget)).contains(pTarget.getName())) {
                                     // check if the player targeted already have the perm
                                     if (db.HaveAPlayerAPerm(pTarget, permToRemove)) {
                                         // set the permission to true in the db

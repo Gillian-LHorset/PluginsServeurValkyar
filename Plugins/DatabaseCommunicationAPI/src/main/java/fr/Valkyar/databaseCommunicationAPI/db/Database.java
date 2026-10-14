@@ -54,162 +54,44 @@ public class Database {
      * @param player This is the player who the information are going to be added to the db
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
-    public void firstTimeJoinStatement(Player player) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("INSERT INTO t_players (uuid, name, balance) VALUE (?, ?, ?)");
-
-        statement.setString(1, player.getUniqueId().toString());
-        statement.setString(2, player.getDisplayName());
-        statement.setDouble(3, 0);
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    /** Get uuid from a player.
-     * @param player This is the player who need to get the uuid.
-     * @return In the case the player isn't be found, return null else return his uuid
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public String getUUIDofPlayer(Player player) throws SQLException{
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT uuid FROM t_players WHERE uuid = ?");
-        statement.setString(1, player.getUniqueId().toString());
-
-        ResultSet results = statement.executeQuery();
-
-        if (results.next()) {
-            return results.getString("uuid");
-        }
-
-
-        statement.close();
-
-        return null;
-    }
-
-    /** Get balance from a player.
-     * @param player This is the player who need to get the balance.
-     * @return In the case the player isn't be found, return null else return his balance
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public Double getBalancePlayerByName(String player) {
+    public void RegisterPlayerInDB(Player player) {
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT balance FROM t_players WHERE name = ?");
-            statement.setString(1, player);
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("INSERT INTO t_players (uuid, name, balance) VALUE (?, ?, ?)");
 
-            ResultSet results = statement.executeQuery();
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, player.getDisplayName());
+            statement.setDouble(3, 0);
 
-            if (results.next()) {
-                return results.getDouble("balance");
-            }
+            statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
-                    "[DatabaseCommunicationAPI] : Erreur de connexion 'getBalancePlayerByName()'");
 
+            System.out.println("[Database API] - RegisterPlayerInDB - " + e);
         }
-        return null;
     }
 
-    /** Get balance from a player.
-     * @param player This is the player who need to get the balance.
-     * @return In the case the player isn't be found, return null else return his
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public Double getPlayerBalanceByUUID(Player player) throws SQLException{
+    // plein de testo
+    public PlayerProfile getBasePlayerProfile(Player player) {
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT balance FROM t_players WHERE uuid = ?");
+                    .prepareStatement("SELECT uuid ,balance FROM t_players WHERE uuid = ?");
             statement.setString(1, player.getUniqueId().toString());
 
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-                return results.getDouble("balance");
+                return new PlayerProfile(UUID.fromString(results.getString("uuid")),
+                        results.getDouble("balance"));
             }
 
             statement.close();
         } catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
-                    "[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerBalanceByUUID()'");
+            System.out.println("[Database API] - RegisterPlayerInDB - " + e);
         }
         return null;
     }
 
-    public void setPlayerBalance(Player player, Double amount) {
-        try {
-         PreparedStatement statement = _plugin.databaseLink._connection
-                 .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
-             statement.setString(1, amount.toString());
-             statement.setString(2, player.getUniqueId().toString());
-
-             statement.executeUpdate();
-             statement.close();
-        } catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
-                    "[DatabaseCommunicationAPI] : Erreur de connexion 'setPlayerBalance()'");
-        }
-    }
-
-    /** Decrease the balance of the player to the specify amount.
-     * @param player This is the player who pay.
-     * @param amount This is how many the player pay for the transaction.
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public void setWithdrawBalanceByUUID(Player player, Double amount) throws SQLException{
-        Double currentBalance = getPlayerBalanceByUUID(player);
-        currentBalance -= amount;
-
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
-        statement.setString(1, currentBalance.toString());
-        statement.setString(2, player.getUniqueId().toString());
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    /** Increase the balance of the player to the specify amount.
-     * @param player This is the player who receive.
-     * @param amount This is how many the player receive from the transaction.
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public void setAddBalanceByName(Player player, Double amount) throws SQLException{
-        Double currentBalance = getBalancePlayerByName(player.getDisplayName());
-        currentBalance += amount;
-
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_players SET balance = ? WHERE name = ?");
-
-        statement.setString(1, currentBalance.toString());
-        statement.setString(2, player.getDisplayName());
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public List<String> getAllJobsName() {
-        try {
-            List<String> jobsList = new ArrayList<>();
-
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT name FROM t_jobs ORDER BY job_id");
-            ResultSet results = statement.executeQuery();
-
-            while (results.next()) {
-                String jobName = results.getString("name");
-                jobsList.add(jobName);
-            }
-
-            return jobsList;
-        }  catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobsName()'");
-        }
-        return null;
-    }
-    
     public List<Job> getAllJobsInfos() {
         try {
             List<Job> jobsList = new ArrayList<>();
@@ -231,38 +113,17 @@ public class Database {
         }
         return null;
     }
-    
-    public Job getJobInfos(int jobId) {
-        try {
-            Job job = null;
-            
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT * FROM t_jobs WHERE job_id = ? ORDER BY job_id");
-            statement.setInt(1, jobId);
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                job = new Job(
-                        results.getInt("job_id"),
-                        results.getString("name"),
-                        results.getBoolean("isMain"));
-            }
-
-            return job;
-        }  catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getJobInfos()'");
-        }
-        return null;
-    }
 
     public List<Job> getPlayerJobs(Player p) {
         try {
             List<Job> job = new ArrayList<>();
 
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT * FROM t_jobs WHERE job_id = ? OR job_id = ? ORDER BY job_id");
-            statement.setInt(1, getPlayerMainJobFk(p));
-            statement.setInt(2, getPlayerSecondJobFk(p));
+                    .prepareStatement("SELECT * FROM t_jobs AS j " +
+                            "JOIN t_players AS p " +
+                            "ON p.main_job_fk = j.job_id OR p.second_job_fk = j.job_id " +
+                            "WHERE p.uuid = ?");
+            statement.setString(1, p.getUniqueId().toString());
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
@@ -278,47 +139,20 @@ public class Database {
         }
         return null;
     }
-
-
-
-    public List<String> getAllMainJobsName() {
+    
+    public void setPlayerBalance(Player player, Double amount) {
         try {
-            List<String> jobsList = new ArrayList<>();
-
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT name FROM t_jobs WHERE ismain = TRUE ORDER BY job_id");
-            ResultSet results = statement.executeQuery();
+                    .prepareStatement("UPDATE t_players SET balance = ? WHERE uuid = ?");
+            statement.setString(1, amount.toString());
+            statement.setString(2, player.getUniqueId().toString());
 
-            while (results.next()) {
-                String jobName = results.getString("name");
-                jobsList.add(jobName);
-            }
-
-            return jobsList;
-        }  catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllMainJobsName()'");
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
+                    "[DatabaseCommunicationAPI] : Erreur de connexion 'setPlayerBalance()'");
         }
-        return null;
-    }
-
-    public List<String> getAllSecondJobsName() {
-        try {
-            List<String> jobsList = new ArrayList<>();
-
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT name FROM t_jobs WHERE ismain = FALSE ORDER BY job_id");
-            ResultSet results = statement.executeQuery();
-
-            while (results.next()) {
-                String jobName = results.getString("name");
-                jobsList.add(jobName);
-            }
-
-            return jobsList;
-        }  catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllSecondJobsName()'");
-        }
-        return null;
     }
 
     public void setPlayerMainJob(Player player, Integer jobsId) throws SQLException{
@@ -335,8 +169,6 @@ public class Database {
         statement.close();
     }
 
-
-
     public void setPlayerSecondJob(Player player, Integer jobsId) throws SQLException{
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET second_job_fk = ? WHERE uuid = ?");
@@ -349,118 +181,6 @@ public class Database {
 
         statement.executeUpdate();
         statement.close();
-    }
-
-    public Integer findJobIdByJobName(String jobName) {
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT job_id " +
-                            "FROM t_jobs " +
-                            "WHERE name = ? ");
-            statement.setString(1, jobName);
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("job_id");
-            }
-
-            statement.close();
-        } catch (SQLException e) {
-
-            return null;
-        }
-        return null;
-    }
-
-    public String getPlayerMainJobName(Player player){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT j.name " +
-                                            "FROM t_players AS p " +
-                                            "LEFT JOIN t_jobs AS j ON p.main_job_fk = j.job_id " +
-                                            "WHERE p.uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getString("name");
-            }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerMainJobName()'");
-            return null;
-        }
-        return null;
-    }
-
-    public String getPlayerSecondJobName(Player player){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT j.name " +
-                                            "FROM t_players AS p " +
-                                            "LEFT JOIN t_jobs AS j ON p.second_job_fk = j.job_id " +
-                                            "WHERE p.uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getString("name");
-            }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerSecondJobName()'");
-            return null;
-        }
-        return null;
-    }
-
-    public Integer getPlayerMainJobFk(Player player){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT main_job_fk " +
-                                            "FROM t_players " +
-                                            "WHERE uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("main_job_fk");
-            }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerMainJobFk()'");
-            return null;
-        }
-        return null;
-    }
-
-    public Integer getPlayerSecondJobFk(Player player){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT second_job_fk " +
-                                            "FROM t_players " +
-                                            "WHERE uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("second_job_fk");
-            }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerSecondJobFk()'");
-            return null;
-        }
-        return null;
     }
 
     public List<ResourceData> getResourceByJob(int jobFk, String actionType) {
@@ -493,30 +213,24 @@ public class Database {
         return breakableBlocksList;
     }
 
-    public void setPlayerBalanceDecrease(Player player, Double amount) throws SQLException {
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "UPDATE t_players " +
-                                        "SET balance = balance - ? " +
-                                        "WHERE uuid = ? ");
-        statement.setDouble(1, amount);
-        statement.setString(2, player.getUniqueId().toString());
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public void CreateTown(Player player, String name){
+    public void CreateTown(Player player, String newTownName){
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
                     .prepareStatement(  "INSERT INTO t_town (name) " +
-                                            "VALUE (?)");
+                                            "VALUE (?)", Statement.RETURN_GENERATED_KEYS);
 
-            createTownStatement.setString(1, name);
+            createTownStatement.setString(1, newTownName);
 
-            createTownStatement.executeUpdate();
+            try (ResultSet generatedKeys = createTownStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int townId = generatedKeys.getInt(1);
+
+                    Town newTown = new Town(townId, newTownName, 0.00);
+
+                    setPlayerTown(player, newTown);
+                }
+            }
             createTownStatement.close();
-
-            setPlayerTownByName(player, name);
 
         } catch (Exception err) {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'CreateTown()' 'INSERT INTO t_town'");
@@ -548,7 +262,7 @@ public class Database {
     public Town getPlayerTown(Player p) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT t.name, t.balance " +
+                    .prepareStatement(  "SELECT t.town_id, t.name, t.balance " +
                             "FROM t_town AS t " +
                             "JOIN t_players AS p " +
                             "ON p.town_fk = t.town_id " +
@@ -559,6 +273,7 @@ public class Database {
 
             if (results.next()) {
                 return new Town(
+                        results.getInt("town_id"),
                         results.getString("t.name"),
                         results.getDouble("balance")
                         );
@@ -571,17 +286,15 @@ public class Database {
         return null;
     }
 
-    public void setPlayerTownByName(Player player, String name) {
+    public void setPlayerTown(Player player, Town town) {
         try {
             PreparedStatement statement;
-            if (name != null) {
+            if (town.getName() != null) {
                 statement = _plugin.databaseLink._connection
-                        .prepareStatement("UPDATE t_players AS p " +
-                                "JOIN t_town AS t " +
-                                "ON t.name = ?" +
-                                "SET p.town_fk = t.town_id " +
-                                "WHERE p.uuid = ? ");
-                statement.setString(1, name);
+                        .prepareStatement("UPDATE t_players " +
+                                "SET town_fk = ? " +
+                                "WHERE uuid = ? ");
+                statement.setInt(1, town.getId());
 
             } else {
                 statement = _plugin.databaseLink._connection
@@ -599,15 +312,15 @@ public class Database {
         }
     }
 
-    public Integer getNumberOfPlayersInTown(String townName){
+    public Integer getNumberOfPlayersInTown(Town town){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "SELECT COUNT(p.uuid) " +
                             "FROM t_town AS t " +
                             "JOIN t_players AS p " +
                             "ON p.town_fk = t.town_id " +
-                            "WHERE t.name = ? ");
-            statement.setString(1, townName);
+                            "WHERE t.town_id = ? ");
+            statement.setInt(1, town.getId());
 
             ResultSet results = statement.executeQuery();
 
@@ -622,13 +335,13 @@ public class Database {
         return null;
     }
 
-    public void deleteTownByName(String townName){
+    public void deleteTownByName(Town town){
         try {
-            deleteAllChunksByTownName(townName);
+            deleteAllChunksOfTown(town);
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_town " +
-                                            "WHERE name = ? ");
-            statement.setString(1, townName);
+                                            "WHERE town_id = ? ");
+            statement.setInt(1, town.getId());
 
             statement.executeUpdate();
             statement.close();
@@ -637,12 +350,13 @@ public class Database {
         }
     }
 
-    public void deleteAllChunksByTownName(String townName){
+    // TODO : vérifier si c'est onCascadDelete
+    public void deleteAllChunksOfTown(Town town){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_chunk_town " +
                                             "WHERE town_fk = ? ");
-            statement.setInt(1, getTownFk(townName));
+            statement.setInt(1, town.getId());
 
             statement.executeUpdate();
             statement.close();
@@ -651,7 +365,7 @@ public class Database {
         }
     }
 
-    public List<String> getAllPlayerOfTownByName (String townName){
+    public List<String> getAllPlayerOfTown(Town town){
         List<String> allPlayers = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
@@ -660,7 +374,7 @@ public class Database {
                                             "JOIN t_players AS p " +
                                             "ON t.town_id = p.town_fk " +
                                             "WHERE t.name = ? ");
-            statement.setString(1, townName);
+            statement.setInt(1, town.getId());
 
             ResultSet results = statement.executeQuery();
 
@@ -675,7 +389,7 @@ public class Database {
         return allPlayers;
     }
 
-    public void registerChunk(int[] chunks, String townName){
+    public void registerChunk(int[] chunks, Town town){
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
                     .prepareStatement(  "INSERT INTO t_chunk_town   (chunk_identifier_x, chunk_identifier_z, town_fk) " +
@@ -683,7 +397,7 @@ public class Database {
 
             createTownStatement.setInt(1, chunks[0]);
             createTownStatement.setInt(2, chunks[1]);
-            createTownStatement.setInt(3, getTownFk(townName));
+            createTownStatement.setInt(3, town.getId());
 
             createTownStatement.executeUpdate();
             createTownStatement.close();
@@ -691,46 +405,6 @@ public class Database {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'registerChunk()'");
             System.out.println(err.getMessage());
         }
-    }
-
-    public Integer getTownFk(String townName){
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT town_id " +
-                            "FROM t_town " +
-                            "WHERE name = ? ");
-
-            statement.setString(1, townName);
-
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("town_id");
-            }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getTownFk()'");
-        }
-        return null;
-    }
-
-    public Double getBalanceTownByName(String townName) throws SQLException{
-
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT balance FROM t_town WHERE name = ?");
-        statement.setString(1, townName);
-
-        ResultSet results = statement.executeQuery();
-
-        if (results.next()) {
-            return results.getDouble("balance");
-        }
-
-
-        statement.close();
-
-        return null;
     }
 
     public Integer[] getChunkById(int[] giveId) throws SQLException{
@@ -761,19 +435,7 @@ public class Database {
         return null;
     }
 
-    public void setTownBalanceDecreaseByName(String townName, Double amount) throws SQLException {
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "UPDATE t_town " +
-                        "SET balance = balance - ? " +
-                        "WHERE name = ? ");
-        statement.setDouble(1, amount);
-        statement.setString(2, townName);
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public Integer[][] getAllChunkOfTown(String townName) throws SQLException{
+    public Integer[][] getAllChunkOfTown(Town town) throws SQLException{
 
         Integer[][] allChunks = new Integer[2][];
         int i = 0;
@@ -782,7 +444,7 @@ public class Database {
                 .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z " +
                         "FROM t_chunk_town " +
                         "WHERE town_fk = ? ");
-        statement.setInt(1, getTownFk(townName));
+        statement.setInt(1, town.getId());
 
         ResultSet results = statement.executeQuery();
 
@@ -796,7 +458,7 @@ public class Database {
         return allChunks;
     }
 
-    public boolean isChunkFromTown(String townName, int[] chunk) {
+    public boolean isChunkFromTown(Town town, int[] chunk) {
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
                     .prepareStatement("SELECT * " +
@@ -804,7 +466,7 @@ public class Database {
                             "WHERE town_fk = ? " +
                             "AND chunk_identifier_x = ? " +
                             "AND chunk_identifier_z = ?");
-            statement.setInt(1, getTownFk(townName));
+            statement.setInt(1, town.getId());
             statement.setInt(2, chunk[0]);
             statement.setInt(3, chunk[1]);
 
@@ -820,14 +482,14 @@ public class Database {
         return false;
     }
 
-    public void deleteOneChunksById(String townName, int[] chunk){
+    public void deleteAChunksById(Town town, int[] chunk){
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement(  "DELETE FROM t_chunk_town " +
                             "WHERE town_fk = ? " +
                             "AND chunk_identifier_x = ? " +
                             "AND chunk_identifier_z = ?");
-            statement.setInt(1, getTownFk(townName));
+            statement.setInt(1, town.getId());
             statement.setInt(2, chunk[0]);
             statement.setInt(3, chunk[1]);
 
@@ -836,27 +498,6 @@ public class Database {
         } catch (Exception err) {
 
         }
-    }
-
-    /** Withdraw money from the player for increase money of a town.
-     * @param townName Name of the town who receive money.
-     * @param amount Amount of the transaction.
-     * @param p The player who send money.
-     * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
-     */
-    public void setWithdrawBalanceToTown(String townName, Double amount, Player p) throws SQLException{
-        Double currentBalance = getBalanceTownByName(townName);
-        currentBalance += amount;
-
-        setPlayerBalanceDecrease(p, amount);
-
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_town SET balance = ? WHERE name = ?");
-        statement.setDouble(1, currentBalance);
-        statement.setString(2, townName);
-
-        statement.executeUpdate();
-        statement.close();
     }
 
     public void registerPermissionPlayer(Player player) throws SQLException{
@@ -956,26 +597,26 @@ public class Database {
         statement.close();
     }
 
-    public List<String> getAllTownsNames() {
-        List<String> townsNames  = new ArrayList<>();
+    public List<Town> getAllTowns() {
+        List<Town> towns  = new ArrayList<>();
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT name " +
+                    .prepareStatement("SELECT town_id, name, balance " +
                             "FROM t_town ");
 
             ResultSet results = statement.executeQuery();
-            int i = 1;
+
             while(results.next()) {
-                townsNames.add(results.getString(i));
-                i++;
+                towns.add(new Town(
+                        results.getInt("town_id"),
+                        results.getString("name"),
+                        results.getDouble("balance")
+                ));
             }
 
-            return townsNames;
-
-
-
+            return towns;
         } catch (SQLException e) {
-            System.out.println("[Database API] - " + e);
+            System.out.println("[Database API] - getAllTowns - " + e);
         }
         return null;
     }
@@ -1046,15 +687,15 @@ public class Database {
         return null;
     }
 
-    public Integer[] getSpawnTown(String tName) {
+    public Integer[] getSpawnTown(Town town) {
         Integer[] spawnTown = new Integer[3];
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
                     // there no sql injection possible, because the string is checked for to be in the perms list
                     .prepareStatement("SELECT spawn_x, spawn_y, spawn_z " +
                             "FROM t_town " +
-                            "WHERE name = ?  ");
-            statement.setString(1, tName);
+                            "WHERE town_id = ?  ");
+            statement.setInt(1, town.getId());
 
             ResultSet results = statement.executeQuery();
 
@@ -1074,18 +715,18 @@ public class Database {
         return null;
     }
 
-    public void setSpawnTown(String tName, Integer[]spawnPos) {
+    public void setSpawnTown(Town town, Integer[]spawnPos) {
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
                     // there no sql injection possible, because of the string is checked for to be in the perms list
                     .prepareStatement("UPDATE t_town SET spawn_x = ?, " +
                             "spawn_y = ?, " +
                             "spawn_z = ? " +
-                            "WHERE name = ?  ");
+                            "WHERE town_id = ?  ");
             statement.setInt(1, spawnPos[0]);
             statement.setInt(2, spawnPos[1]);
             statement.setInt(3, spawnPos[2]);
-            statement.setString(4, tName);
+            statement.setInt(4, town.getId());
 
             statement.executeUpdate();
             statement.close();
@@ -1108,39 +749,6 @@ public class Database {
 
         } catch (SQLException e) {
             System.out.println("[Database API] - " + "CreatePlayerJobInDb - " + e);
-        }
-    }
-
-    public void IncreasePlayerJobExp(Player p, int jobFk, Double exp) {
-        int playerId = getPlayerFk(p);
-        try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("UPDATE t_player_jobs SET current_exp = current_exp + ? WHERE player_fk = ? AND job_fk = ?");
-            statement.setDouble(1, exp);
-            statement.setInt(2, playerId);
-            statement.setInt(3, jobFk);
-
-            statement.execute();
-            statement.close();
-
-        } catch (SQLException e) {
-            System.out.println("[Database API] - " + "IncreasePlayerJobExp - " + e);
-        }
-    }
-
-    public void IncreasePlayerJobLvl(Player p, int jobFk) {
-        int playerId = getPlayerFk(p);
-        try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("UPDATE t_player_jobs SET level = level + 1 WHERE player_fk = ? AND job_fk = ?");
-            statement.setInt(1, playerId);
-            statement.setInt(2, jobFk);
-
-            statement.execute();
-            statement.close();
-
-        } catch (SQLException e) {
-            System.out.println("[Database API] - " + "IncreasePlayerJobLvl - " + e);
         }
     }
 
@@ -1177,21 +785,22 @@ public class Database {
         }
     }
 
-    public JobProgression getJobProgression(Player p, int jobFk) {
+    public JobProgression getJobProgression(Player p, Job playerJob) {
         int playerId = getPlayerFk(p);
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT level, current_exp FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?");
+                    .prepareStatement("SELECT job_fk ,level, current_exp FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?");
             statement.setInt(1, playerId);
-            statement.setInt(2, jobFk);
+            statement.setInt(2, playerJob.getId());
 
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
+                int jobFk = results.getInt("job_fk");
                 int level = results.getInt("level");
                 double currentExp = results.getDouble("current_exp");
 
-                return new JobProgression(jobFk, currentExp, level, getJobInfos(jobFk));
+                return new JobProgression(jobFk, currentExp, level, playerJob);
             }
             statement.close();
 

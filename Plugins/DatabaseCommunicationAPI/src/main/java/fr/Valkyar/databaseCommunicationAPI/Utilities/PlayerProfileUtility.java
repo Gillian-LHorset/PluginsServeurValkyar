@@ -18,7 +18,7 @@ import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.*;
 public class PlayerProfileUtility {
 
     public static PlayerProfile CreatePlayerProfile(Player p, Database db) {
-        PlayerProfile pP = new PlayerProfile(p.getUniqueId(), db.getBalancePlayerByName(p.getName()));
+        PlayerProfile pP = db.getBasePlayerProfile(p);
         List<Job> playerJobs = db.getPlayerJobs(p);
 
         Town town = db.getPlayerTown(p);
@@ -32,7 +32,7 @@ public class PlayerProfileUtility {
         }
 
         for (Job job : playerJobs) {
-            JobProgression progression = db.getJobProgression(p, job.getId());
+            JobProgression progression = db.getJobProgression(p, job);
             if (job.isPrimary()) {
                 pP.setPrimaryJob(job);
             } else {

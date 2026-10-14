@@ -97,7 +97,7 @@ public class JobCommand implements CommandExecutor {
                                 return true;
                             }
 
-                            if (db.getJobProgression(player, job.getId()) == null) {
+                            if (db.getJobProgression(player, job) == null) {
                                 db.CreatePlayerJobInDb(player, job.getId());
                             }
 
@@ -126,7 +126,7 @@ public class JobCommand implements CommandExecutor {
                             return true;
                         }
 
-                        LeaveJob(player, TRUE);
+                        LeaveJob(player, pProfile.getPrimaryJob());
                         return true;
                     } else if (args[1].equalsIgnoreCase("secondaire")) {
                         // leave second job logic
@@ -135,7 +135,7 @@ public class JobCommand implements CommandExecutor {
                             return true;
                         }
 
-                        LeaveJob(player, FALSE);
+                        LeaveJob(player, pProfile.getSecondaryJob());
                         return true;
                  } else {
                     player.sendMessage(ChatColor.RED + "Veuillez entrer un type de métier valide.");
@@ -184,7 +184,7 @@ public class JobCommand implements CommandExecutor {
                 p.sendMessage(ChatColor.GREEN + "Vous avez adopté métier secondaire de " + job.getDisplayName() + ".");
             }
 
-            if (db.getJobProgression(p, job.getId()) == null) {
+            if (db.getJobProgression(p, job) == null) {
                 db.CreatePlayerJobInDb(p, job.getId());
             }
 
@@ -195,16 +195,16 @@ public class JobCommand implements CommandExecutor {
         }
     }
 
-    private void LeaveJob(Player p, boolean primary) {
+    private void LeaveJob(Player p, Job job) {
         try {
             // update the jobs progress in db
             UpdatePlayerProfileInDB(p, db, _plugin.databaseApi.playerProfiles);
-            if (primary) {
-                ResetJobInfoCheckpoint(p, db.getPlayerMainJobFk(p));
+            if (job.isPrimary()) {
+                ResetJobInfoCheckpoint(p, job);
                 db.setPlayerMainJob(p, null);
                 p.sendMessage(ChatColor.GREEN + "Vous avez quitter votre métier principal.");
             } else {
-                ResetJobInfoCheckpoint(p, db.getPlayerSecondJobFk(p));
+                ResetJobInfoCheckpoint(p, job);
                 db.setPlayerSecondJob(p, null);
                 p.sendMessage(ChatColor.GREEN + "Vous avez quitter votre métier secondaire.");
             }
@@ -216,14 +216,14 @@ public class JobCommand implements CommandExecutor {
         }
     }
 
-    private void ResetJobInfoCheckpoint(Player p, int pJobId) {
+    private void ResetJobInfoCheckpoint(Player p, Job job) {
         // reset job to the last checkpoint
-        JobProgression jobProgression = db.getJobProgression(p, pJobId);
+        JobProgression jobProgression = db.getJobProgression(p, job);
         int lastCheckpoint = Arrays.stream(_jobLvlCheckpoint).filter(x -> x <= jobProgression.getLevel()).max().orElse(0);
-        db.UpdateLastLeaveJob(p, pJobId);
+        db.UpdateLastLeaveJob(p, job.getId());
 
-        db.SetPlayerJobLvl(p, pJobId, lastCheckpoint);
-        db.ResetPlayerJobExp(p, pJobId);
+        db.SetPlayerJobLvl(p, job.getId(), lastCheckpoint);
+        db.ResetPlayerJobExp(p, job.getId());
     }
 
     private Duration getRemainingCooldown(Player p, int jobId, Duration cooldown) {

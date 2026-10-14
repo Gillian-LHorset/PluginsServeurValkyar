@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -14,7 +15,7 @@ public class ClaimTownCommand {
     private Database db;
     private ValkyarTownPlugin _plugin;
 
-    private String _playerTown;
+    private Town _playerTown;
 
     private Double claimPrice = 1.00;
     private Double _townBalance;
@@ -26,14 +27,14 @@ public class ClaimTownCommand {
                 _playerTown = db.getPlayerTown(p);
                 if (_playerTown != null) {
                     try {
-                        _townBalance = db.getBalanceTownByName(_playerTown);
+                        _townBalance = _playerTown.getBalance();
                         if (_townBalance > claimPrice) {
                             if (p.getWorld().getName().equalsIgnoreCase("world")) {
                                 int[] claimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
                                 if (db.getChunkById(claimedChunk) == null) {
                                     if (ChunkSystem.IsChunkNextToAnother(p, db, claimedChunk)) {
                                         db.registerChunk(claimedChunk, _playerTown);
-                                        db.setTownBalanceDecreaseByName(_playerTown, claimPrice);
+                                        _playerTown.WhithdrawMoney(claimPrice);
                                         p.sendMessage(ChatColor.GREEN + "Le chunk à été claim.");
                                     } else {
                                         p.sendMessage(ChatColor.RED + "Le chunk ciblé doit être adjacent à un autre chunk de la ville.");

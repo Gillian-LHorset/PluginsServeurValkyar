@@ -4,7 +4,14 @@ import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.displayingPlugin.Listener.JoinListener;
 import fr.Valkyar.displayingPlugin.Listener.LeaveListener;
 import fr.Valkyar.displayingPlugin.Tasks.DisplayTask;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public final class DisplayingPlugin extends JavaPlugin {
 
@@ -24,6 +31,8 @@ public final class DisplayingPlugin extends JavaPlugin {
 
     public DisplayTask balanceTask;
 
+    public static final Map<UUID, BossBar> activeBossBars = new HashMap<>();
+
     @Override
     public void onEnable() {
 
@@ -42,6 +51,9 @@ public final class DisplayingPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        for (BossBar bossBar : activeBossBars.values()) {
+            bossBar.removeAll();
+        }
     }
 
     public static void OutputColoredText (String color, String message) {

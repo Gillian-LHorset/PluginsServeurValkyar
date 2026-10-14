@@ -1,16 +1,19 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
 
 public class TownDepositCommand {
 
     private Database db;
     private ValkyarTownPlugin _plugin;
 
-    private String _playerTown;
+    private Town _playerTown;
 
     private Double _playerBalance;
     private Double _amountToDeposit;
@@ -23,10 +26,10 @@ public class TownDepositCommand {
             try {
                 try {
                     _playerTown = db.getPlayerTown(p);
-                    _playerBalance = db.getPlayerBalanceByUUID(p);
+                    _playerBalance = playerProfiles.get(p.getUniqueId()).getCurrentMoney();
                     _amountToDeposit = Double.parseDouble(args[1]);
                     if (_playerBalance > _amountToDeposit) {
-                        db.setWithdrawBalanceToTown(_playerTown, _amountToDeposit, p);
+                        _playerTown.DepositMoney(_amountToDeposit);
                         p.sendMessage(ChatColor.GREEN + "" + _amountToDeposit + "$ ont été déposé dans le compte de votre ville.");
                     }
                 } catch (Exception e) {

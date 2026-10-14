@@ -1,6 +1,7 @@
 package fr.Valkyar.displayingPlugin.Tasks;
 
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
 import org.bukkit.Bukkit;
@@ -17,12 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
+import static fr.Valkyar.displayingPlugin.DisplayingPlugin.activeBossBars;
+
 public class DisplayTask extends BukkitRunnable {
 
     private DisplayingPlugin _plugin;
     private Database db;
 
-    public final Map<UUID, BossBar> activeBossBars = new HashMap<>();
 
     public DisplayTask(DisplayingPlugin plugin) {
         this._plugin = plugin;
@@ -44,61 +47,60 @@ public class DisplayTask extends BukkitRunnable {
     public void run() {
         //TODO : séparer le code en méthodes
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
-            db = _plugin.databaseApi.databaseLink;
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p != null && p.isOnline()) {
-                    try {
-                        String playerTown = db.getPlayerTown(p);
+            return;
+        }
+        db = _plugin.databaseApi.databaseLink;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p == null && !p.isOnline()) {
+                return;
+            }
 
-                        Double balance = db.getPlayerBalanceByUUID(p);
-                        Double townBalance = db.getBalanceTownByName(playerTown);
+            PlayerProfile pProfile = playerProfiles.get(p.getUniqueId());
 
-                        String formattedBalance = _df.format(balance);
+            Town playerTown = pProfile.getTown();
 
-                        String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
+            Double balance = pProfile.getCurrentMoney();
 
-                        Integer playerJob = db.getPlayerMainJobFk(p);
-                        // TODO : AJOUTER job secondaire
+            String formattedBalance = _df.format(balance);
 
+            String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
-                        // TODO : mettre ce système au propre
-                        if (playerJob != null) {
-                            switch (playerJob) {
-                                case 1:
-                                    title += "   " + _plugin.mineurIcon + ChatColor.RED + " " + "Mineur";
-                                    break;
-                                case 2:
-                                    title += "   " + _plugin.bucheronIcon + ChatColor.RED + " " + "Bucheron";
-                                    break;
-                                case 3:
-                                    title += "   " + _plugin.farmerIcon + ChatColor.RED + " " + "Paysan";
-                                    break;
-                            }
-                        }
+            title += "   " + "Métier principale : " + pProfile.getPrimaryJob().getDisplayName();
+            title += "   " + "Métier secondaire : " + pProfile.getSecondaryJob().getDisplayName();
 
-                        if (playerTown != null) {
-                            title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown;
-                            title += "   " + _plugin.townIcon + ChatColor.YELLOW + " " + townBalance;
-                        }
+            if (playerTown != null) {
+                title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown.getName();
+                title += "   " + _plugin.moneyIcon + ChatColor.YELLOW + " " + playerTown.getBalance();
+            }
 
-                        UUID uuid = p.getUniqueId();
+            UUID uuid = p.getUniqueId();
 
-                        if (activeBossBars.containsKey(uuid)) {
-                            BossBar currentBar = activeBossBars.get(uuid);
-                            currentBar.setTitle(title);
-                        } else {
-                            BossBar hudDisplay = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
-                            hudDisplay.setProgress(0);
-                            hudDisplay.addPlayer(p);
+            if (activeBossBars.containsKey(uuid)) {
+                BossBar currentBar = activeBossBars.get(uuid);
+                currentBar.setTitle(title);
+            } else {
+                BossBar hudDisplay = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
+                hudDisplay.setProgress(0);
+                hudDisplay.addPlayer(p);
 
-                            activeBossBars.put(uuid, hudDisplay);
-                        }
-                    } catch (SQLException err) {
-                        System.out.println(RED_OUTPUT + "[ScreenDisplayingPlugin] - Error get balance from database." + ANSI_RESET);
-                        err.getMessage();
-                    }
-                }
+                activeBossBars.put(uuid, hudDisplay);
             }
         }
     }
 }
+
+
+// TODO : mettre ce système au propre
+//if (playerJob != null) {
+//    switch (playerJob) {
+//        case 1:
+//            title += "   " + _plugin.mineurIcon + ChatColor.RED + " " + "Mineur";
+//            break;
+//        case 2:
+//            title += "   " + _plugin.bucheronIcon + ChatColor.RED + " " + "Bucheron";
+//            break;
+//        case 3:
+//            title += "   " + _plugin.farmerIcon + ChatColor.RED + " " + "Paysan";
+//            break;
+//    }
+//}

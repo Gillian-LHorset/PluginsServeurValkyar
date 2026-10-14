@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -15,7 +16,7 @@ public class LeaveTownCommand {
     public LeaveTownCommand(ValkyarTownPlugin plugin, Player p, String[] args) {
         try {
             db = plugin.databaseApi.databaseLink;
-            String playerTown = db.getPlayerTown(p);
+            Town playerTown = db.getPlayerTown(p);
             if (playerTown != null) {
                 if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
                     if (!plugin.leaveTown.containsKey(p.getUniqueId())) {
@@ -46,12 +47,12 @@ public class LeaveTownCommand {
 
                             // // // // // // // // // // // // // // //
                             // revoke the player town fk from the db
-                            db.setPlayerTownByName(p, null);
+                            db.setPlayerTown(p, null);
                             // // // // // // // // // // // // // // //
 
-                            List<String> allPlayers = db.getAllPlayerOfTownByName(playerTown);
+                            List<String> allPlayers = db.getAllPlayerOfTown(playerTown);
                             // get all players of the town with the permission "second"
-                            List<String> second = db.getAllSecondFromTown(playerTown);
+                            List<String> second = db.getAllSecondFromTown(playerTown.getName());
 
                             Player newMajor;
 
@@ -81,14 +82,14 @@ public class LeaveTownCommand {
                         }
 
                         // disable all permission of players
-                        for (String pTownName : db.getAllPlayerOfTownByName(playerTown)) {
+                        for (String pTownName : db.getAllPlayerOfTown(playerTown)) {
                             if (!pTownName.equals(p.getName())) {
                                 Bukkit.getPlayer(pTownName).sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BOLD + p.getDisplayName() + ChatColor.RESET + "" + ChatColor.RED + " a quitté la ville.");
                             }
                         }
 
                         // revoke the player town fk from the db
-                        db.setPlayerTownByName(p, null);
+                        db.setPlayerTown(p, null);
 
                         p.sendMessage(ChatColor.RED + "Vous avez quitter la ville de " + playerTown + ".");
 

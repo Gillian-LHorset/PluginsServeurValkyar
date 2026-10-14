@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
 
+import static fr.Valkyar.displayingPlugin.DisplayingPlugin.activeBossBars;
+
 public class JoinListener implements Listener {
 
     private DisplayingPlugin _plugin;
@@ -23,18 +25,6 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        try {
-            String balance = _plugin.databaseApi.databaseLink.getPlayerBalanceByUUID(p).toString();
-            String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + balance;
-
-            BossBar hudDisplay = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
-            hudDisplay.setProgress(0);
-            hudDisplay.addPlayer(p);
-
-            _plugin.balanceTask.activeBossBars.put(p.getUniqueId(), hudDisplay);
-        } catch (SQLException err) {
-            err.printStackTrace();        }
-
+        // TODO : extraire la méthode de DisplayTask pour la reporter ici
     }
 }

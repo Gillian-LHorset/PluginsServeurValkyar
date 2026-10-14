@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -12,7 +13,7 @@ public class UnclaimTownCommand {
     private Database db;
     private ValkyarTownPlugin _plugin;
 
-    private String _playerTown;
+    private Town _playerTown;
 
     public UnclaimTownCommand(ValkyarTownPlugin plugin, Player p, String[] args) {
         _plugin = plugin;
@@ -24,7 +25,7 @@ public class UnclaimTownCommand {
                 try {
                     int[] unclaimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
                     if (db.getChunkById(unclaimedChunk) != null) {
-                        db.deleteOneChunksById(_playerTown, unclaimedChunk);
+                        db.deleteAChunksById(_playerTown, unclaimedChunk);
                         p.sendMessage(ChatColor.GREEN + "Le chunk à été unclaim.");
                     } else {
                         p.sendMessage(ChatColor.RED + "Ce chunk n'est pas claim.");

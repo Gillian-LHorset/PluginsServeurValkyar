@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.JoinInvitationCommand;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
@@ -30,14 +31,14 @@ public class AcceptCommand implements CommandExecutor {
                     UUID pUUID =  p.getUniqueId();
                     Player pSender = Bukkit.getPlayer(_plugin.sentInvitations.get(pUUID));
 
-                    String town = db.getPlayerTown(pSender);
+                    Town town = db.getPlayerTown(pSender);
 
                     // add the player to the town
-                    db.setPlayerTownByName(p, town);
+                    db.setPlayerTown(p, town);
                     p.sendMessage(ChatColor.GREEN + "Vous avez accepté l'invitation.");
                     pSender.sendMessage(ChatColor.GREEN + "" + p.getDisplayName() + " a accepté l'invitation.");
 
-                    for (String player : db.getAllPlayerOfTownByName(town)) {
+                    for (String player : db.getAllPlayerOfTown(town)) {
                         Bukkit.getPlayer(player).sendMessage(ChatColor.GREEN + "" + p.getDisplayName() + " a rejoint votre ville.");
                     }
 

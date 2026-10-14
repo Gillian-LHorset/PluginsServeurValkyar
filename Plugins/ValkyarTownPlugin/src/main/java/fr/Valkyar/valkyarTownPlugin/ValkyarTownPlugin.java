@@ -25,7 +25,8 @@ public final class ValkyarTownPlugin extends JavaPlugin {
     // define in which chat the player will talk
     public final Map<UUID, String> playerChat = new HashMap<>();
 
-
+    //TODO : faire une tache qui mets à jour tout ce qui se passe dans la ville (membres, argent)
+    // TODO : lié toutes les villes dans une hashmap dans dbapi et faire tout la dedans
     @Override
     public void onEnable() {
         // Plugin startup logic

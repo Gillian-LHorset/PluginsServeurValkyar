@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
@@ -17,27 +18,19 @@ public class TownBalanceCommand {
         db = plugin.databaseApi.databaseLink;
 
         if (args.length == 1) {
-            String _playerTown = db.getPlayerTown(p);
+            Town _playerTown = db.getPlayerTown(p);
             if (_playerTown != null) {
-                try {
-                    p.sendMessage(ChatColor.YELLOW + "Votre ville possède " + db.getBalanceTownByName(_playerTown) + " $.");
-                } catch (SQLException e) {
-                    System.err.println("[TownBalanceCommand] - " + e.getMessage());
-                }
+                p.sendMessage(ChatColor.YELLOW + "Votre ville possède " + _playerTown.getBalance() + " $.");
             } else {
                 p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
             }
         } else if (args.length == 2) {
-            List<String> allTowns = db.getAllTownsNames();
+            List<Town> allTowns = db.getAllTowns();
             if (allTowns != null && allTowns.contains(args[1])) {
-                for (String town : allTowns) {
-                    if (town.equals(args[1])) {
-                        try {
-                            p.sendMessage("La ville de " + town + " possède " + db.getBalanceTownByName(town) + "$.");
-                            break;
-                        } catch (SQLException e) {
-                            System.err.println("[TownBalanceCommand] - " + e.getMessage());
-                        }
+                for (Town town : allTowns) {
+                    if (town.getName().equals(args[1])) {
+                        p.sendMessage("La ville de " + town + " possède " + town.getBalance() + "$.");
+                        break;
                     }
                 }
             } else {
