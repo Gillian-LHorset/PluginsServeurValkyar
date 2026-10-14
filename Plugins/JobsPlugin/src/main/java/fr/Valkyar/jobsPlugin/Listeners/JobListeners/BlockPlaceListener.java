@@ -44,8 +44,6 @@ public class BlockPlaceListener implements Listener {
         }
     }
 
-    // TODO : Ajouter dans la db le block placer
-
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         // pour fermier (planter graine)

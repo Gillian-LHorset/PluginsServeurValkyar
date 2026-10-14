@@ -9,6 +9,7 @@ fr\Valkyar\databaseCommunicationAPI\Models\BlockData.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI$BlockPosition.class
 fr\Valkyar\databaseCommunicationAPI\Models\Job.class
 fr\Valkyar\databaseCommunicationAPI\Models\PlayerProfile.class
+fr\Valkyar\databaseCommunicationAPI\Models\Town.class
 fr\Valkyar\databaseCommunicationAPI\Models\JobProgression.class
 fr\Valkyar\databaseCommunicationAPI\Utilities\PlacedBlockUtilites.class
 fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.class

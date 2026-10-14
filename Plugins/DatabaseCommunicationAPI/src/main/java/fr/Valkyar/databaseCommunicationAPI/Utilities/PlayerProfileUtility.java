@@ -2,11 +2,13 @@ package fr.Valkyar.databaseCommunicationAPI.Utilities;
 
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +20,15 @@ public class PlayerProfileUtility {
     public static PlayerProfile CreatePlayerProfile(Player p, Database db) {
         PlayerProfile pP = new PlayerProfile(p.getUniqueId(), db.getBalancePlayerByName(p.getName()));
         List<Job> playerJobs = db.getPlayerJobs(p);
+        Town town = null;
+        try {
+            town = new Town(db.getPlayerTown(p), db.getBalanceTownByName(db.getPlayerTown(p)));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (town != null) {
+            pP.setTown(town);
+        }
 
         // if the player didn't have jobs
         if (playerJobs == null || playerJobs.isEmpty()) {

@@ -15,7 +15,7 @@ public final class DisplayingPlugin extends JavaPlugin {
 
     public DatabaseCommunicationAPI databaseApi = DatabaseCommunicationAPI.getApi();
 
-    public String denugIcon = "\uE000";
+    public String debugIcon = "\uE000";
     public String moneyIcon = "\uE001";
     public String mineurIcon = "\uE002";
     public String bucheronIcon = "\uE003";

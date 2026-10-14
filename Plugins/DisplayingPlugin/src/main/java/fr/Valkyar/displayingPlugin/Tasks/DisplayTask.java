@@ -1,5 +1,6 @@
 package fr.Valkyar.displayingPlugin.Tasks;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
 import org.bukkit.Bukkit;

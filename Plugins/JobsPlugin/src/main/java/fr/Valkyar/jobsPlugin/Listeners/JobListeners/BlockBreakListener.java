@@ -57,7 +57,6 @@ public class BlockBreakListener implements Listener {
         // pour mineur
         // pour bucheron
         // pour fermier (casser plantation)
-        //TODO : verifier si le block cassé n'à été posé à la main
 
         Player p = event.getPlayer();
         PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());

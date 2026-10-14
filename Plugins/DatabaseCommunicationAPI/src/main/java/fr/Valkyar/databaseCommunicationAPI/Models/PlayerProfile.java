@@ -15,6 +15,7 @@ public class PlayerProfile {
     private Job primaryJob;
     private Job secondaryJob;
     private Double currentMoney;
+    private Town town;
 
     public PlayerProfile(UUID playerUuid, Double CurrentMoney) {
         this.playerUuid = playerUuid;
@@ -50,6 +51,7 @@ public class PlayerProfile {
     public boolean hasSecondJobs() {
         return (secondaryJob != null);
     }
+    public boolean hasTown() {return town != null;}
 
     public UUID getPlayerUuid() {
         return playerUuid;
@@ -61,6 +63,7 @@ public class PlayerProfile {
         return secondaryJob;
     }
     public Double getCurrentMoney() {return currentMoney;}
+    public Town getTown() {return town;}
 
 
     public JobProgression getProgression(Integer jobId) {
@@ -76,6 +79,7 @@ public class PlayerProfile {
     public void setSecondaryJob(Job secondaryJob) {
         this.secondaryJob = secondaryJob;
     }
+    public void setTown(Town town) {this.town = town;}
 
     public void increaseExp(Integer jobId, Double amount) {
         if (progressions.get(jobId) == null) {
