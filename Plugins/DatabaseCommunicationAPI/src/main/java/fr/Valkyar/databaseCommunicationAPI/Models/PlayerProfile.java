@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.TownMap;
+
 public class PlayerProfile {
     private UUID playerUuid;
     private Job primaryJob;
     private Job secondaryJob;
     private Double currentMoney;
-    private Town town;
+    private Integer townId;
 
-    public PlayerProfile(UUID playerUuid, Double CurrentMoney) {
+    public PlayerProfile(UUID playerUuid, Double CurrentMoney, Integer townId) {
         this.playerUuid = playerUuid;
         currentMoney = CurrentMoney;
     }
@@ -51,7 +53,7 @@ public class PlayerProfile {
     public boolean hasSecondJobs() {
         return (secondaryJob != null);
     }
-    public boolean hasTown() {return town != null;}
+    public boolean hasTown() {return townId != null;}
 
     public UUID getPlayerUuid() {
         return playerUuid;
@@ -63,7 +65,7 @@ public class PlayerProfile {
         return secondaryJob;
     }
     public Double getCurrentMoney() {return currentMoney;}
-    public Town getTown() {return town;}
+    public Town getTown() {return TownMap.get(townId);}
 
 
     public JobProgression getProgression(Integer jobId) {
@@ -79,7 +81,7 @@ public class PlayerProfile {
     public void setSecondaryJob(Job secondaryJob) {
         this.secondaryJob = secondaryJob;
     }
-    public void setTown(Town town) {this.town = town;}
+    public void setTown(Town town) {townId = town.getId();}
 
     public void increaseExp(Integer jobId, Double amount) {
         if (progressions.get(jobId) == null) {

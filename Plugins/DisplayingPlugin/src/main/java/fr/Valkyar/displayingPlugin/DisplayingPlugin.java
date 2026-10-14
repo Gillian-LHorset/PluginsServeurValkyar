@@ -6,6 +6,7 @@ import fr.Valkyar.displayingPlugin.Listener.LeaveListener;
 import fr.Valkyar.displayingPlugin.Tasks.DisplayTask;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,7 +32,7 @@ public final class DisplayingPlugin extends JavaPlugin {
 
     public DisplayTask balanceTask;
 
-    public static final Map<UUID, BossBar> activeBossBars = new HashMap<>();
+    public static final Map<UUID, KeyedBossBar> activeBossBars = new HashMap<>();
 
     @Override
     public void onEnable() {

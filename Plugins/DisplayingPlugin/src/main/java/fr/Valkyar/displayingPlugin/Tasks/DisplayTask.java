@@ -6,9 +6,11 @@ import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -35,7 +37,6 @@ public class DisplayTask extends BukkitRunnable {
 
     public void removeBar(Player p) {
         if (activeBossBars.containsKey(p.getUniqueId())) {
-            activeBossBars.get(p.getUniqueId()).removeAll();
             activeBossBars.remove(p.getUniqueId());
         }
     }
@@ -46,7 +47,7 @@ public class DisplayTask extends BukkitRunnable {
     @Override
     public void run() {
         //TODO : séparer le code en méthodes
-        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+        if (Bukkit.getOnlinePlayers().isEmpty()) {
             return;
         }
         db = _plugin.databaseApi.databaseLink;
@@ -59,14 +60,16 @@ public class DisplayTask extends BukkitRunnable {
 
             Town playerTown = pProfile.getTown();
 
-            Double balance = pProfile.getCurrentMoney();
-
-            String formattedBalance = _df.format(balance);
+            String formattedBalance = _df.format(pProfile.getCurrentMoney());
 
             String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
-            title += "   " + "Métier principale : " + pProfile.getPrimaryJob().getDisplayName();
-            title += "   " + "Métier secondaire : " + pProfile.getSecondaryJob().getDisplayName();
+            if (pProfile.hasMainJobs()) {
+                title += "   " + "Métier principal : " + pProfile.getPrimaryJob().getDisplayName();
+            }
+            if (pProfile.hasSecondJobs()) {
+                title += "   " + "Métier secondaire : " + pProfile.getSecondaryJob().getDisplayName();
+            }
 
             if (playerTown != null) {
                 title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown.getName();
@@ -79,11 +82,22 @@ public class DisplayTask extends BukkitRunnable {
                 BossBar currentBar = activeBossBars.get(uuid);
                 currentBar.setTitle(title);
             } else {
-                BossBar hudDisplay = Bukkit.createBossBar(title, BarColor.PINK, BarStyle.SOLID);
+                String bossBarKey = p.getUniqueId().toString().replace("-", "");
+
+                NamespacedKey key = new NamespacedKey(_plugin, bossBarKey);
+                KeyedBossBar hudDisplay = Bukkit.getBossBar(key);
+
+                if (hudDisplay == null) {
+                    hudDisplay = Bukkit.createBossBar(key, "", BarColor.PINK, BarStyle.SOLID);
+                } else {
+                    hudDisplay.setColor(BarColor.PINK);
+                    hudDisplay.setStyle(BarStyle.SOLID);
+                }
+
                 hudDisplay.setProgress(0);
                 hudDisplay.addPlayer(p);
 
-                activeBossBars.put(uuid, hudDisplay);
+                activeBossBars.put(p.getUniqueId(), hudDisplay);
             }
         }
     }

@@ -1,6 +1,7 @@
 package fr.Valkyar.databaseCommunicationAPI;
 
 import fr.Valkyar.databaseCommunicationAPI.Models.BlockData;
+import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.listeners.JoinListener;
 import fr.Valkyar.databaseCommunicationAPI.listeners.LeaveListener;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
@@ -39,6 +40,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
 
     public static HashMap<UUID, PlayerProfile> playerProfiles = new HashMap<>();
     public static HashMap<BlockPosition, BlockData> PlacedBlocks = new HashMap<>();
+    public static HashMap<Integer, Town> TownMap = new HashMap<>();
 
     public StockPlacedBlockTask stockPlacedBlockTask;
 
@@ -70,6 +72,10 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
 
             JoinListener.RegisterPlayerProfile(p, this);
         }
+
+        databaseLink.getAllTowns().forEach(t -> {
+            TownMap.put(t.getId(), t);
+        });
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

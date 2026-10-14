@@ -1,9 +1,12 @@
 package fr.Valkyar.displayingPlugin.Listener;
 
 import fr.Valkyar.displayingPlugin.DisplayingPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import static fr.Valkyar.displayingPlugin.DisplayingPlugin.activeBossBars;
 
 public class LeaveListener implements Listener {
 
@@ -14,8 +17,7 @@ public class LeaveListener implements Listener {
     }
 
     public void onPlayerLeave(PlayerQuitEvent e) {
-        if (_plugin.balanceTask != null) {
-             _plugin.balanceTask.removeBar(e.getPlayer());
-        }
+        Bukkit.removeBossBar(activeBossBars.get(e.getPlayer().getUniqueId()).getKey());
+        activeBossBars.remove(e.getPlayer().getUniqueId());
     }
 }

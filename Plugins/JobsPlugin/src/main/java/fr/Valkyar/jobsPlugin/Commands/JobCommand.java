@@ -44,111 +44,114 @@ public class JobCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (sender instanceof Player player) {
+        if (!(sender instanceof Player)) {
+            return true;
+        }
+        Player player = (Player) sender;
 
-            if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-                player.sendMessage(ChatColor.RED + "Utilisation de la commande :\n/<command> <argument> <argument>");
-                return true;
-            }
+        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+            player.sendMessage(ChatColor.RED + "Utilisation de la commande :\n/<command> <argument> <argument>");
+            return true;
+        }
 
-            PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(player.getUniqueId());
+        PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(player.getUniqueId());
 
-            switch (args[0]) {
-                case "join":
+        switch (args[0]) {
+            case "join":
 
-                    if (args.length == 1) {
-                        player.sendMessage(ChatColor.RED + "Veuillez sélectionner un type métier à rejoindre.");
+                if (args.length == 1) {
+                    player.sendMessage(ChatColor.RED + "Veuillez sélectionner un type métier à rejoindre.");
+                    return true;
+                }
+
+                if (args.length == 2) {
+                    player.sendMessage(ChatColor.RED + "Veuillez sélectionner un métier à rejoindre.");
+                    return true;
+                }
+
+                if (args.length != 3) {
+                    player.sendMessage(ChatColor.RED + "Erreur dans la commande.");
+                    return true;
+                }
+
+                Job job = _plugin.jobsList.get(args[2]);
+
+                if (job == null) {
+                    player.sendMessage(ChatColor.RED + "Le métier ciblé n'existe pas.");
+                    return true;
+                }
+
+                if (job.isPrimary()) {
+                    // join main job logic
+                    if (pProfile.hasMainJobs()) {
+                        player.sendMessage(ChatColor.RED + "Vous avez déjà un métier principal.");
                         return true;
                     }
 
-                    if (args.length == 2) {
-                        player.sendMessage(ChatColor.RED + "Veuillez sélectionner un métier à rejoindre.");
+                    if (!IsCoolDownEnded(player, job, _mainJobCooldown)) {
                         return true;
                     }
 
-                    if (args.length != 3) {
-                        player.sendMessage(ChatColor.RED + "Erreur dans la commande.");
-                        return true;
-                    }
-
-                    Job job = _plugin.jobsList.get(args[2]);
-
-                    if (job == null) {
-                        player.sendMessage(ChatColor.RED + "Le métier ciblé n'existe pas.");
-                        return true;
-                    }
-
-                    if (job.isPrimary()) {
-                        // join main job logic
-                        if (pProfile.hasMainJobs()) {
-                            player.sendMessage(ChatColor.RED + "Vous avez déjà un métier principal.");
+                    RegisterJob(player, job);
+                } else {
+                    // secondary job logic
+                    if (!pProfile.hasSecondJobs()) {
+                        if (!IsCoolDownEnded(player, job, _secondJobCooldown)) {
                             return true;
                         }
 
-                        if (!IsCoolDownEnded(player, job, _mainJobCooldown)) {
-                            return true;
+                        if (db.getJobProgression(player, job) == null) {
+                            db.CreatePlayerJobInDb(player, job.getId());
                         }
 
                         RegisterJob(player, job);
+
                     } else {
-                        // secondary job logic
-                        if (!pProfile.hasSecondJobs()) {
-                            if (!IsCoolDownEnded(player, job, _secondJobCooldown)) {
-                                return true;
-                            }
-
-                            if (db.getJobProgression(player, job) == null) {
-                                db.CreatePlayerJobInDb(player, job.getId());
-                            }
-
-                            RegisterJob(player, job);
-
-                        } else {
-                            player.sendMessage(ChatColor.RED + "Vous avez déjà un métier secondaire.");
-                        }
+                        player.sendMessage(ChatColor.RED + "Vous avez déjà un métier secondaire.");
                     }
-                    break;
-                case "leave":
-                    if (args.length == 1) {
-                        player.sendMessage(ChatColor.RED + "Veuillez selectionner un type de métier à quitter.");
-                        return true;
-                    }
-
-                    if (args.length != 2) {
-                        player.sendMessage(ChatColor.RED + "Longueur de la commande non valide.");
-                        return true;
-                    }
-
-                    if (args[1].equalsIgnoreCase("principal")) {
-                        // leave main job logic
-                        if (!pProfile.hasMainJobs()) {
-                            player.sendMessage(ChatColor.RED + "Vous n'avez pas de métier principal.");
-                            return true;
-                        }
-
-                        LeaveJob(player, pProfile.getPrimaryJob());
-                        return true;
-                    } else if (args[1].equalsIgnoreCase("secondaire")) {
-                        // leave second job logic
-                        if (!pProfile.hasSecondJobs()) {
-                            player.sendMessage(ChatColor.RED + "Vous n'avez pas de métier secondaire.");
-                            return true;
-                        }
-
-                        LeaveJob(player, pProfile.getSecondaryJob());
-                        return true;
-                 } else {
-                    player.sendMessage(ChatColor.RED + "Veuillez entrer un type de métier valide.");
                 }
                 break;
-
-                default:
-                    player.sendMessage(ChatColor.RED + "Utilisation de la commande :\n/<command> <argument> <argument>");
+            case "leave":
+                if (args.length == 1) {
+                    player.sendMessage(ChatColor.RED + "Veuillez selectionner un type de métier à quitter.");
                     return true;
-            } // end switch
+                }
+
+                if (args.length != 2) {
+                    player.sendMessage(ChatColor.RED + "Longueur de la commande non valide.");
+                    return true;
+                }
+
+                if (args[1].equalsIgnoreCase("principal")) {
+                    // leave main job logic
+                    if (!pProfile.hasMainJobs()) {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas de métier principal.");
+                        return true;
+                    }
+
+                    LeaveJob(player, pProfile.getPrimaryJob());
+                    return true;
+                } else if (args[1].equalsIgnoreCase("secondaire")) {
+                    // leave second job logic
+                    if (!pProfile.hasSecondJobs()) {
+                        player.sendMessage(ChatColor.RED + "Vous n'avez pas de métier secondaire.");
+                        return true;
+                    }
+
+                    LeaveJob(player, pProfile.getSecondaryJob());
+                    return true;
+             } else {
+                player.sendMessage(ChatColor.RED + "Veuillez entrer un type de métier valide.");
+            }
+            break;
+
+            default:
+                player.sendMessage(ChatColor.RED + "Utilisation de la commande :\n/<command> <argument> <argument>");
+                return true;
+        } // end switch
 
 
-        }
+
         return true;
     }
 

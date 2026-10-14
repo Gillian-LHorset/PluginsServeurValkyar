@@ -75,14 +75,16 @@ public class Database {
     public PlayerProfile getBasePlayerProfile(Player player) {
         try {
             PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT uuid ,balance FROM t_players WHERE uuid = ?");
+                    .prepareStatement("SELECT uuid, balance, town_fk FROM t_players " +
+                            "WHERE uuid = ?");
             statement.setString(1, player.getUniqueId().toString());
 
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
                 return new PlayerProfile(UUID.fromString(results.getString("uuid")),
-                        results.getDouble("balance"));
+                        results.getDouble("balance"),
+                        results.getInt("town_fk"));
             }
 
             statement.close();
@@ -139,7 +141,7 @@ public class Database {
         }
         return null;
     }
-    
+
     public void setPlayerBalance(Player player, Double amount) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
