@@ -94,7 +94,7 @@ CREATE TABLE t_permission_list (
     FOREIGN KEY (player_fk) REFERENCES t_players(player_ID)
 );
 
-CREATE TABLE IF NOT EXISTS player_placed_blocks (
+CREATE TABLE IF NOT EXISTS t_player_placed_blocks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     player_uuid VARCHAR(36) NOT NULL,
     world VARCHAR(64) NOT NULL,

@@ -1,5 +1,6 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.BlockData;
 import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
@@ -8,10 +9,8 @@ import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class Database {
     private Connection _connection;
@@ -1256,6 +1255,91 @@ public class Database {
             System.out.println("[Database API] - " + "getLastLeaveTime - " + e);
         }
         return null;
+    }
+
+    public void InsertBlockPlaced(BlockData block) {
+        // exécute la requete en arrière-plan de manière asynchrone
+        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(_plugin, () -> {
+            String query = "INSERT INTO t_player_placed_blocks (player_uuid, world, x, y, z, block_type) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement statement = _connection.prepareStatement(query)) {
+                statement.setString(1, block.getPlayer().toString());
+                statement.setString(2, block.getWorld());
+                statement.setInt(3, block.getX());
+                statement.setInt(4, block.getY());
+                statement.setInt(5, block.getZ());
+                statement.setString(6, block.getBlockType());
+
+                statement.executeUpdate();
+
+            } catch (SQLException e) {
+                System.out.println("[Database API] - InsertBlockPlaced - " + e.getMessage());
+            }
+        });
+    }
+
+    public void insertBlockBatch(Collection<BlockData> blocks) {
+        if (blocks == null || blocks.isEmpty()) {
+            return;
+        }
+
+        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(_plugin, () -> {
+            String query = "INSERT INTO t_player_placed_blocks (player_uuid, world, x, y, z, block_type) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement statement = _connection.prepareStatement(query)) {
+
+                for (BlockData block : blocks) {
+                    statement.setString(1, block.getPlayer().toString());
+                    statement.setString(2, block.getWorld());
+                    statement.setInt(3, block.getX());
+                    statement.setInt(4, block.getY());
+                    statement.setInt(5, block.getZ());
+                    statement.setString(6, block.getBlockType());
+
+                    // permet de tout stocker dans un Batch avant d'envoyer le packet en db
+                    statement.addBatch();
+                }
+
+                statement.executeBatch();
+
+            } catch (SQLException e) {
+                System.out.println("[Database API] - insertBlockBatch - " + e.getMessage());
+            }
+        });
+    }
+
+    public CompletableFuture<BlockData> getPlacedBlockByLocation(int x, int y, int z, String worldName) {
+        // CompletableFuture permet un retour de manière asynchrone
+        return CompletableFuture.supplyAsync(() -> {
+            String query = "SELECT * FROM t_player_placed_blocks WHERE x = ? AND y = ? AND z = ? AND world = ?";
+
+            try (PreparedStatement statement = _connection.prepareStatement(query)) {
+                statement.setInt(1, x);
+                statement.setInt(2, y);
+                statement.setInt(3, z);
+                statement.setString(4, worldName);
+
+                try (ResultSet results = statement.executeQuery()) {
+                    if (results.next()) {
+                        return new BlockData(
+                                UUID.fromString(results.getString("player_uuid")),
+                                results.getString("world"),
+                                results.getInt("x"),
+                                results.getInt("y"),
+                                results.getInt("z"),
+                                results.getString("block_type"),
+                                results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
+                        );
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("[Database API] - getPlacedBlockByLocation - " + e.getMessage());
+            }
+
+            return null;
+        });
     }
 
 }
