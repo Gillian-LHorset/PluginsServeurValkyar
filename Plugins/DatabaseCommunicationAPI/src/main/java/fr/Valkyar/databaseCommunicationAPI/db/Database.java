@@ -1342,4 +1342,36 @@ public class Database {
         });
     }
 
+    public CompletableFuture<BlockData> getPlacedBlockByLocation(DatabaseCommunicationAPI.BlockPosition blockPosition) {
+        // CompletableFuture permet un retour de manière asynchrone
+        return CompletableFuture.supplyAsync(() -> {
+            String query = "SELECT * FROM t_player_placed_blocks WHERE x = ? AND y = ? AND z = ? AND world = ?";
+
+            try (PreparedStatement statement = _connection.prepareStatement(query)) {
+                statement.setInt(1, blockPosition.x());
+                statement.setInt(2, blockPosition.y());
+                statement.setInt(3, blockPosition.z());
+                statement.setString(4, blockPosition.worldName());
+
+                try (ResultSet results = statement.executeQuery()) {
+                    if (results.next()) {
+                        return new BlockData(
+                                UUID.fromString(results.getString("player_uuid")),
+                                results.getString("world"),
+                                results.getInt("x"),
+                                results.getInt("y"),
+                                results.getInt("z"),
+                                results.getString("block_type"),
+                                results.getTimestamp("date") != null ? Timestamp.valueOf(results.getTimestamp("date").toLocalDateTime()) : null
+                        );
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("[Database API] - getPlacedBlockByLocation - " + e.getMessage());
+            }
+
+            return null;
+        });
+    }
+
 }
