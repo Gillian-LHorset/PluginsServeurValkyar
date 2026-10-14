@@ -1,9 +1,6 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
-import fr.Valkyar.databaseCommunicationAPI.Models.BlockData;
-import fr.Valkyar.databaseCommunicationAPI.Models.ResourceData;
-import fr.Valkyar.databaseCommunicationAPI.Models.Job;
-import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.Models.*;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
@@ -548,20 +545,23 @@ public class Database {
         return null;
     }
 
-    public String getPlayerTown(Player player){
+    public Town getPlayerTown(Player p) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT t.name " +
+                    .prepareStatement(  "SELECT t.name, t.balance " +
                             "FROM t_town AS t " +
                             "JOIN t_players AS p " +
                             "ON p.town_fk = t.town_id " +
                             "WHERE uuid = ? ");
-            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(1, p.getUniqueId().toString());
 
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-                return results.getString("t.name");
+                return new Town(
+                        results.getString("t.name"),
+                        results.getDouble("balance")
+                        );
             }
 
             statement.close();

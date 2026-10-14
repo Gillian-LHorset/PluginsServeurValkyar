@@ -20,12 +20,8 @@ public class PlayerProfileUtility {
     public static PlayerProfile CreatePlayerProfile(Player p, Database db) {
         PlayerProfile pP = new PlayerProfile(p.getUniqueId(), db.getBalancePlayerByName(p.getName()));
         List<Job> playerJobs = db.getPlayerJobs(p);
-        Town town = null;
-        try {
-            town = new Town(db.getPlayerTown(p), db.getBalanceTownByName(db.getPlayerTown(p)));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        Town town = db.getPlayerTown(p);
         if (town != null) {
             pP.setTown(town);
         }
