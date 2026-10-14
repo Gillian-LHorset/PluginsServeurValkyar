@@ -6,6 +6,7 @@ import fr.Valkyar.databaseCommunicationAPI.listeners.LeaveListener;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
+import fr.Valkyar.databaseCommunicationAPI.listeners.PlaceBlockListener;
 import fr.Valkyar.databaseCommunicationAPI.tasks.StockPlacedBlockTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -58,6 +59,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlaceBlockListener(), this);
 
         stockPlacedBlockTask = new StockPlacedBlockTask(this);
         // attend 1 minute (1200 ticks) avant la première exécution
