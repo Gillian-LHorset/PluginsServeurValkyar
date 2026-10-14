@@ -7,7 +7,9 @@ import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.databaseCommunicationAPI.tasks.StockPlacedBlockTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -61,6 +63,11 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         // attend 1 minute (1200 ticks) avant la première exécution
         // puis se répète toutes les 10 minutes (12000 ticks)
         stockPlacedBlockTask.runTaskTimer(this, 1200L, 12000L);
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            JoinListener.RegisterPlayerProfile(p, this);
+        }
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

@@ -54,12 +54,18 @@ public class JoinListener implements Listener {
 
         Player p = e.getPlayer();
 
-        PlayerProfile playerProfile = CreatePlayerProfile(p, _plugin.databaseLink);
+        RegisterPlayerProfile(p, _plugin);
+
+    }
+
+    public static void RegisterPlayerProfile(Player p, DatabaseCommunicationAPI plugin) {
+
+        PlayerProfile playerProfile = CreatePlayerProfile(p, plugin.databaseLink);
 
         if (playerProfiles == null) {
             OutputColoredText(RED_OUTPUT, "Erreur création profil");
         };
 
-        _plugin.playerProfiles.put(p.getUniqueId(), playerProfile);
+        plugin.playerProfiles.put(p.getUniqueId(), playerProfile);
     }
 }
