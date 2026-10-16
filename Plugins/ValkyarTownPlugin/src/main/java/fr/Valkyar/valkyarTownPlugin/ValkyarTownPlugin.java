@@ -8,6 +8,7 @@ import fr.Valkyar.valkyarTownPlugin.Commands.TownCommand;
 import fr.Valkyar.valkyarTownPlugin.JoinInvitationCommand.AcceptCommand;
 import fr.Valkyar.valkyarTownPlugin.JoinInvitationCommand.RefuseCommand;
 import fr.Valkyar.valkyarTownPlugin.Listeners.*;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public final class ValkyarTownPlugin extends JavaPlugin {
     public final Map<UUID, String> playerChat = new HashMap<>();
 
     //TODO : faire une tache qui mets à jour tout ce qui se passe dans la ville (membres, argent)
-    // TODO : lié toutes les villes dans une hashmap dans dbapi et faire tout la dedans
+    // TODO : supprimer tous les player.hasPermission et remplacer par playerProfile.hasPermission
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -42,13 +43,16 @@ public final class ValkyarTownPlugin extends JavaPlugin {
         getCommand("t").setTabCompleter(new TownCommandCompletion(this));
         getCommand("chat").setTabCompleter(new ChatCommandCompletion());
 
-        // TODO : ajouter la protection contre les explosions et les dégats aux entités
+        // TODO : ajouter la protection contre les explosions et les dégats aux entités et dégats des entités
         getServer().getPluginManager().registerEvents(new BreakBlockListenener(this), this);
         getServer().getPluginManager().registerEvents(new PlaceBlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new BucketListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerTalkListener(this), this);
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            playerChat.put(p.getUniqueId(), "global");});
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

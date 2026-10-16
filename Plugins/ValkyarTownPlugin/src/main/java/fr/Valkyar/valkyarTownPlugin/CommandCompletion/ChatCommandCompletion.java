@@ -14,7 +14,7 @@ public class ChatCommandCompletion implements TabCompleter {
 
         if (args.length == 1) {
             completions.add("ville");
-            completions.add("globale");
+            completions.add("global");
         }
 
         return completions;

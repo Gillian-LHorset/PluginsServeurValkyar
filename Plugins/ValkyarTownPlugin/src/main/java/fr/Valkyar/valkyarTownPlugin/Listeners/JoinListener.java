@@ -7,8 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms.assignPerms;
-
 public class JoinListener implements Listener {
 
     private Database db;
@@ -21,9 +19,8 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        assignPerms(p, db, _plugin);
 
         // define the player to talk by default to the global chat
-        _plugin.playerChat.put(p.getUniqueId(), "globale");
+        _plugin.playerChat.put(p.getUniqueId(), "global");
     }
 }

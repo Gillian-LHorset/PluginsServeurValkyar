@@ -65,10 +65,10 @@ public class DisplayTask extends BukkitRunnable {
             String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
             if (pProfile.hasMainJobs()) {
-                title += "   " + "Métier principal : " + pProfile.getPrimaryJob().getDisplayName();
+                title += "   " + "job1: " + pProfile.getPrimaryJob().getDisplayName();
             }
             if (pProfile.hasSecondJobs()) {
-                title += "   " + "Métier secondaire : " + pProfile.getSecondaryJob().getDisplayName();
+                title += "   " + "job2: " + pProfile.getSecondaryJob().getDisplayName();
             }
 
             if (playerTown != null) {

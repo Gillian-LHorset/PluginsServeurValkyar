@@ -1,6 +1,8 @@
 package fr.Valkyar.databaseCommunicationAPI.db;
 
 import fr.Valkyar.databaseCommunicationAPI.Models.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 
@@ -8,6 +10,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.TownMap;
 
 public class Database {
     private Connection _connection;
@@ -20,7 +24,9 @@ public class Database {
         this._plugin = plugin;
     }
 
-    /** Make a connexion to the db.
+    /**
+     * Make a connexion to the db.
+     *
      * @return Return a connexion to the db.
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
@@ -50,7 +56,9 @@ public class Database {
     }
 
 
-    /** Add the name, uuid and balance of a player to the database
+    /**
+     * Add the name, uuid and balance of a player to the database
+     *
      * @param player This is the player who the information are going to be added to the db
      * @throws SQLException In the case of the connexion with the db cannot be done, the methode throw an exception.
      */
@@ -74,7 +82,7 @@ public class Database {
     // plein de testo
     public PlayerProfile getBasePlayerProfile(Player player) {
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT uuid, balance, town_fk FROM t_players " +
                             "WHERE uuid = ?");
             statement.setString(1, player.getUniqueId().toString());
@@ -84,7 +92,8 @@ public class Database {
             if (results.next()) {
                 return new PlayerProfile(UUID.fromString(results.getString("uuid")),
                         results.getDouble("balance"),
-                        results.getInt("town_fk"));
+                        results.getObject("town_fk", Integer.class),
+                        this);
             }
 
             statement.close();
@@ -110,7 +119,7 @@ public class Database {
             }
 
             return jobsList;
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getAllJobsInfos()'");
         }
         return null;
@@ -136,7 +145,7 @@ public class Database {
             }
 
             return job;
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getPlayerJobs()'");
         }
         return null;
@@ -157,7 +166,7 @@ public class Database {
         }
     }
 
-    public void setPlayerMainJob(Player player, Integer jobsId) throws SQLException{
+    public void setPlayerMainJob(Player player, Integer jobsId) throws SQLException {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET main_job_fk = ? WHERE uuid = ?");
         if (jobsId == null) {
@@ -171,7 +180,7 @@ public class Database {
         statement.close();
     }
 
-    public void setPlayerSecondJob(Player player, Integer jobsId) throws SQLException{
+    public void setPlayerSecondJob(Player player, Integer jobsId) throws SQLException {
         PreparedStatement statement = _plugin.databaseLink._connection
                 .prepareStatement("UPDATE t_players SET second_job_fk = ? WHERE uuid = ?");
         if (jobsId == null) {
@@ -189,7 +198,7 @@ public class Database {
         List<ResourceData> breakableBlocksList = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT block_id, minecraft_identifier, money_bringing, exp_bringing, action ,job_fk " +
+                    .prepareStatement("SELECT block_id, minecraft_identifier, money_bringing, exp_bringing, action ,job_fk " +
                             "FROM t_action_type " +
                             "WHERE job_fk = ? AND action = ?");
             statement.setInt(1, jobFk);
@@ -198,7 +207,7 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
-                breakableBlocksList.add( new ResourceData(results.getInt("block_id"),
+                breakableBlocksList.add(new ResourceData(results.getInt("block_id"),
                         results.getString("minecraft_identifier"),
                         results.getDouble("money_bringing"),
                         results.getDouble("exp_bringing"),
@@ -215,35 +224,66 @@ public class Database {
         return breakableBlocksList;
     }
 
-    public void CreateTown(Player player, String newTownName){
+    public Town CreateTown(Player player, String newTownName) {
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
-                    .prepareStatement(  "INSERT INTO t_town (name) " +
-                                            "VALUE (?)", Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement("INSERT INTO t_town (name) " +
+                            "VALUE (?)", Statement.RETURN_GENERATED_KEYS);
 
             createTownStatement.setString(1, newTownName);
+
+            createTownStatement.executeUpdate();
 
             try (ResultSet generatedKeys = createTownStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int townId = generatedKeys.getInt(1);
 
-                    Town newTown = new Town(townId, newTownName, 0.00);
-
-                    setPlayerTown(player, newTown);
+                    return new Town(
+                            townId,
+                            newTownName,
+                            0.00,
+                            null,
+                            List.of(player.getUniqueId()),
+                            null,
+                            this);
                 }
             }
             createTownStatement.close();
-
         } catch (Exception err) {
             System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'CreateTown()' 'INSERT INTO t_town'");
             System.out.println(err.getMessage());
         }
+        return null;
     }
 
-    public Integer getPlayerFk(Player player){
+    public List<UUID> getUuidOfTownResidentsById(int townId) {
+        List<UUID> uuidList = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT player_id " +
+                    .prepareStatement("SELECT uuid " +
+                            "FROM t_players " +
+                            "WHERE town_fk = ? ");
+            statement.setInt(1, townId);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                uuidList.add(UUID.fromString(results.getString("uuid")));
+            }
+
+            statement.close();
+
+            return uuidList;
+        } catch (SQLException error) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'GetPlayerFk()'");
+        }
+        return null;
+    }
+
+    public Integer getPlayerFk(Player player) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT player_id " +
                             "FROM t_players " +
                             "WHERE uuid = ? ");
             statement.setString(1, player.getUniqueId().toString());
@@ -262,36 +302,59 @@ public class Database {
     }
 
     public Town getPlayerTown(Player p) {
-        try {
-            PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT t.town_id, t.name, t.balance " +
-                            "FROM t_town AS t " +
-                            "JOIN t_players AS p " +
-                            "ON p.town_fk = t.town_id " +
-                            "WHERE uuid = ? ");
-            statement.setString(1, p.getUniqueId().toString());
+        Town town = null;
 
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return new Town(
-                        results.getInt("town_id"),
-                        results.getString("t.name"),
-                        results.getDouble("balance")
-                        );
+        String townQuery = "SELECT t.town_id, t.name, t.balance " +
+                "FROM t_town AS t " +
+                "JOIN t_players AS p " +
+                "ON p.town_fk = t.town_id " +
+                "WHERE p.uuid = ?";
+        try (PreparedStatement stmt = _plugin.databaseLink._connection.prepareStatement(townQuery)) {
+            stmt.setString(1, p.getUniqueId().toString());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    town = new Town(
+                            rs.getInt("town_id"),
+                            rs.getString("name"),
+                            rs.getDouble("balance"),
+                            new HashSet<>(),
+                            getUuidOfTownResidentsById(rs.getInt("town_id")),
+                            getSpawnTown(rs.getInt("town_id")),
+                            this
+                    );
+                }
             }
-
-            statement.close();
-        } catch (SQLException error) {
-            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'GetPlayerTown()'");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        return null;
+
+        if (town == null) return null;
+
+        String chunkQuery = "SELECT chunk_identifier_x, chunk_identifier_z " +
+                "FROM t_chunk_town " +
+                "WHERE town_fk = ?";
+        try (PreparedStatement stmt = _plugin.databaseLink._connection.prepareStatement(chunkQuery)) {
+            stmt.setInt(1, town.getId());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    town.addChunk(new DatabaseCommunicationAPI.ChunkCoord(
+                            rs.getInt("chunk_identifier_x"),
+                            rs.getInt("chunk_identifier_z")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return town;
     }
 
     public void setPlayerTown(Player player, Town town) {
         try {
             PreparedStatement statement;
-            if (town.getName() != null) {
+            if (town != null) {
                 statement = _plugin.databaseLink._connection
                         .prepareStatement("UPDATE t_players " +
                                 "SET town_fk = ? " +
@@ -314,10 +377,10 @@ public class Database {
         }
     }
 
-    public Integer getNumberOfPlayersInTown(Town town){
+    public Integer getNumberOfPlayersInTown(Town town) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT COUNT(p.uuid) " +
+                    .prepareStatement("SELECT COUNT(p.uuid) " +
                             "FROM t_town AS t " +
                             "JOIN t_players AS p " +
                             "ON p.town_fk = t.town_id " +
@@ -337,12 +400,12 @@ public class Database {
         return null;
     }
 
-    public void deleteTownByName(Town town){
+    public void deleteTown(Town town) {
         try {
             deleteAllChunksOfTown(town);
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "DELETE FROM t_town " +
-                                            "WHERE town_id = ? ");
+                    .prepareStatement("DELETE FROM t_town " +
+                            "WHERE town_id = ? ");
             statement.setInt(1, town.getId());
 
             statement.executeUpdate();
@@ -353,11 +416,11 @@ public class Database {
     }
 
     // TODO : vérifier si c'est onCascadDelete
-    public void deleteAllChunksOfTown(Town town){
+    public void deleteAllChunksOfTown(Town town) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "DELETE FROM t_chunk_town " +
-                                            "WHERE town_fk = ? ");
+                    .prepareStatement("DELETE FROM t_chunk_town " +
+                            "WHERE town_fk = ? ");
             statement.setInt(1, town.getId());
 
             statement.executeUpdate();
@@ -367,15 +430,15 @@ public class Database {
         }
     }
 
-    public List<String> getAllPlayerOfTown(Town town){
+    public List<String> getAllPlayerOfTown(Town town) {
         List<String> allPlayers = new ArrayList<>();
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "SELECT p.name " +
-                                            "FROM t_town AS t " +
-                                            "JOIN t_players AS p " +
-                                            "ON t.town_id = p.town_fk " +
-                                            "WHERE t.name = ? ");
+                    .prepareStatement("SELECT p.name " +
+                            "FROM t_town AS t " +
+                            "JOIN t_players AS p " +
+                            "ON t.town_id = p.town_fk " +
+                            "WHERE t.name = ? ");
             statement.setInt(1, town.getId());
 
             ResultSet results = statement.executeQuery();
@@ -391,14 +454,14 @@ public class Database {
         return allPlayers;
     }
 
-    public void registerChunk(int[] chunks, Town town){
+    public void registerChunk(DatabaseCommunicationAPI.ChunkCoord chunks, Town town) {
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
-                    .prepareStatement(  "INSERT INTO t_chunk_town   (chunk_identifier_x, chunk_identifier_z, town_fk) " +
-                                            "VALUE                      (?, ?, ?)");
+                    .prepareStatement("INSERT INTO t_chunk_town   (chunk_identifier_x, chunk_identifier_z, town_fk) " +
+                            "VALUE                      (?, ?, ?)");
 
-            createTownStatement.setInt(1, chunks[0]);
-            createTownStatement.setInt(2, chunks[1]);
+            createTownStatement.setInt(1, chunks.x());
+            createTownStatement.setInt(2, chunks.z());
             createTownStatement.setInt(3, town.getId());
 
             createTownStatement.executeUpdate();
@@ -409,217 +472,290 @@ public class Database {
         }
     }
 
-    public Integer[] getChunkById(int[] giveId) throws SQLException{
+    public Integer getTownFkByName(String townName) {
+        try {
+            DatabaseCommunicationAPI.ChunkCoord chunkProrities;
 
-        Integer[] chunkProrities = new Integer[3];
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT town_id " +
+                            "FROM t_town " +
+                            "WHERE name = ? ");
+            statement.setString(1, townName);
 
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z, town_fk " +
-                        "FROM t_chunk_town " +
-                        "WHERE chunk_identifier_x = ? " +
-                        "AND chunk_identifier_z = ?");
-        statement.setString(1, String.valueOf(giveId[0]));
-        statement.setString(2, String.valueOf(giveId[1]));
+            ResultSet results = statement.executeQuery();
 
-        ResultSet results = statement.executeQuery();
-
-        if (results.next()) {
-            chunkProrities[0] = results.getInt("chunk_identifier_x");
-            chunkProrities[1] = results.getInt("chunk_identifier_z");
-            chunkProrities[2] = results.getInt("town_fk");
-
-            return chunkProrities;
+            if (results.next()) {
+                return results.getInt("town_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
+    public DatabaseCommunicationAPI.ChunkCoord getChunkById(DatabaseCommunicationAPI.ChunkCoord giveId, Town town) {
+        try {
+            DatabaseCommunicationAPI.ChunkCoord chunkProrities;
 
-        statement.close();
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z, town_fk " +
+                            "FROM t_chunk_town " +
+                            "WHERE chunk_identifier_x = ? " +
+                            "AND chunk_identifier_z = ?");
+            statement.setInt(1, giveId.x());
+            statement.setInt(2, giveId.z());
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                chunkProrities = new DatabaseCommunicationAPI.ChunkCoord(
+                        results.getInt("chunk_identifier_x"),
+                        results.getInt("chunk_identifier_z")
+                );
+
+                return chunkProrities;
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[DatabaseCommunicationAPI] : Erreur de connexion 'getChunkById()'" + e.getMessage());
+        }
 
         return null;
     }
 
-    public Integer[][] getAllChunkOfTown(Town town) throws SQLException{
+    public Set<DatabaseCommunicationAPI.ChunkCoord> getAllChunkOfTown(Town town) {
+        try {
+            Set<DatabaseCommunicationAPI.ChunkCoord> allChunks = new HashSet<>();
 
-        Integer[][] allChunks = new Integer[2][];
-        int i = 0;
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z " +
+                            "FROM t_chunk_town " +
+                            "WHERE town_fk = ? ");
+            statement.setInt(1, town.getId());
 
-        PreparedStatement statement =  _plugin.databaseLink._connection
-                .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z " +
-                        "FROM t_chunk_town " +
-                        "WHERE town_fk = ? ");
-        statement.setInt(1, town.getId());
+            ResultSet results = statement.executeQuery();
 
-        ResultSet results = statement.executeQuery();
+            while (results.next()) {
+                allChunks.add(new DatabaseCommunicationAPI.ChunkCoord(
+                        results.getInt("chunk_identifier_x"),
+                        results.getInt("chunk_identifier_z")
+                ));
+            }
 
-        while (results.next()) {
-            allChunks[0][i] = results.getInt("chunk_identifier_x");
-            allChunks[1][i] = results.getInt("chunk_identifier_z");
-
-            i++;
+            return allChunks;
+        } catch (SQLException e) {
+            System.out.println("[Database API] - getAllChunkOfTown : " + e);
         }
-
-        return allChunks;
+        return null;
     }
 
-    public boolean isChunkFromTown(Town town, int[] chunk) {
+    public boolean isChunkFromTown(Town town, DatabaseCommunicationAPI.ChunkCoord chunk) {
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT * " +
                             "FROM t_chunk_town " +
                             "WHERE town_fk = ? " +
                             "AND chunk_identifier_x = ? " +
                             "AND chunk_identifier_z = ?");
             statement.setInt(1, town.getId());
-            statement.setInt(2, chunk[0]);
-            statement.setInt(3, chunk[1]);
+            statement.setInt(2, chunk.x());
+            statement.setInt(3, chunk.z());
 
             ResultSet results = statement.executeQuery();
 
             return (results.next());
 
 
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("[Database API] - isChunkFromTown : " + e);
         }
         return false;
     }
 
-    public void deleteAChunksById(Town town, int[] chunk){
+    public void deleteAChunksById(DatabaseCommunicationAPI.ChunkCoord chunk, Town town) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement(  "DELETE FROM t_chunk_town " +
+                    .prepareStatement("DELETE FROM t_chunk_town " +
                             "WHERE town_fk = ? " +
                             "AND chunk_identifier_x = ? " +
                             "AND chunk_identifier_z = ?");
             statement.setInt(1, town.getId());
-            statement.setInt(2, chunk[0]);
-            statement.setInt(3, chunk[1]);
+            statement.setInt(2, chunk.x());
+            statement.setInt(3, chunk.z());
 
             statement.executeUpdate();
             statement.close();
-        } catch (Exception err) {
-
+        } catch (Exception e) {
+            System.out.println("[Database API] - deleteAChunksById : " + e);
         }
     }
 
-    public void registerPermissionPlayer(Player player) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("INSERT INTO t_permission_list (mayor, second, claim, withdraw, unclaim, invite, kick, player_fk) " +
-                                      "VALUE (?, ?, ?, ?, ?, ?, ?, ?)");
-
-        statement.setBoolean(1, false);
-        statement.setBoolean(2, false);
-        statement.setBoolean(3, false);
-        statement.setBoolean(4, false);
-        statement.setBoolean(5, false);
-        statement.setBoolean(6, false);
-        statement.setBoolean(7, false);
-        statement.setInt(8, getPlayerFk(player));
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public Map<String, Boolean> getAllPermissionOfAPlayer(Player p) throws SQLException{
-        Map<String, Boolean> permissions = new HashMap<>();
-
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "SELECT mayor, second, claim, withdraw, unclaim, invite, kick " +
-                                        "FROM t_permission_list " +
-                                        "WHERE player_fk = ? ");
-
-        statement.setInt(1, getPlayerFk(p));
-
-        ResultSet results = statement.executeQuery();
-
-        if (!results.next()) {
-            return null;
-        }
-
-        permissions.put("mayor", results.getBoolean("mayor"));
-        permissions.put("second", results.getBoolean("second"));
-        permissions.put("claim", results.getBoolean("claim"));
-        permissions.put("withdraw", results.getBoolean("withdraw"));
-        permissions.put("unclaim", results.getBoolean("unclaim"));
-        permissions.put("invite", results.getBoolean("invite"));
-        permissions.put("kick", results.getBoolean("kick"));
-
-        return permissions;
-    }
-
-    public void setAllPermissionsOfAPlayerToFalse(Player p) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "UPDATE t_permission_list SET " +
-                        "mayor = FALSE, " +
-                        "second = FALSE, " +
-                        "claim = FALSE, " +
-                        "withdraw = FALSE, " +
-                        "unclaim = FALSE, " +
-                        "invite = FALSE, " +
-                        "kick = FALSE " +
-                        "WHERE player_fk = ? ");
-        statement.setInt(1, getPlayerFk(p));
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public void setAllPermissionsOfAPlayerToTrue(Player p) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement(  "UPDATE t_permission_list SET " +
-                        "mayor = TRUE, " +
-                        "second = TRUE, " +
-                        "claim = TRUE, " +
-                        "withdraw = TRUE, " +
-                        "unclaim = TRUE, " +
-                        "invite = TRUE, " +
-                        "kick = TRUE " +
-                        "WHERE player_fk = ? ");
-        statement.setInt(1, getPlayerFk(p));
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public void setPermissionOfAPlayerToTrue(Player p, String permissionToGive) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_permission_list SET " + permissionToGive + " = TRUE WHERE player_fk = ?");
-        statement.setInt(1, getPlayerFk(p));
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public void setPermissionOfAPlayerToFalse(Player p, String permissionToGive) throws SQLException{
-        PreparedStatement statement = _plugin.databaseLink._connection
-                .prepareStatement("UPDATE t_permission_list SET " + permissionToGive +" = FALSE WHERE player_fk = ?");
-        statement.setInt(1, getPlayerFk(p));
-
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public List<Town> getAllTowns() {
-        List<Town> towns  = new ArrayList<>();
+    public void registerPermissionPlayer(Player player) {
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
-                    .prepareStatement("SELECT town_id, name, balance " +
-                            "FROM t_town ");
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("INSERT INTO t_permission_list (town_mayor, town_second, town_claim, town_withdraw, town_unclaim, town_invite, town_kick, player_fk) " +
+                            "VALUE (?, ?, ?, ?, ?, ?, ?, ?)");
+
+            statement.setBoolean(1, false);
+            statement.setBoolean(2, false);
+            statement.setBoolean(3, false);
+            statement.setBoolean(4, false);
+            statement.setBoolean(5, false);
+            statement.setBoolean(6, false);
+            statement.setBoolean(7, false);
+            statement.setInt(8, getPlayerFk(player));
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - registerPermissionPlayer : " + e);
+        }
+    }
+
+    public HashMap<String, Boolean> getAllPermissionOfAPlayer(Player p) {
+        try {
+            HashMap<String, Boolean> permissions = new HashMap<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT town_mayor, town_second, town_claim, town_withdraw, town_unclaim, town_invite, town_kick " +
+                            "FROM t_permission_list " +
+                            "WHERE player_fk = ? ");
+
+            statement.setInt(1, getPlayerFk(p));
 
             ResultSet results = statement.executeQuery();
 
-            while(results.next()) {
-                towns.add(new Town(
-                        results.getInt("town_id"),
-                        results.getString("name"),
-                        results.getDouble("balance")
-                ));
+            if (!results.next()) {
+                return null;
             }
 
-            return towns;
+            permissions.put("town_mayor", results.getBoolean("town_mayor"));
+            permissions.put("town_second", results.getBoolean("town_second"));
+            permissions.put("town_claim", results.getBoolean("town_claim"));
+            permissions.put("town_withdraw", results.getBoolean("town_withdraw"));
+            permissions.put("town_unclaim", results.getBoolean("town_unclaim"));
+            permissions.put("town_invite", results.getBoolean("town_invite"));
+            permissions.put("town_kick", results.getBoolean("town_kick"));
+
+            return permissions;
+        } catch (SQLException e) {
+            System.out.println("[Database API] - getAllPermissionOfAPlayer : " + e);
+        }
+        return null;
+    }
+
+    public void setAllPermissionsOfAPlayerToFalse(Player p) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_permission_list SET " +
+                            "town_mayor = FALSE, " +
+                            "town_second = FALSE, " +
+                            "town_claim = FALSE, " +
+                            "town_withdraw = FALSE, " +
+                            "town_unclaim = FALSE, " +
+                            "town_invite = FALSE, " +
+                            "town_kick = FALSE " +
+                            "WHERE player_fk = ? ");
+            statement.setInt(1, getPlayerFk(p));
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - setAllPermissionsOfAPlayerToFalse : " + e);
+        }
+    }
+
+    public void setAllPermissionsOfAPlayerToTrue(Player p) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_permission_list SET " +
+                            "town_mayor = TRUE, " +
+                            "town_second = TRUE, " +
+                            "town_claim = TRUE, " +
+                            "town_withdraw = TRUE, " +
+                            "town_unclaim = TRUE, " +
+                            "town_invite = TRUE, " +
+                            "town_kick = TRUE " +
+                            "WHERE player_fk = ? ");
+            statement.setInt(1, getPlayerFk(p));
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - setAllPermissionsOfAPlayerToTrue : " + e);
+        }
+    }
+
+    public void setPermissionOfAPlayerToTrue(Player p, String permissionToGive) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_permission_list SET " + permissionToGive + " = TRUE WHERE player_fk = ?");
+            statement.setInt(1, getPlayerFk(p));
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - setPermissionOfAPlayerToTrue : " + e);
+        }
+    }
+
+    public void setPermissionOfAPlayerToFalse(Player p, String permissionToGive) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_permission_list SET " + permissionToGive + " = FALSE WHERE player_fk = ?");
+            statement.setInt(1, getPlayerFk(p));
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("[Database API] - setPermissionOfAPlayerToFalse : " + e);
+        }
+    }
+
+    public List<Town> getAllTowns() {
+        Map<Integer, Town> townMap = new HashMap<>();
+
+        String query = "SELECT t.town_id, t.name, t.balance, c.chunk_identifier_x, c.chunk_identifier_z " +
+                "FROM t_town AS t " +
+                "LEFT JOIN t_chunk_town AS c " +
+                "ON t.town_id = c.town_fk";
+
+        try (PreparedStatement statement = _plugin.databaseLink._connection.prepareStatement(query);
+             ResultSet results = statement.executeQuery()) {
+
+            while (results.next()) {
+                int townId = results.getInt("town_id");
+
+                Town town = townMap.get(townId);
+                if (town == null) {
+                    town = new Town(
+                            townId,
+                            results.getString("name"),
+                            results.getDouble("balance"),
+                            new HashSet<>(),
+                            getUuidOfTownResidentsById(townId),
+                            getSpawnTown(townId),
+                            this
+                    );
+                    townMap.put(townId, town);
+                }
+
+                int chunkX = results.getInt("chunk_identifier_x");
+                int chunkZ = results.getInt("chunk_identifier_z");
+
+                if (!results.wasNull()) {
+                    town.addChunk(new DatabaseCommunicationAPI.ChunkCoord(chunkX, chunkZ));
+                }
+            }
+
+            return new ArrayList<>(townMap.values());
+
         } catch (SQLException e) {
             System.out.println("[Database API] - getAllTowns - " + e);
+            e.printStackTrace();
         }
+
         return null;
     }
 
@@ -641,7 +777,7 @@ public class Database {
 
     public boolean HaveAPlayerAPerm(Player p, String permToCheck) {
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     // there no sql injection possible, because the string is checked for to be in the perms list
                     .prepareStatement("SELECT " + permToCheck + " FROM t_permission_list WHERE player_fk = ?");
             statement.setInt(1, getPlayerFk(p));
@@ -653,7 +789,6 @@ public class Database {
             }
 
 
-
         } catch (SQLException e) {
             System.out.println("[Database API] - " + "HaveAPlayerAPerm - " + e);
         }
@@ -663,20 +798,20 @@ public class Database {
     public List<String> getAllSecondFromTown(String townName) {
         List<String> seconds = new ArrayList<>();
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     // there no sql injection possible, because the string is checked for to be in the perms list
                     .prepareStatement("SELECT p.name " +
                             "FROM t_permission_list AS pl " +
                             "JOIN t_players AS p ON p.player_id = pl.player_fk " +
                             "JOIN t_town AS t ON t.town_id = p.town_fk " +
                             "WHERE t.name = ?  " +
-                            "AND pl.second = true");
+                            "AND pl.town_second = true");
             statement.setString(1, townName);
 
             ResultSet results = statement.executeQuery();
 
             int i = 1;
-            while(results.next()) {
+            while (results.next()) {
                 seconds.add(results.getString(i));
                 i++;
             }
@@ -689,10 +824,10 @@ public class Database {
         return null;
     }
 
-    public Integer[] getSpawnTown(Town town) {
-        Integer[] spawnTown = new Integer[3];
+    public Location getSpawnTown(Town town) {
+        Location spawnTown;
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     // there no sql injection possible, because the string is checked for to be in the perms list
                     .prepareStatement("SELECT spawn_x, spawn_y, spawn_z " +
                             "FROM t_town " +
@@ -702,32 +837,58 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-
-                spawnTown[0] = results.getObject("spawn_x", Integer.class);
-                spawnTown[1] = results.getObject("spawn_y", Integer.class);
-                spawnTown[2] = results.getObject("spawn_z", Integer.class);
+                return spawnTown = new Location(
+                        Bukkit.getWorld("world"),
+                        results.getObject("spawn_x", Integer.class),
+                        results.getObject("spawn_y", Integer.class),
+                        results.getObject("spawn_z", Integer.class)
+                );
 
             }
-
-            return spawnTown;
-
         } catch (SQLException e) {
             System.out.println("[Database API] - " + "getSpawnTown - " + e);
         }
         return null;
     }
 
-    public void setSpawnTown(Town town, Integer[]spawnPos) {
+    public Location getSpawnTown(int townId) {
+        Location spawnTown;
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    // there no sql injection possible, because the string is checked for to be in the perms list
+                    .prepareStatement("SELECT spawn_x, spawn_y, spawn_z " +
+                            "FROM t_town " +
+                            "WHERE town_id = ?  ");
+            statement.setInt(1, townId);
+
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                return spawnTown = new Location(
+                        Bukkit.getWorld("world"),
+                        results.getObject("spawn_x", Integer.class),
+                        results.getObject("spawn_y", Integer.class),
+                        results.getObject("spawn_z", Integer.class)
+                );
+
+            }
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "getSpawnTown - " + e);
+        }
+        return null;
+    }
+
+    public void setSpawnTown(Town town, Location spawnPos) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
                     // there no sql injection possible, because of the string is checked for to be in the perms list
                     .prepareStatement("UPDATE t_town SET spawn_x = ?, " +
                             "spawn_y = ?, " +
                             "spawn_z = ? " +
                             "WHERE town_id = ?  ");
-            statement.setInt(1, spawnPos[0]);
-            statement.setInt(2, spawnPos[1]);
-            statement.setInt(3, spawnPos[2]);
+            statement.setInt(1, spawnPos.getBlockX());
+            statement.setInt(2, spawnPos.getBlockY());
+            statement.setInt(3, spawnPos.getBlockZ());
             statement.setInt(4, town.getId());
 
             statement.executeUpdate();
@@ -741,7 +902,7 @@ public class Database {
     public void CreatePlayerJobInDb(Player p, int jobFk) {
         int playerId = getPlayerFk(p);
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("INSERT INTO t_player_jobs (player_fk, job_fk) VALUES (?, ?)");
             statement.setInt(1, playerId);
             statement.setInt(2, jobFk);
@@ -790,7 +951,7 @@ public class Database {
     public JobProgression getJobProgression(Player p, Job playerJob) {
         int playerId = getPlayerFk(p);
         try {
-            PreparedStatement statement =  _plugin.databaseLink._connection
+            PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT job_fk ,level, current_exp FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?");
             statement.setInt(1, playerId);
             statement.setInt(2, playerJob.getId());
@@ -813,7 +974,7 @@ public class Database {
     }
 
 
-    public void setProgress(Player p,JobProgression jobProgression) {
+    public void setProgress(Player p, JobProgression jobProgression) {
         int playerId = getPlayerFk(p);
 
         try {
@@ -985,4 +1146,18 @@ public class Database {
         });
     }
 
+    public void setTownBalance(Town town) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_town SET balance = ? WHERE town_id = ?");
+            statement.setDouble(1, town.getBalance());
+            statement.setInt(2, town.getId());
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("[Database API] - " + "setTownBalance - " + e);
+        }
+    }
 }

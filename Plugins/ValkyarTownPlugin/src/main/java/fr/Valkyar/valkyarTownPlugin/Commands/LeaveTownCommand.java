@@ -1,8 +1,9 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
-import fr.Valkyar.valkyarTownPlugin.Utility.AssignPerms;
+import fr.Valkyar.databaseCommunicationAPI.managers.TownManager;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,102 +12,100 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.TownMap;
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
+import static java.lang.Boolean.TRUE;
+
 public class LeaveTownCommand {
     Database db;
+    ValkyarTownPlugin _plugin;
+
+    private boolean _wasMayor = false;
+
     public LeaveTownCommand(ValkyarTownPlugin plugin, Player p, String[] args) {
-        try {
-            db = plugin.databaseApi.databaseLink;
-            Town playerTown = db.getPlayerTown(p);
-            if (playerTown != null) {
-                if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
-                    if (!plugin.leaveTown.containsKey(p.getUniqueId())) {
-                        p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Êtes vous sûr de vouloir quitter la ville ?\nRéexécutez la commande dans la minute pour confirmer.");
-                        plugin.leaveTown.put(p.getUniqueId(), null);
+        _plugin = plugin;
+        db = plugin.databaseApi.databaseLink;
+        PlayerProfile pp = playerProfiles.get(p.getUniqueId());
 
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (plugin.leaveTown.containsKey(p.getUniqueId())) {
-                                    plugin.leaveTown.remove(p.getUniqueId());
-                                    p.sendMessage(ChatColor.RED + "La confirmation de la commande a expiré.");
+        if (!pp.hasTown()) {
+            p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
+            return;
+        }
 
-                                }
-                            }
-                        }.runTaskLater(plugin, 20L * 60);
+        Town playerTown = TownMap.get(pp.getTown().getId());
 
-                    } else {
+        if (args.length != 1) {
+            p.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
+            p.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument>");
+            return;
+        }
+
+        if (!plugin.leaveTown.containsKey(p.getUniqueId())) {
+            p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Êtes vous sûr de vouloir quitter votre ville ?\nRéexécutez la commande dans la minute pour confirmer.");
+            plugin.leaveTown.put(p.getUniqueId(), null);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (plugin.leaveTown.containsKey(p.getUniqueId())) {
                         plugin.leaveTown.remove(p.getUniqueId());
+                        p.sendMessage(ChatColor.RED + "La confirmation de la commande a expiré.");
 
-                        // if the town has no player anymore
-                        if (db.getNumberOfPlayersInTown(playerTown) - 1 < 1) {
-                            // delete the town
-                            db.deleteTownByName(playerTown);
-                            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown + " viens d'être détruite par faute de membres !");
-                            // if the player is the major of his town
-                        } else if (p.hasPermission("town.mayor")) {
-
-                            // // // // // // // // // // // // // // //
-                            // revoke the player town fk from the db
-                            db.setPlayerTown(p, null);
-                            // // // // // // // // // // // // // // //
-
-                            List<String> allPlayers = db.getAllPlayerOfTown(playerTown);
-                            // get all players of the town with the permission "second"
-                            List<String> second = db.getAllSecondFromTown(playerTown.getName());
-
-                            Player newMajor;
-
-                            if (!second.isEmpty()) {
-                                newMajor = Bukkit.getPlayer(second.getFirst());
-
-                                // set major the first of the list
-                                db.setPermissionOfAPlayerToTrue(newMajor, "mayor");
-
-                                // inform all player about the change
-                                for (String pName : allPlayers) {
-                                    Bukkit.getPlayer(pName).sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Le joueur " + newMajor.getName() + " est désormait le maire de votre ville.");
-                                }
-                            } else {
-                                // set a random of the town new major
-                                newMajor = Bukkit.getPlayer(allPlayers.getFirst());
-
-                                // set all permission to true to the new major
-                                db.setPermissionOfAPlayerToTrue(newMajor, "mayor");
-
-                                // inform all player about the change
-                                for (String pName : allPlayers) {
-                                    Bukkit.getPlayer(pName).sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Le joueur " + newMajor.getName() + " est désormait le maire de votre ville.");
-                                }
-                            }
-                            AssignPerms.assignPerms(newMajor, db, plugin);
-                        }
-
-                        // disable all permission of players
-                        for (String pTownName : db.getAllPlayerOfTown(playerTown)) {
-                            if (!pTownName.equals(p.getName())) {
-                                Bukkit.getPlayer(pTownName).sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BOLD + p.getDisplayName() + ChatColor.RESET + "" + ChatColor.RED + " a quitté la ville.");
-                            }
-                        }
-
-                        // revoke the player town fk from the db
-                        db.setPlayerTown(p, null);
-
-                        p.sendMessage(ChatColor.RED + "Vous avez quitter la ville de " + playerTown + ".");
-
-                        db.setAllPermissionsOfAPlayerToFalse(p);
-
-                        // refresh perms
-                        AssignPerms.assignPerms(p, db, plugin);
                     }
-                } else {
-                    p.sendMessage(ChatColor.RED + "Erreur dans la syntaxe de la commande.");
-                    p.sendMessage(ChatColor.RED + "Utilisation correcte :\n/<commande> <argument>");
                 }
-            } else {
-                p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
+            }.runTaskLater(plugin, 20L * 60);
+
+        } else {
+            plugin.leaveTown.remove(p.getUniqueId());
+
+            p.sendMessage(ChatColor.RED + "Vous avez quitter la ville de " + playerTown.getName() + ".");
+
+            if (pp.hasPermission("town_mayor")) {
+                _wasMayor = TRUE;
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            TownManager.LeaveTown(db, p, playerTown);
+
+            for (Player player : playerTown.getTownPlayers()) {
+                player.sendMessage(ChatColor.RED + "Le joueur " + ChatColor.BOLD + p.getDisplayName() + ChatColor.RESET + "" + ChatColor.RED + " a quitté la ville.");
+            }
+
+            // if the town has no player anymore
+            if (playerTown.getTownPlayers().isEmpty()) {
+                // delete the town
+                TownManager.DeleteTown(db, playerTown);
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "La ville de " + playerTown.getName() + " viens d'être détruite par faute de membres !");
+                return;
+            }
+            // if the player is the major of his town
+
+            if (_wasMayor) {
+                setNewMayor(playerTown);
+            }
+        } // end of : plugin.leaveTown.containsKey(p.getUniqueId())
+    }
+
+    private void setNewMayor(Town town) {
+        List<Player> allPlayers = town.getTownPlayers();
+        // get all players of the town with the permission "second"
+        List<String> second = db.getAllSecondFromTown(town.getName());
+
+        Player newMayor;
+
+        if (!second.isEmpty()) {
+            newMayor = Bukkit.getPlayer(second.getFirst());
+        } else { //if (second.isEmpty())
+            // set a random of the town new major
+            newMayor = allPlayers.getFirst();
+        }
+        // set all permission to true to the new major
+        db.setPermissionOfAPlayerToTrue(newMayor, "mayor");
+        playerProfiles.get(newMayor.getUniqueId()).setPermissionsTrue();
+
+        // inform all player about the change
+        for (Player player : allPlayers) {
+            player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Le joueur " + newMayor.getName() + " est désormait le maire de votre ville.");
         }
     }
+
 }

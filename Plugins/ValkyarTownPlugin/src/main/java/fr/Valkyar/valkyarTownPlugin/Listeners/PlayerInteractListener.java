@@ -17,37 +17,26 @@ public class PlayerInteractListener implements Listener {
 
     private Database db;
     private ValkyarTownPlugin _plugin;
-    public PlayerInteractListener(ValkyarTownPlugin  plugin) {
+
+    public PlayerInteractListener(ValkyarTownPlugin plugin) {
         _plugin = plugin;
         db = plugin.databaseApi.databaseLink;
     }
-
-    private int[] _breakChunk;
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
 
-        if (e.getClickedBlock() != null) {
-            _breakChunk = new int[]{
-                    (int) Math.floor(e.getClickedBlock().getLocation().getX()),
-                    (int) Math.floor(e.getClickedBlock().getLocation().getZ())
-            };
-        } else {
+        if (e.getClickedBlock() == null) {
             return;
         }
 
-        if (!IsPlayerPermissionInClaim(p, _breakChunk, db)) {
-            try {
-                if (e.getClickedBlock().getState() instanceof InventoryHolder
-                        || e.getClickedBlock().getBlockData() instanceof Openable) {
-                    e.setCancelled(true);
-                    p.sendMessage(ChatColor.RED + "Vous n'avez pas la permission d'interagir avec block.");
-                }
-            } catch (Exception ex) {
-
+        if (!IsPlayerPermissionInClaim(p, e.getClickedBlock().getLocation())) {
+            if (e.getClickedBlock().getState() instanceof InventoryHolder
+                    || e.getClickedBlock().getBlockData() instanceof Openable) {
+                e.setCancelled(true);
+                p.sendMessage(ChatColor.RED + "Vous n'avez pas la permission d'interagir avec block.");
             }
         }
-
     }
 }

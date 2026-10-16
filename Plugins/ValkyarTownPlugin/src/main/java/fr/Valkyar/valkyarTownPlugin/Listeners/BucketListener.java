@@ -3,6 +3,7 @@ package fr.Valkyar.valkyarTownPlugin.Listeners;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,21 +22,15 @@ public class BucketListener implements Listener {
         db = plugin.databaseApi.databaseLink;
     }
 
-    private int[] _breakChunk;
+    private Location _breakChunk;
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         Player p = e.getPlayer();
 
-        _breakChunk = new int[]{
-                (int) Math.floor(e.getBlock().getLocation().getX()),
-                (int) Math.floor(e.getBlock().getLocation().getZ())
-        };
-
-        if (!IsPlayerPermissionInClaim(p, _breakChunk, db)) {
+        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de vider un seau ici.");
-        } else {
         }
     }
 
@@ -43,15 +38,9 @@ public class BucketListener implements Listener {
     public void onBucketEmpty(PlayerBucketFillEvent e) {
         Player p = e.getPlayer();
 
-        _breakChunk = new int[]{
-                (int) Math.floor(e.getBlock().getLocation().getX()),
-                (int) Math.floor(e.getBlock().getLocation().getZ())
-        };
-
-        if (!IsPlayerPermissionInClaim(p, _breakChunk, db)) {
+        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de remplir un seau ici.");
-        } else {
         }
     }
 }

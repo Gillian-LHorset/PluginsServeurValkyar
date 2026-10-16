@@ -1,13 +1,18 @@
 package fr.Valkyar.valkyarTownPlugin.Commands;
 
+import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
-import fr.Valkyar.valkyarTownPlugin.Utility.ChunkSystem;
+import fr.Valkyar.databaseCommunicationAPI.Utilities.ChunkSystem;
+import fr.Valkyar.databaseCommunicationAPI.managers.TownManager;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
 
 public class UnclaimTownCommand {
     private Database db;
@@ -19,25 +24,27 @@ public class UnclaimTownCommand {
         _plugin = plugin;
         db = _plugin.databaseApi.databaseLink;
 
-        if (args.length == 1) {
-            _playerTown = db.getPlayerTown(p);
-            if (_playerTown != null) {
-                try {
-                    int[] unclaimedChunk = ChunkSystem.getChunkId(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
-                    if (db.getChunkById(unclaimedChunk) != null) {
-                        db.deleteAChunksById(_playerTown, unclaimedChunk);
-                        p.sendMessage(ChatColor.GREEN + "Le chunk à été unclaim.");
-                    } else {
-                        p.sendMessage(ChatColor.RED + "Ce chunk n'est pas claim.");
-                    }
-                } catch (SQLException e) {
-                    p.sendMessage(ChatColor.RED + "Une erreur s'est produite.");
-                    throw new RuntimeException(e);
-                }
-            }  else {
-                p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
-            }
+        if (args.length != 1) {
+            p.sendMessage(ChatColor.RED + "Erreur de syntaxe.");
+            return;
         }
+
+        PlayerProfile pp = playerProfiles.get(p.getUniqueId());
+
+        if (!pp.hasTown()) {
+            p.sendMessage(ChatColor.RED + "Vous n'avez pas de ville.");
+            return;
+        }
+
+        _playerTown = pp.getTown();
+
+        DatabaseCommunicationAPI.ChunkCoord unclaimedChunk = ChunkSystem.getChunkId(p.getLocation());
+        if (!_playerTown.hasChunk(unclaimedChunk)) {
+            p.sendMessage(ChatColor.RED + "Vous ne pouvez pas unclaim un chunk qui n'appartient pas à votre ville.");
+            return;
+        }
+        TownManager.TownUnclaim(DatabaseCommunicationAPI.getApi(), _playerTown, unclaimedChunk);
+        p.sendMessage(ChatColor.GREEN + "Le chunk à été unclaim.");
 
     }
 }

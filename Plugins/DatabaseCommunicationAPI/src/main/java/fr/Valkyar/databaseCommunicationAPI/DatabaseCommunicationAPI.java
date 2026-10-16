@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.RegisterPlayerProfile;
+
 public final class DatabaseCommunicationAPI extends JavaPlugin {
 
     // color for the output messages
@@ -37,6 +39,10 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
     }
 
     public record BlockPosition(String worldName, int x, int y, int z) {}
+    public record ChunkCoord(int x, int z) {}
+
+    public static double createTownPrice = 1.00;
+    public static double claimPrice = 1.00;
 
     public static HashMap<UUID, PlayerProfile> playerProfiles = new HashMap<>();
     public static HashMap<BlockPosition, BlockData> PlacedBlocks = new HashMap<>();
@@ -70,7 +76,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
-            JoinListener.RegisterPlayerProfile(p, this);
+            RegisterPlayerProfile(p, this);
         }
 
         databaseLink.getAllTowns().forEach(t -> {

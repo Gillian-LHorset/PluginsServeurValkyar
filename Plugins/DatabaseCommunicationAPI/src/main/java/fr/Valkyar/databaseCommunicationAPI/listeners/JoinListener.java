@@ -13,6 +13,7 @@ import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.*;
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.RED_OUTPUT;
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.GREEN_OUTPUT;
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.CreatePlayerProfile;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.RegisterPlayerProfile;
 
 public class JoinListener implements Listener {
 
@@ -35,16 +36,5 @@ public class JoinListener implements Listener {
 
         RegisterPlayerProfile(p, _plugin);
 
-    }
-
-    public static void RegisterPlayerProfile(Player p, DatabaseCommunicationAPI plugin) {
-
-        PlayerProfile playerProfile = CreatePlayerProfile(p, plugin.databaseLink);
-
-        if (playerProfiles == null) {
-            OutputColoredText(RED_OUTPUT, "Erreur création profil");
-        };
-
-        plugin.playerProfiles.put(p.getUniqueId(), playerProfile);
     }
 }

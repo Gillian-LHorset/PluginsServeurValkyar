@@ -3,6 +3,8 @@ C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValk
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\listeners\LeaveListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\listeners\PlaceBlockListener.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\managers\PlayerProfileManager.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\managers\TownManager.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\BlockData.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\Job.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\JobProgression.java
@@ -10,6 +12,7 @@ C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValk
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\ResourceData.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Models\Town.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\tasks\StockPlacedBlockTask.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\ChunkSystem.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\JobsRegister.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\PlacedBlockUtilites.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\DatabaseCommunicationAPI\src\main\java\fr\Valkyar\databaseCommunicationAPI\Utilities\PlayerProfileUtility.java

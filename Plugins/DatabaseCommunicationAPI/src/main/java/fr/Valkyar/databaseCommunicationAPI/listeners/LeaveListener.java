@@ -7,6 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
+
 public class LeaveListener implements Listener {
 
     private final DatabaseCommunicationAPI _plugin;
@@ -19,7 +21,7 @@ public class LeaveListener implements Listener {
     public void onLeave(PlayerQuitEvent e) {
         Player p =  e.getPlayer();
 
-        PlayerProfileUtility.UpdatePlayerProfileInDB(p, _plugin.databaseLink, _plugin.playerProfiles);
-
+        PlayerProfileUtility.UpdatePlayerProfileInDB(p, _plugin.databaseLink, playerProfiles);
+        playerProfiles.remove(p.getUniqueId());
     }
 }

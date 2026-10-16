@@ -1,5 +1,6 @@
 package fr.Valkyar.valkyarTownPlugin.Listeners;
 
+import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import fr.Valkyar.valkyarTownPlugin.ValkyarTownPlugin;
@@ -11,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.List;
+
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
 
 public class PlayerTalkListener implements Listener {
 
@@ -30,11 +33,12 @@ public class PlayerTalkListener implements Listener {
 
         if (_plugin.playerChat.get(p.getUniqueId()).equalsIgnoreCase("ville")) {
             e.setCancelled(true);
-            Town town = db.getPlayerTown(p);
-            List<String> playersTown = db.getAllPlayerOfTown(town);
+            PlayerProfile pp = playerProfiles.get(p.getUniqueId());
+            Town town = pp.getTown();
+            List<Player> playersTown = town.getTownPlayers();
 
-            for (String pTown : playersTown) {
-                Bukkit.getPlayer(pTown).sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + town.getName() + " - "
+            for (Player playerTown : playersTown) {
+                playerTown.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + town.getName() + " - "
                         + p.getName() + " : " + ChatColor.RESET
                         + e.getMessage());
             }

@@ -22,9 +22,9 @@ public class BreakBlockListenener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        int[] breakChunk = new int[]{(int) Math.floor(e.getBlock().getLocation().getX()), (int) Math.floor(e.getBlock().getLocation().getZ())};
 
-        if (!IsPlayerPermissionInClaim(p, breakChunk, db)) {
+
+        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de casser ce block.");
         }

@@ -1,9 +1,11 @@
 package fr.Valkyar.databaseCommunicationAPI.Models;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
+import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +20,14 @@ public class PlayerProfile {
     private Job secondaryJob;
     private Double currentMoney;
     private Integer townId;
+    private Map<String, Boolean> permissionsMap;
+    private Database db;
 
-    public PlayerProfile(UUID playerUuid, Double CurrentMoney, Integer townId) {
+    public PlayerProfile(UUID playerUuid, Double CurrentMoney, Integer townId, Database db) {
         this.playerUuid = playerUuid;
         currentMoney = CurrentMoney;
+        this.townId = townId;
+        this.db = db;
     }
 
     // Integer is the job id
@@ -53,7 +59,18 @@ public class PlayerProfile {
     public boolean hasSecondJobs() {
         return (secondaryJob != null);
     }
-    public boolean hasTown() {return townId != null;}
+    public boolean hasTown() {
+        return townId != null;
+    }
+    public Boolean hasPermission(String permission) {
+        if (!permission.startsWith("town_")) {
+            permission = "town_" + permission;
+        }
+        return permissionsMap.get(permission).booleanValue();
+    }
+    public Boolean hasHighPermission() {
+        return permissionsMap.get("town_mayor") || permissionsMap.get("town_second");
+    }
 
     public UUID getPlayerUuid() {
         return playerUuid;
@@ -65,6 +82,7 @@ public class PlayerProfile {
         return secondaryJob;
     }
     public Double getCurrentMoney() {return currentMoney;}
+    public Integer getTownId() {return townId;}
     public Town getTown() {return TownMap.get(townId);}
 
 
@@ -81,11 +99,42 @@ public class PlayerProfile {
     public void setSecondaryJob(Job secondaryJob) {
         this.secondaryJob = secondaryJob;
     }
-    public void setTown(Town town) {townId = town.getId();}
+    public void setTown(Town town) {
+        if (town != null) {
+            townId = town.getId();
+        } else {
+            townId = null;
+        }
+    }
+    public void setPermissions(HashMap<String, Boolean> permissions) {
+        this.permissionsMap = permissions;
+    }
+    public void addPermission(String permission) {
+        if (!permission.startsWith("town_")) {
+            permission = "town_" + permission;
+        }
+        permissionsMap.put(permission, Boolean.TRUE);
+        db.setPermissionOfAPlayerToTrue(Bukkit.getPlayer(playerUuid),permission);
+    }
+    public void removePermission(String permission) {
+        if (!permission.startsWith("town_")) {
+            permission = "town_" + permission;
+        }
+        permissionsMap.put(permission, Boolean.FALSE);
+        db.setPermissionOfAPlayerToFalse(Bukkit.getPlayer(playerUuid),permission);
+    }
+
+    public void setPermissionsTrue() {
+        permissionsMap.replaceAll((key, value) -> true);
+        db.setAllPermissionsOfAPlayerToTrue(Bukkit.getPlayer(playerUuid));
+    }
+    public void ResetPermissions() {
+        this.permissionsMap.values().forEach(v -> v = Boolean.FALSE);
+        db.setAllPermissionsOfAPlayerToFalse(Bukkit.getPlayer(playerUuid));
+    }
 
     public void increaseExp(Integer jobId, Double amount) {
         if (progressions.get(jobId) == null) {
-            System.out.println("erreur ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             return;
         }
         progressions.get(jobId).increaseExperience(amount);
@@ -111,7 +160,6 @@ public class PlayerProfile {
     public void increaseMoney(Double amount) {
         currentMoney += amount;
     }
-
     public void decreaseMoney(Double amount) {
         currentMoney -= amount;
     }

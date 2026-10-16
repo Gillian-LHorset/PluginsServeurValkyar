@@ -20,18 +20,18 @@ public class RefuseCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player p) {
-            if (_plugin.sentInvitations.containsKey(p.getUniqueId())) {
-                Player pSender = Bukkit.getPlayer(_plugin.sentInvitations.get(p.getUniqueId()));
-                if (pSender != null && pSender.isOnline()) {
-                    pSender.sendMessage(ChatColor.RED + p.getName() + " a refusé votre invitation.");
-                }
-
-                _plugin.sentInvitations.remove(p.getUniqueId());
-                p.sendMessage("Vous avez refusé l'invitation.");
-
-            } else {
+            if (!_plugin.sentInvitations.containsKey(p.getUniqueId())) {
                 p.sendMessage(ChatColor.RED + "Vous n'avez pas d'invitation en cours.");
             }
+
+            Player pSender = Bukkit.getPlayer(_plugin.sentInvitations.get(p.getUniqueId()));
+            if (pSender != null && pSender.isOnline()) {
+                pSender.sendMessage(ChatColor.RED + p.getName() + " a refusé votre invitation.");
+            }
+
+            _plugin.sentInvitations.remove(p.getUniqueId());
+            p.sendMessage("Vous avez refusé l'invitation.");
+
             return true;
         }
         return false;
