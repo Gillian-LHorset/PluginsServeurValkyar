@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
 
 public class PlayerPermissionLogic {
-    public static boolean IsPlayerPermissionInClaim(Player p, Location location) {
+    public static boolean hasPlayerPermissionInClaim(Player p, Location location) {
         if (p.getGameMode() == GameMode.CREATIVE) {
             return true;
         }

@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 
-import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.IsPlayerPermissionInClaim;
+import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.hasPlayerPermissionInClaim;
 
 public class BucketListener implements Listener {
 
@@ -28,7 +28,7 @@ public class BucketListener implements Listener {
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
         Player p = e.getPlayer();
 
-        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
+        if (!hasPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de vider un seau ici.");
         }
@@ -38,7 +38,7 @@ public class BucketListener implements Listener {
     public void onBucketEmpty(PlayerBucketFillEvent e) {
         Player p = e.getPlayer();
 
-        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
+        if (!hasPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas le droit de remplir un seau ici.");
         }

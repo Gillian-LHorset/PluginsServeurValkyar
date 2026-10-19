@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
 
-import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.IsPlayerPermissionInClaim;
+import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.hasPlayerPermissionInClaim;
 
 public class PlayerInteractListener implements Listener {
 
@@ -31,7 +31,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (!IsPlayerPermissionInClaim(p, e.getClickedBlock().getLocation())) {
+        if (!hasPlayerPermissionInClaim(p, e.getClickedBlock().getLocation())) {
             if (e.getClickedBlock().getState() instanceof InventoryHolder
                     || e.getClickedBlock().getBlockData() instanceof Openable) {
                 e.setCancelled(true);

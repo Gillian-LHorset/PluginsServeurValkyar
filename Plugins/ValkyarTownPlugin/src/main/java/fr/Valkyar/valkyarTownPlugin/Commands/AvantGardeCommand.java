@@ -7,7 +7,7 @@ public class AvantGardeCommand {
 
     int AvantGardePrice = 500;
 
-    public AvantGardeCommand(ValkyarTownPlugin plugin, Player player, String[] args) {
+    public AvantGardeCommand(ValkyarTownPlugin plugin, Player p, String[] args) {
 
         if (args[0].equalsIgnoreCase("spawn")) {
 

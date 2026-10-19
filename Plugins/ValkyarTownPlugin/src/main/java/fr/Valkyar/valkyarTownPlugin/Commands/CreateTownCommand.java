@@ -32,7 +32,6 @@ public class CreateTownCommand {
             PlayerProfile pp = playerProfiles.get(player.getUniqueId());
 
             Double playerBalance = pp.getCurrentMoney();
-            Town playerTown = db.getPlayerTown(player);
 
             if (args.length != 2 ) {
                 player.sendMessage(ChatColor.RED + "Commande incorrecte.");
@@ -43,6 +42,8 @@ public class CreateTownCommand {
                 player.sendMessage(ChatColor.RED + "Vous appartenez déjà à une ville.");
                 return;
             }
+
+            Town playerTown = db.getPlayerTown(player);
 
             if (playerBalance < createTownPrice) {
                 player.sendMessage(ChatColor.RED + "Vous n'avez pas assez d'argent pour créer une ville.");

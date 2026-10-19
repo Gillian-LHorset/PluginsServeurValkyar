@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.IsPlayerPermissionInClaim;
+import static fr.Valkyar.valkyarTownPlugin.Utility.PlayerPermissionLogic.hasPlayerPermissionInClaim;
 
 public class BreakBlockListenener implements Listener {
 
@@ -24,7 +24,7 @@ public class BreakBlockListenener implements Listener {
         Player p = e.getPlayer();
 
 
-        if (!IsPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
+        if (!hasPlayerPermissionInClaim(p, e.getBlock().getLocation())) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "Vous n'avez pas la permission de casser ce block.");
         }
