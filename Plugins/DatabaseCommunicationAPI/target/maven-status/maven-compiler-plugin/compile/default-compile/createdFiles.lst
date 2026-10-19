@@ -7,6 +7,7 @@ fr\Valkyar\databaseCommunicationAPI\Utilities\JobsRegister.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI.class
 fr\Valkyar\databaseCommunicationAPI\tasks\StockPlacedBlockTask.class
 fr\Valkyar\databaseCommunicationAPI\Models\BlockData.class
+fr\Valkyar\databaseCommunicationAPI\Models\AvantGarde.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI$BlockPosition.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI$ChunkCoord.class
 fr\Valkyar\databaseCommunicationAPI\Models\Job.class

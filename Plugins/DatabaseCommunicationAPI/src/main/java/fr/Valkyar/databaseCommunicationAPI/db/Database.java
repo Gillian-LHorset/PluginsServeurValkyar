@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.ChunkCoord;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -338,7 +339,7 @@ public class Database {
             stmt.setInt(1, town.getId());
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    town.addChunk(new DatabaseCommunicationAPI.ChunkCoord(
+                    town.addChunk(new ChunkCoord(
                             rs.getInt("chunk_identifier_x"),
                             rs.getInt("chunk_identifier_z")
                     ));
@@ -454,7 +455,7 @@ public class Database {
         return allPlayers;
     }
 
-    public void registerChunk(DatabaseCommunicationAPI.ChunkCoord chunks, Town town) {
+    public void registerChunk(ChunkCoord chunks, Town town) {
         try {
             PreparedStatement createTownStatement = _plugin.databaseLink._connection
                     .prepareStatement("INSERT INTO t_chunk_town   (chunk_identifier_x, chunk_identifier_z, town_fk) " +
@@ -474,7 +475,7 @@ public class Database {
 
     public Integer getTownFkByName(String townName) {
         try {
-            DatabaseCommunicationAPI.ChunkCoord chunkProrities;
+            ChunkCoord chunkProrities;
 
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT town_id " +
@@ -493,9 +494,9 @@ public class Database {
         return null;
     }
 
-    public DatabaseCommunicationAPI.ChunkCoord getChunkById(DatabaseCommunicationAPI.ChunkCoord giveId, Town town) {
+    public ChunkCoord getChunkById(ChunkCoord giveId, Town town) {
         try {
-            DatabaseCommunicationAPI.ChunkCoord chunkProrities;
+            ChunkCoord chunkProrities;
 
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z, town_fk " +
@@ -508,7 +509,7 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             if (results.next()) {
-                chunkProrities = new DatabaseCommunicationAPI.ChunkCoord(
+                chunkProrities = new ChunkCoord(
                         results.getInt("chunk_identifier_x"),
                         results.getInt("chunk_identifier_z")
                 );
@@ -524,9 +525,14 @@ public class Database {
         return null;
     }
 
-    public Set<DatabaseCommunicationAPI.ChunkCoord> getAllChunkOfTown(Town town) {
+
+    /**
+     * @param town The town for which we want to get the chunks.
+     * @return A list of coordinate of chunk who is not an outpost
+     */
+    public Set<ChunkCoord> getAllTownChunkOfTown(Town town) {
         try {
-            Set<DatabaseCommunicationAPI.ChunkCoord> allChunks = new HashSet<>();
+            Set<ChunkCoord> allChunks = new HashSet<>();
 
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT chunk_identifier_x, chunk_identifier_z " +
@@ -537,7 +543,7 @@ public class Database {
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
-                allChunks.add(new DatabaseCommunicationAPI.ChunkCoord(
+                allChunks.add(new ChunkCoord(
                         results.getInt("chunk_identifier_x"),
                         results.getInt("chunk_identifier_z")
                 ));
@@ -550,7 +556,7 @@ public class Database {
         return null;
     }
 
-    public boolean isChunkFromTown(Town town, DatabaseCommunicationAPI.ChunkCoord chunk) {
+    public boolean isChunkFromTown(Town town, ChunkCoord chunk) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("SELECT * " +
@@ -573,7 +579,7 @@ public class Database {
         return false;
     }
 
-    public void deleteAChunksById(DatabaseCommunicationAPI.ChunkCoord chunk, Town town) {
+    public void deleteAChunksById(ChunkCoord chunk, Town town) {
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
                     .prepareStatement("DELETE FROM t_chunk_town " +
@@ -719,7 +725,7 @@ public class Database {
         String query = "SELECT t.town_id, t.name, t.balance, c.chunk_identifier_x, c.chunk_identifier_z " +
                 "FROM t_town AS t " +
                 "LEFT JOIN t_chunk_town AS c " +
-                "ON t.town_id = c.town_fk";
+                "ON t.town_id = c.town_fk AND c.is_avant_garde = FALSE";
 
         try (PreparedStatement statement = _plugin.databaseLink._connection.prepareStatement(query);
              ResultSet results = statement.executeQuery()) {
@@ -745,7 +751,7 @@ public class Database {
                 int chunkZ = results.getInt("chunk_identifier_z");
 
                 if (!results.wasNull()) {
-                    town.addChunk(new DatabaseCommunicationAPI.ChunkCoord(chunkX, chunkZ));
+                    town.addChunk(new ChunkCoord(chunkX, chunkZ));
                 }
             }
 

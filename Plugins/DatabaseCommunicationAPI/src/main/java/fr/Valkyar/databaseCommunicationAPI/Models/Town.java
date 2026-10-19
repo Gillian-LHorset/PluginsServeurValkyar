@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class Town {// TODO : à terme déplacer tous les appels db vers TownManager
-    private int id;
+    private final int id;
     private String name;
     private Double balance;
     private Set<DatabaseCommunicationAPI.ChunkCoord> claimedChunk = new HashSet<>();
