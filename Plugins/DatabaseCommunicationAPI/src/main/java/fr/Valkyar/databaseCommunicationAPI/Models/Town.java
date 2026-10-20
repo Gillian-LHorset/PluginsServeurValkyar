@@ -14,6 +14,7 @@ public class Town {// TODO : à terme déplacer tous les appels db vers TownMana
     private Double balance;
     private Set<DatabaseCommunicationAPI.ChunkCoord> claimedChunk = new HashSet<>();
     private List<UUID> townResidentsId = new ArrayList<>();
+    private List<AvantGarde> avantGardes = new ArrayList<>();
     private Location spawnLocation;
     private Database db;
 
@@ -41,12 +42,18 @@ public class Town {// TODO : à terme déplacer tous les appels db vers TownMana
         return townPlayers;
     }
 
+    // about spawn
+
+    public boolean hasSpawn() {return this.spawnLocation != null;}
+
     public void setTownSpawnLocation(Location spawnLocation) {
         this.spawnLocation = spawnLocation;
         db.setSpawnTown(this, spawnLocation);
     }
 
     public Location getSpawnLocation() {return spawnLocation;}
+
+    // about players
 
     public void AddPlayerTown(Player player) {
         townResidentsId.add(player.getUniqueId());
@@ -56,6 +63,12 @@ public class Town {// TODO : à terme déplacer tous les appels db vers TownMana
     public void RemovePlayerTown(Player player) {
         townResidentsId.remove(player.getUniqueId());
         db.setPlayerTown(player, null);
+    }
+
+    // about chunks
+
+    public void setClaimedChunk(Set<DatabaseCommunicationAPI.ChunkCoord> claimedChunk) {
+        this.claimedChunk = claimedChunk;
     }
 
     public boolean addChunk(DatabaseCommunicationAPI.ChunkCoord chunk) {
@@ -71,14 +84,30 @@ public class Town {// TODO : à terme déplacer tous les appels db vers TownMana
     }
 
     public boolean hasChunk(DatabaseCommunicationAPI.ChunkCoord coord) {
+        for (AvantGarde avantGarde : this.avantGardes) {
+            if (avantGarde.hasChunk(coord)) {
+                return true;
+            }
+        }
         return this.claimedChunk.contains(coord);
     }
 
     public boolean hasChunk(int x, int z) {
+        for (AvantGarde avantGarde : this.avantGardes) {
+            if (avantGarde.hasChunk(new DatabaseCommunicationAPI.ChunkCoord(x, z))) {
+                return true;
+            }
+        }
         return this.claimedChunk.contains(new DatabaseCommunicationAPI.ChunkCoord(x, z));
     }
 
-    public boolean hasSpawn() {return this.spawnLocation != null;}
+    // about AvantGarde
+
+    public void setAvantGardes(List<AvantGarde> avantGardes) {
+        this.avantGardes = avantGardes;
+    }
+
+    // about money
 
     public void DepositMoney(Double amount) {
         balance += amount;

@@ -1,19 +1,21 @@
 package fr.Valkyar.databaseCommunicationAPI.Models;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+import org.bukkit.Location;
 
-import javax.xml.stream.Location;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.ChunkCoord;
 
 import java.util.List;
 
 public class AvantGarde {
+    private final int id;
     private final String name;
     private Location spawnLocation;
     private final List<ChunkCoord> avantGardeChunks;
 
-    public AvantGarde(String name, Location spawnLocation, List<ChunkCoord> chunks) {
+    public AvantGarde(int id, String name, Location spawnLocation, List<ChunkCoord> chunks) {
+        this.id = id;
         this.name = name;
         this.spawnLocation = spawnLocation;
         this.avantGardeChunks = chunks;

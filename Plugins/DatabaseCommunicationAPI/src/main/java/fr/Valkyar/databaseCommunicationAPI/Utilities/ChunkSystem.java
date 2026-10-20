@@ -74,7 +74,7 @@ public class ChunkSystem {
             };
 
             for (DatabaseCommunicationAPI.ChunkCoord coord : adjacentCoords) {
-                if (db.isChunkFromTown(town, coord)) {
+                if (db.isChunkFromTown(town, coord)) { // TODO : passer par un objet
                     return true;
                 }
             }

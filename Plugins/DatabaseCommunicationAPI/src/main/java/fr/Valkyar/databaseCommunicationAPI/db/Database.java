@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
+
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.ChunkCoord;
 
 import java.sql.*;
@@ -719,13 +720,11 @@ public class Database {
         }
     }
 
-    public List<Town> getAllTowns() {
+    public List<Town> getAllTownsBasics() { //TODO : récuperer les chunk et les avantgarde chunks
         Map<Integer, Town> townMap = new HashMap<>();
 
-        String query = "SELECT t.town_id, t.name, t.balance, c.chunk_identifier_x, c.chunk_identifier_z " +
-                "FROM t_town AS t " +
-                "LEFT JOIN t_chunk_town AS c " +
-                "ON t.town_id = c.town_fk AND c.is_avant_garde = FALSE";
+        String query = "SELECT town_id, name, balance " +
+                "FROM t_town ";
 
         try (PreparedStatement statement = _plugin.databaseLink._connection.prepareStatement(query);
              ResultSet results = statement.executeQuery()) {
@@ -733,26 +732,17 @@ public class Database {
             while (results.next()) {
                 int townId = results.getInt("town_id");
 
-                Town town = townMap.get(townId);
-                if (town == null) {
-                    town = new Town(
-                            townId,
-                            results.getString("name"),
-                            results.getDouble("balance"),
-                            new HashSet<>(),
-                            getUuidOfTownResidentsById(townId),
-                            getSpawnTown(townId),
-                            this
-                    );
-                    townMap.put(townId, town);
-                }
+                Town town = new Town(
+                        townId,
+                        results.getString("name"),
+                        results.getDouble("balance"),
+                        new HashSet<>(),
+                        getUuidOfTownResidentsById(townId),
+                        getSpawnTown(townId),
+                        this);
 
-                int chunkX = results.getInt("chunk_identifier_x");
-                int chunkZ = results.getInt("chunk_identifier_z");
+                townMap.put(townId, town);
 
-                if (!results.wasNull()) {
-                    town.addChunk(new ChunkCoord(chunkX, chunkZ));
-                }
             }
 
             return new ArrayList<>(townMap.values());
@@ -1164,6 +1154,58 @@ public class Database {
 
         } catch (SQLException e) {
             System.out.println("[Database API] - " + "setTownBalance - " + e);
+        }
+    }
+
+    public List<AvantGarde> getTownAvantGardes(Town town) {
+        List<AvantGarde> avantGardes = new ArrayList<>();
+
+        String query = "SELECT avant_garde_id, avant_garde_name, spawn_x, spawn_y, spawn_z FROM t_avant_garde WHERE town_fk = ?";
+        try (PreparedStatement statement = _connection.prepareStatement(query)) {
+            statement.setInt(1, town.getId());
+
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    avantGardes.add(new AvantGarde(
+                            results.getInt("avant_garde_id"),
+                            results.getString("avant_garde_name"),
+                            new Location(Bukkit.getWorld("world"),
+                                    results.getInt("spawn_x"),
+                                    results.getInt("spawn_y"),
+                                    results.getInt("spawn_z")
+                            ),
+                            null
+                    ));
+                }
+                return avantGardes;
+            }
+        } catch (SQLException e) {
+            System.out.println("[Database API] - getTownAvantGardes - " + e.getMessage());
+        }
+        return null;
+    }
+
+
+    public Set<ChunkCoord> getAvantGardeChunks(AvantGarde avantGarde) {
+        String query = "SELECT * FROM t_chunk_town AS c " +
+                "JOIN t_avant_garde AS a " +
+                    "ON c.chunk_id = a.chunk_fk " +
+                "WHERE a.town_fk = ? " +
+                "GROUP BY a.avant_garde_name";
+
+        try (PreparedStatement statement = _connection.prepareStatement(query)) {
+            statement.setInt(1, blockPosition.x());
+            statement.setInt(2, blockPosition.y());
+            statement.setInt(3, blockPosition.z());
+            statement.setString(4, blockPosition.worldName());
+
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("[Database API] - getAvantGardeChunks - " + e.getMessage());
         }
     }
 }

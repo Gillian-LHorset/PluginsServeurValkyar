@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/.idea/data_source_mapping.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Models/AvantGarde.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Models/AvantGarde.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Models/Town.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Models/Town.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Utilities/ChunkSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Utilities/ChunkSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Utilities/TownUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/Utilities/TownUtility.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/src/main/java/fr/Valkyar/databaseCommunicationAPI/db/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/DatabaseCommunicationAPI-0.0.2-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/classes/fr/Valkyar/databaseCommunicationAPI/db/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DatabaseCommunicationAPI/target/original-DatabaseCommunicationAPI-0.0.2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-valkyartownplugin-0.1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-valkyartownplugin-0.1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/valkyartownplugin-0.1.0-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/valkyartownplugin-0.1.0-shaded.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/Commands/KickTownCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/Valkyar/valkyarTownPlugin/ValkyarTownPlugin.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,30 +48,30 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.valkyartownplugin [compile].executor": "Run",
-    "Maven.valkyartownplugin [package].executor": "Run",
-    "Maven.valkyartownplugin [validate].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "settings.sync",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.valkyartownplugin [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.valkyartownplugin [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.valkyartownplugin [validate].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="valkyartownplugin [package]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
       <MavenSettings>
@@ -206,7 +205,9 @@
       <workItem from="1792358230432" duration="444000" />
       <workItem from="1792403446616" duration="73000" />
       <workItem from="1792403595433" duration="563000" />
-      <workItem from="1792413703572" duration="2561000" />
+      <workItem from="1792413703572" duration="3813000" />
+      <workItem from="1792485693308" duration="89000" />
+      <workItem from="1792519409239" duration="4407000" />
     </task>
     <servers />
   </component>

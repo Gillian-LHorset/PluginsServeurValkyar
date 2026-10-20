@@ -69,10 +69,8 @@ CREATE TABLE t_avant_garde (
     spawn_y INT DEFAULT NULL,
     spawn_z INT DEFAULT NULL,
     town_fk INT,
-    chunk_fk INT,
     PRIMARY KEY (avant_garde_id),
-    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE CASCADE,
-    FOREIGN KEY (chunk_fk) REFERENCES t_chunk_town(chunk_id) ON DELETE CASCADE
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_chunk_town (
@@ -81,8 +79,10 @@ CREATE TABLE t_chunk_town (
     chunk_identifier_z INT NOT NULL,
     is_avant_garde BOOLEAN DEFAULT FALSE,
     town_fk INT,
+    avant_garde_fk INT DEFAULT NULL,
     PRIMARY KEY (chunk_id),
-    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
+    FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL,
+    FOREIGN KEY (avant_garde_fk) REFERENCES t_avant_garde(avant_garde_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_permission_list (

@@ -75,7 +75,7 @@ public class KickTownCommand {
             return;
         }
 
-        if (senderProfile.hasPermission("town_kick")) { // TODO : déterminer est ce que quelqu'un qui peut kick peut se faire kick par quelqu'un qui à la meme permission
+        if (senderProfile.hasPermission("town_kick")) { // TODO : quelqu'un qui peut kick ne peut pas se faire kick par quelqu'un qui à la meme permission
             // if the player who kick have the perm "kick"
             if (!db.HaveAPlayerAPerm(pKicked, "second") || !db.HaveAPlayerAPerm(pKicked, "mayor")) {
                 KickPlayerTown(p, pKicked, town);

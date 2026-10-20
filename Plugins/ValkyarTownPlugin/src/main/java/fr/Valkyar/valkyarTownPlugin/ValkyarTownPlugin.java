@@ -49,8 +49,7 @@ public final class ValkyarTownPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BucketListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerTalkListener(this), this);
 
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            playerChat.put(p.getUniqueId(), "global");});
+        Bukkit.getOnlinePlayers().forEach(p -> playerChat.put(p.getUniqueId(), "global"));
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

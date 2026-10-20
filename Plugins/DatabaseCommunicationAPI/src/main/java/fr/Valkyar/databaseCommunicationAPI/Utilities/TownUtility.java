@@ -8,7 +8,12 @@ import java.util.List;
 public class TownUtility {
     public static List<Town> getAllTowns(Database db, int town_id) {
 
-        List<Town> towns = db.getAllTowns();
+        List<Town> towns = db.getAllTownsBasics();
+
+        towns.forEach(t -> {
+            t.setClaimedChunk(db.getAllTownChunkOfTown(t));
+            t.setAvantGardes(db.)
+        });
 
         return null;
     }
