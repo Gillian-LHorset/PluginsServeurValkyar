@@ -1,4 +1,6 @@
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Commands\JobCommand.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Commands\PrestigeCommand.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Commands\prestigeCommands\PrestigeShop.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\JobsPlugin.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\AnvilListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\BlockBreakListener.java
@@ -11,5 +13,6 @@ C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValk
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\EntityDeathListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\PlayerFishListener.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\JobListeners\SmeltListener.java
+C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\Listeners\PrestigeShopMenuHandler.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\TabCompletion\JobCommandCompletion.java
 C:\Users\lhors\OneDrive\Desktop\ServeurValkyar\PluginsServeurValkyar\ServeurValkyar\Plugins\JobsPlugin\src\main\java\fr\Valkyar\jobsPlugin\utilities\JobUtility.java

@@ -11,3 +11,6 @@ commands:
   jobs:
     description: Use for get a job.
     usage: /<command> <argument> <argument>
+  prestige:
+    description: Using for access to the prestige shop.
+    usage: /<command>

@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="" />
+    <list default="true" id="7959a567-6fbc-4daf-93b5-35de090d12bf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/Commands/PrestigeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/Commands/PrestigeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/JobsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../JobsPlugin/src/main/java/fr/Valkyar/jobsPlugin/JobsPlugin.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -199,6 +202,7 @@
       <workItem from="1792413703572" duration="3813000" />
       <workItem from="1792485693308" duration="89000" />
       <workItem from="1792519409239" duration="4862000" />
+      <workItem from="1792588144298" duration="2000" />
     </task>
     <servers />
   </component>

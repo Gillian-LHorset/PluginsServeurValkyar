@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PrestigeTokenUtility.GiveTokenToPlayer;
+
 public class BlockBreakListener implements Listener {
 
     private JobsPlugin _plugin;
@@ -59,6 +61,7 @@ public class BlockBreakListener implements Listener {
         // pour fermier (casser plantation)
 
         Player p = event.getPlayer();
+        GiveTokenToPlayer(p);
 
         PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;

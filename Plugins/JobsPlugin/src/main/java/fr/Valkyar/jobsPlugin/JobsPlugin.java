@@ -4,8 +4,11 @@ import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.databaseCommunicationAPI.Utilities.JobsRegister;
 import fr.Valkyar.jobsPlugin.Commands.JobCommand;
+import fr.Valkyar.jobsPlugin.Commands.PrestigeCommand;
 import fr.Valkyar.jobsPlugin.Listeners.JobListeners.*;
+import fr.Valkyar.jobsPlugin.Listeners.PrestigeShopMenuHandler;
 import fr.Valkyar.jobsPlugin.TabCompletion.JobCommandCompletion;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
@@ -17,15 +20,21 @@ public final class JobsPlugin extends JavaPlugin {
     public Map<String, Job> jobsList;
 
     public final JobsRegister jobsRegister = new JobsRegister();
+    public FileConfiguration config;
 
     @Override
     public void onEnable() {
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        config = this.getConfig();
 
         jobsRegister.loadJobsFromDatabase(databaseApi.databaseLink);
         jobsList = jobsRegister.getAllJobs();
 
         // Register Commands
         getCommand("jobs").setExecutor(new JobCommand(this));
+        getCommand("prestige").setExecutor(new PrestigeCommand(this, config));
 
         // Register tab completion
         getCommand("jobs").setTabCompleter(new JobCommandCompletion(this));
@@ -42,8 +51,8 @@ public final class JobsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerFishListener(this), this);
         getServer().getPluginManager().registerEvents(new SmeltListener(this), this);
 
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
+        getServer().getPluginManager().registerEvents(new PrestigeShopMenuHandler(this), this);
+
     }
 
     @Override
