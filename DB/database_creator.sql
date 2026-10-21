@@ -77,7 +77,6 @@ CREATE TABLE t_chunk_town (
     chunk_id int NOT NULL AUTO_INCREMENT,
     chunk_identifier_x INT NOT NULL,
     chunk_identifier_z INT NOT NULL,
-    is_avant_garde BOOLEAN DEFAULT FALSE,
     town_fk INT,
     avant_garde_fk INT DEFAULT NULL,
     PRIMARY KEY (chunk_id),

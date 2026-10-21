@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.RegisterPlayerProfile;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.TownUtility.getAllTowns;
 
 public final class DatabaseCommunicationAPI extends JavaPlugin {
 
@@ -79,8 +80,9 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
             RegisterPlayerProfile(p, this);
         }
 
-        databaseLink.getAllTowns().forEach(t -> {
+        getAllTowns(databaseLink).forEach(t -> {
             TownMap.put(t.getId(), t);
+            System.out.println(t.getName());
         });
 
         getConfig().options().copyDefaults();

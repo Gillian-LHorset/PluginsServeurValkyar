@@ -1160,7 +1160,7 @@ public class Database {
     public List<AvantGarde> getTownAvantGardes(Town town) {
         List<AvantGarde> avantGardes = new ArrayList<>();
 
-        String query = "SELECT avant_garde_id, avant_garde_name, spawn_x, spawn_y, spawn_z FROM t_avant_garde WHERE town_fk = ?";
+        String query = "SELECT avant_garde_id, avant_garde_name, spawn_x, spawn_y, spawn_z, town_fk FROM t_avant_garde WHERE town_fk = ?";
         try (PreparedStatement statement = _connection.prepareStatement(query)) {
             statement.setInt(1, town.getId());
 
@@ -1168,6 +1168,7 @@ public class Database {
                 while (results.next()) {
                     avantGardes.add(new AvantGarde(
                             results.getInt("avant_garde_id"),
+                            results.getInt("town_fk"),
                             results.getString("avant_garde_name"),
                             new Location(Bukkit.getWorld("world"),
                                     results.getInt("spawn_x"),
@@ -1187,25 +1188,27 @@ public class Database {
 
 
     public Set<ChunkCoord> getAvantGardeChunks(AvantGarde avantGarde) {
-        String query = "SELECT * FROM t_chunk_town AS c " +
+        Set<ChunkCoord> chunks = new HashSet<>();
+        String query = "SELECT chunk_identifier_x, chunk_identifier_z FROM t_chunk_town AS c " +
                 "JOIN t_avant_garde AS a " +
-                    "ON c.chunk_id = a.chunk_fk " +
-                "WHERE a.town_fk = ? " +
-                "GROUP BY a.avant_garde_name";
+                    "ON c.avant_garde_fk = a.avant_garde_id " +
+                "WHERE a.avant_garde_id = ?";
 
         try (PreparedStatement statement = _connection.prepareStatement(query)) {
-            statement.setInt(1, blockPosition.x());
-            statement.setInt(2, blockPosition.y());
-            statement.setInt(3, blockPosition.z());
-            statement.setString(4, blockPosition.worldName());
+            statement.setInt(1, avantGarde.getId());
 
             try (ResultSet results = statement.executeQuery()) {
                 while (results.next()) {
-
+                    chunks.add(new ChunkCoord(
+                            results.getInt("chunk_identifier_x"),
+                            results.getInt("chunk_identifier_z")
+                    ));
                 }
+                return chunks;
             }
         } catch (SQLException e) {
             System.out.println("[Database API] - getAvantGardeChunks - " + e.getMessage());
         }
+        return null;
     }
 }

@@ -10,17 +10,21 @@ import java.util.List;
 
 public class AvantGarde {
     private final int id;
+    private final int townFk;
     private final String name;
     private Location spawnLocation;
     private final List<ChunkCoord> avantGardeChunks;
 
-    public AvantGarde(int id, String name, Location spawnLocation, List<ChunkCoord> chunks) {
+    public AvantGarde(int id, int townFk, String name, Location spawnLocation, List<ChunkCoord> chunks) {
         this.id = id;
+        this.townFk = townFk;
         this.name = name;
         this.spawnLocation = spawnLocation;
         this.avantGardeChunks = chunks;
     }
 
+    public int getId() {return id;}
+    public int getTownFk() {return townFk;}
     public String getName() { return name; }
     public Location getSpawnLocation() { return spawnLocation; }
     public List<ChunkCoord> getChunks() { return avantGardeChunks; }

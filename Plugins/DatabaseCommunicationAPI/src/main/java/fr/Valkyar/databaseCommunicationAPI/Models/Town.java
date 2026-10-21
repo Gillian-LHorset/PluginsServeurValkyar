@@ -103,6 +103,8 @@ public class Town {// TODO : à terme déplacer tous les appels db vers TownMana
 
     // about AvantGarde
 
+    public List<AvantGarde> getAvantGardes() {return this.avantGardes;}
+
     public void setAvantGardes(List<AvantGarde> avantGardes) {
         this.avantGardes = avantGardes;
     }
