@@ -78,6 +78,12 @@ public class PlayerProfile {
     public Job getPrimaryJob() {
         return primaryJob;
     }
+    public Integer getPrimaryJobLvl() {
+        return progressions.get(getPrimaryJob().getId()).getLevel();
+    }
+    public Integer getSecondaryJobLvl() {
+        return progressions.get(getSecondaryJob().getId()).getLevel();
+    }
     public Job getSecondaryJob() {
         return secondaryJob;
     }
