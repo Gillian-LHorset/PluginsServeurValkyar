@@ -59,6 +59,7 @@ public class BlockBreakListener implements Listener {
         // pour fermier (casser plantation)
 
         Player p = event.getPlayer();
+
         PlayerProfile pProfile = _plugin.databaseApi.playerProfiles.get(p.getUniqueId());
         if (pProfile == null || !pProfile.hasAnyJobs()) return;
 

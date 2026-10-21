@@ -11,4 +11,5 @@ fr\Valkyar\jobsPlugin\Listeners\JobListeners\CraftItemListener.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\PlayerFishListener.class
 fr\Valkyar\jobsPlugin\JobsPlugin.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\AnvilListener.class
+fr\Valkyar\jobsPlugin\utilities\JobUtility.class
 fr\Valkyar\jobsPlugin\Listeners\JobListeners\EnchantItemListener.class
