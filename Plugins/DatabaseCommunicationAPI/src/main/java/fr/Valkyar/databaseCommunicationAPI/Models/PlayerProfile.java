@@ -4,6 +4,8 @@ import fr.Valkyar.databaseCommunicationAPI.Models.JobProgression;
 import fr.Valkyar.databaseCommunicationAPI.db.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 import javax.xml.crypto.Data;
 import java.awt.*;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.TownMap;
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.PrestigeTokenUtility.GiveTokenToPlayer;
 
 public class PlayerProfile {
     private UUID playerUuid;
@@ -70,6 +73,12 @@ public class PlayerProfile {
     }
     public Boolean hasHighPermission() {
         return permissionsMap.get("town_mayor") || permissionsMap.get("town_second");
+    }
+    public Boolean isPrimaryJobHundred() {
+        return getPrimaryJobLvl() == 100;
+    }
+    public Boolean isPrimaryJobMoreThantHundred() {
+        return getPrimaryJobLvl() > 100;
     }
 
     public UUID getPlayerUuid() {
@@ -148,15 +157,18 @@ public class PlayerProfile {
         // TODO : implementer les réel valeurs d'exp nécéssaire pour lvl up
         if (progressions.get(jobId).getExperience() < 100) {
             return;
+        }// case player level up
+        JobLevelUp(jobId);
+        if (isPrimaryJobHundred()) {
+            Player p = Bukkit.getPlayer(playerUuid);
+            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
+            p.sendMessage(ChatColor.BLUE + "Vous venez de passer niveau maximum, le post-game commence. Pour commencer voici un Jeton de Prestige.\nVous pouvez accèder à la boutique de prestige avec le /prestige.");
+            GiveTokenToPlayer(p);
+        } else if (isPrimaryJobMoreThantHundred() && (progressions.get(jobId).getLevel() - 100) % 10 == 0) {
+            Player p = Bukkit.getPlayer(playerUuid);
+            p.sendMessage(ChatColor.BLUE + "Vous recevez un Jeton de Presitge");
+            GiveTokenToPlayer(p);
         }
-
-        progressions.get(jobId).setExperience(0);
-        progressions.get(jobId).increaseLevel();
-        Bukkit.getPlayer(playerUuid).sendMessage("Vous venez de passer au niveau " +
-                ChatColor.BOLD + progressions.get(jobId).getLevel() + ChatColor.RESET +
-                " dans le métier de " +
-                ChatColor.BOLD + progressions.get(jobId).getJob().getDisplayName() + ChatColor.RESET + ".");
-
     }
 
     public void addProgression(JobProgression progression) {
@@ -168,5 +180,13 @@ public class PlayerProfile {
     }
     public void decreaseMoney(Double amount) {
         currentMoney -= amount;
+    }
+    private void JobLevelUp(int jobId) {
+        progressions.get(jobId).setExperience(0);
+        progressions.get(jobId).increaseLevel();
+        Bukkit.getPlayer(playerUuid).sendMessage("Vous venez de passer au niveau " +
+                ChatColor.BOLD + progressions.get(jobId).getLevel() + ChatColor.RESET +
+                " dans le métier de " +
+                ChatColor.BOLD + progressions.get(jobId).getJob().getDisplayName() + ChatColor.RESET + ".");
     }
 }
