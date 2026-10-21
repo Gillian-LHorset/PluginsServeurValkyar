@@ -43,6 +43,7 @@ CREATE TABLE t_player_jobs (
     player_fk INT NOT NULL,
     job_fk INT NOT NULL,
     current_exp DOUBLE(10,2) NOT NULL DEFAULT 0,
+    specialisation VARCHAR(51) DEFAULT NULL,
     last_leave DATETIME DEFAULT NULL,
     level INT NOT NULL DEFAULT 0,
     PRIMARY KEY (player_fk, job_fk),
