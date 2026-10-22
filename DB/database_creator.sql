@@ -110,6 +110,14 @@ CREATE TABLE IF NOT EXISTS t_player_placed_blocks (
     placed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS t_specialisations (
+    specialisation_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(41) NOT NULL,
+    job_fk INT,
+    PRIMARY KEY (specialisation_id),
+    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
+);
+
 CREATE INDEX index_block_location ON t_player_placed_blocks (world, x, y, z);
 
 INSERT INTO t_jobs (name, ismain) VALUES ('Mineur', TRUE);
@@ -139,5 +147,11 @@ INSERT INTO t_action_type   (minecraft_identifier, action,    money_bringing, ex
                             ('sheep',              "kill",    1.00,           1.00,         9),
                             ('iron_ingot',         "smelt",   1.00,           1.00,         10),
                             ('iron_chestplate',    "repaire", 1.00,           1.00,         8);
+
+INSERT INTO t_specialisations   (name,              job_fk)
+    VALUES                      ("terraformation",  1),
+                                ("extraction",      1),
+                                ("bucheronage industriel", 2),
+                                ("deforestation", 2);
 
 COMMIT;
