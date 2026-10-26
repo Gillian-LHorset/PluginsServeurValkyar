@@ -127,6 +127,31 @@ public class Database {
         return null;
     }
 
+    public record specialisation(Integer jobId, String name) {
+    }
+
+    public List<specialisation> getSpecialisations() {
+        try {
+            List<specialisation> specialisationsList = new ArrayList<>();
+
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("SELECT job_fk, name FROM t_specialisations ORDER BY job_fk");
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                specialisationsList.add(new specialisation(
+                        results.getInt("job_fk"),
+                        results.getString("name")
+                ));
+            }
+
+            return specialisationsList;
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getSpecialisations()'");
+        }
+        return null;
+    }
+
     public List<Job> getPlayerJobs(Player p) {
         try {
             List<Job> job = new ArrayList<>();
@@ -1191,7 +1216,7 @@ public class Database {
         Set<ChunkCoord> chunks = new HashSet<>();
         String query = "SELECT chunk_identifier_x, chunk_identifier_z FROM t_chunk_town AS c " +
                 "JOIN t_avant_garde AS a " +
-                    "ON c.avant_garde_fk = a.avant_garde_id " +
+                "ON c.avant_garde_fk = a.avant_garde_id " +
                 "WHERE a.avant_garde_id = ?";
 
         try (PreparedStatement statement = _connection.prepareStatement(query)) {

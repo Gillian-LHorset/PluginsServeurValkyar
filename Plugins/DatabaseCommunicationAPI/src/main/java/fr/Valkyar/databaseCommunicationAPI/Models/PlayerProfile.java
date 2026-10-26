@@ -162,7 +162,9 @@ public class PlayerProfile {
         if (isPrimaryJobHundred()) {
             Player p = Bukkit.getPlayer(playerUuid);
             p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
-            p.sendMessage(ChatColor.BLUE + "Vous venez de passer niveau maximum, le post-game commence. Pour commencer voici un Jeton de Prestige.\nVous pouvez accèder à la boutique de prestige avec le /prestige.");
+            p.sendMessage(ChatColor.BLUE + "Vous pouvez désormais choisir une spécialisation avec la commande " +
+                    ChatColor.BOLD + "/specialisation" + ChatColor.RESET + "" +ChatColor.BLUE + ".");
+            p.sendMessage(ChatColor.BLUE + "Vous venez d'atteindre le palier maximum, le post-game commence. Pour commencer voici un Jeton de Prestige.\nVous pouvez accèder à la boutique de prestige avec le /prestige.");
             GiveTokenToPlayer(p);
         } else if (isPrimaryJobMoreThantHundred() && (progressions.get(jobId).getLevel() - 100) % 10 == 0) {
             Player p = Bukkit.getPlayer(playerUuid);

@@ -2,7 +2,6 @@ package fr.Valkyar.jobsPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
-import fr.Valkyar.databaseCommunicationAPI.Utilities.JobsRegister;
 import fr.Valkyar.jobsPlugin.Commands.JobCommand;
 import fr.Valkyar.jobsPlugin.Commands.PrestigeCommand;
 import fr.Valkyar.jobsPlugin.Listeners.JobListeners.*;
@@ -13,13 +12,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.JobsUtilities.setupJobsList;
+
 public final class JobsPlugin extends JavaPlugin {
 
     public DatabaseCommunicationAPI databaseApi = DatabaseCommunicationAPI.getApi();
     // attention : case-sensitive
     public Map<String, Job> jobsList;
 
-    public final JobsRegister jobsRegister = new JobsRegister();
     public FileConfiguration config;
 
     @Override
@@ -29,8 +29,7 @@ public final class JobsPlugin extends JavaPlugin {
         saveDefaultConfig();
         config = this.getConfig();
 
-        jobsRegister.loadJobsFromDatabase(databaseApi.databaseLink);
-        jobsList = jobsRegister.getAllJobs();
+        jobsList = setupJobsList(databaseApi.databaseLink);
 
         // Register Commands
         getCommand("jobs").setExecutor(new JobCommand(this));

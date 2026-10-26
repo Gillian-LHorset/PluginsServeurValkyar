@@ -1,11 +1,12 @@
+fr\Valkyar\databaseCommunicationAPI\Utilities\JobsUtilities.class
 fr\Valkyar\databaseCommunicationAPI\listeners\ItemProtectionListener.class
-fr\Valkyar\databaseCommunicationAPI\Utilities\JobsRegister.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI.class
 fr\Valkyar\databaseCommunicationAPI\Utilities\TownUtility.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI$BlockPosition.class
 fr\Valkyar\databaseCommunicationAPI\Models\Job.class
 fr\Valkyar\databaseCommunicationAPI\Models\Town.class
 fr\Valkyar\databaseCommunicationAPI\Utilities\PlacedBlockUtilites.class
+fr\Valkyar\databaseCommunicationAPI\db\Database$specialisation.class
 fr\Valkyar\databaseCommunicationAPI\listeners\JoinListener.class
 fr\Valkyar\databaseCommunicationAPI\managers\PlayerProfileManager.class
 fr\Valkyar\databaseCommunicationAPI\Models\ResourceData.class
