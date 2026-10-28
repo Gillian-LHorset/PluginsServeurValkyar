@@ -39,18 +39,6 @@ CREATE TABLE t_players (
     FOREIGN KEY (town_fk) REFERENCES t_town(town_id) ON DELETE SET NULL
 );
 
-CREATE TABLE t_player_jobs (
-    player_fk INT NOT NULL,
-    job_fk INT NOT NULL,
-    current_exp DOUBLE(10,2) NOT NULL DEFAULT 0,
-    specialisation VARCHAR(51) DEFAULT NULL,
-    last_leave DATETIME DEFAULT NULL,
-    level INT NOT NULL DEFAULT 0,
-    PRIMARY KEY (player_fk, job_fk),
-    FOREIGN KEY (player_fk) REFERENCES t_players(player_id) ON DELETE CASCADE,
-    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id) ON DELETE CASCADE
-);
-
 CREATE TABLE t_action_type (
     block_id int NOT NULL AUTO_INCREMENT,
     minecraft_identifier VARCHAR(51) NOT NULL,
@@ -116,6 +104,19 @@ CREATE TABLE IF NOT EXISTS t_specialisations (
     job_fk INT,
     PRIMARY KEY (specialisation_id),
     FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id)
+);
+
+CREATE TABLE t_player_jobs (
+    player_fk INT NOT NULL,
+    job_fk INT NOT NULL,
+    current_exp DOUBLE(10,2) NOT NULL DEFAULT 0,
+    last_leave DATETIME DEFAULT NULL,
+    level INT NOT NULL DEFAULT 0,
+    specialisation_fk INT DEFAULT NULL,
+    PRIMARY KEY (player_fk, job_fk),
+    FOREIGN KEY (player_fk) REFERENCES t_players(player_id) ON DELETE CASCADE,
+    FOREIGN KEY (job_fk) REFERENCES t_jobs(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (specialisation_fk) REFERENCES t_specialisations(specialisation_id) ON DELETE CASCADE
 );
 
 CREATE INDEX index_block_location ON t_player_placed_blocks (world, x, y, z);

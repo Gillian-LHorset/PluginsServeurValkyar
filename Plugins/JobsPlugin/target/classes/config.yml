@@ -4,12 +4,16 @@ boutique:
     - name: "Le Terraformateur"
       material: "netherite_pickaxe"
       cost: 5
+      metier: "mineur"
+      specialisation: "terraformation"
       enchantments:
         - name: "efficiency"
           level: 6
     - name: "L'Extracteur"
       material: "netherite_pickaxe"
       cost: 5
+      metier: "mineur"
+      specialisation: "extraction"
       enchantments:
         - name: "fortune"
           level: 4

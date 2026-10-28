@@ -19,6 +19,7 @@ fr\Valkyar\databaseCommunicationAPI\Models\BlockData.class
 fr\Valkyar\databaseCommunicationAPI\Models\AvantGarde.class
 fr\Valkyar\databaseCommunicationAPI\DatabaseCommunicationAPI$ChunkCoord.class
 fr\Valkyar\databaseCommunicationAPI\Models\PlayerProfile.class
+fr\Valkyar\databaseCommunicationAPI\managers\SpecialisationManager.class
 fr\Valkyar\databaseCommunicationAPI\Utilities\ChunkSystem.class
 fr\Valkyar\databaseCommunicationAPI\Models\JobProgression.class
 fr\Valkyar\databaseCommunicationAPI\Utilities\PrestigeTokenUtility.class

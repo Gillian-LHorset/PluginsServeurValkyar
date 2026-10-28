@@ -29,13 +29,15 @@ public class JobsUtilities {
             System.out.println(loadedJobs.size() + " métiers chargés depuis la DB.");
     }
 
+    public static List<Database.specialisation> loadJobsSpecialisations(Database db) {
+        return db.getSpecialisations();
+    }
+
     private static void setJobsSpecialisations(Database db) {
-        List<Database.specialisation> specialisations = db.getSpecialisations();
-        for (Job job : loadedJobs.values()) {
-            for (Database.specialisation spe : specialisations) {
+        for (Database.specialisation spe : loadJobsSpecialisations(db)) {
+            for (Job job : loadedJobs.values()) {
                 if (spe.jobId().equals(job.getId())) {
                     job.addSpecialisation(spe.name());
-                    specialisations.remove(spe);
                 }
             }
         }

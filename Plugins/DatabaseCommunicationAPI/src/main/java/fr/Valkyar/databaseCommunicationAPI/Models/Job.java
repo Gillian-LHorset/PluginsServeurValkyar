@@ -1,12 +1,13 @@
 package fr.Valkyar.databaseCommunicationAPI.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Job {
     private final Integer id;
     private final String displayName;
     private final boolean isPrimary;
-    private List<String> specialisations;
+    private List<String> specialisations = new ArrayList<>();
 
     public Job(Integer id, String displayName, boolean isPrimary) {
         this.id = id;

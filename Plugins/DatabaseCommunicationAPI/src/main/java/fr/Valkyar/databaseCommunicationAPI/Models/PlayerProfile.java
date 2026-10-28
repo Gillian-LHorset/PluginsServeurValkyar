@@ -53,6 +53,10 @@ public class PlayerProfile {
         return false;
     }
 
+    public boolean hasSpecialisation() {
+        return hasMainJobs() && progressions.get(primaryJob.getId()).hasSpecialisation();
+    }
+
     public boolean hasAnyJobs() {
         return (primaryJob != null || secondaryJob != null);
     }
@@ -99,7 +103,9 @@ public class PlayerProfile {
     public Double getCurrentMoney() {return currentMoney;}
     public Integer getTownId() {return townId;}
     public Town getTown() {return TownMap.get(townId);}
-
+    public String getSpecialisation() {
+        return progressions.get(primaryJob.getId()).getSpecialisation();
+    }
 
     public JobProgression getProgression(Integer jobId) {
         if (progressions.containsKey(jobId)) {

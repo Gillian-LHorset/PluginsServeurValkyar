@@ -127,7 +127,7 @@ public class Database {
         return null;
     }
 
-    public record specialisation(Integer jobId, String name) {
+    public record specialisation(Integer id, Integer jobId, String name) {
     }
 
     public List<specialisation> getSpecialisations() {
@@ -135,11 +135,12 @@ public class Database {
             List<specialisation> specialisationsList = new ArrayList<>();
 
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT job_fk, name FROM t_specialisations ORDER BY job_fk");
+                    .prepareStatement("SELECT specialisation_id, name, job_fk FROM t_specialisations ORDER BY job_fk");
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
                 specialisationsList.add(new specialisation(
+                        results.getInt("specialisation_id"),
                         results.getInt("job_fk"),
                         results.getString("name")
                 ));
@@ -147,9 +148,25 @@ public class Database {
 
             return specialisationsList;
         } catch (SQLException e) {
-            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getSpecialisations()'");
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT, "[DatabaseCommunicationAPI] : Erreur de connexion 'getSpecialisations() - '" + e.getMessage());
         }
         return null;
+    }
+
+    public void setSpecialisation(Player p, specialisation spe, Job job) {
+        try {
+            PreparedStatement statement = _plugin.databaseLink._connection
+                    .prepareStatement("UPDATE t_player_jobs SET specialisation_fk = ? WHERE player_fk = ? AND job_fk = ?");
+            statement.setInt(1, spe.id());
+            statement.setInt(2, getPlayerFk(p));
+            statement.setInt(3, job.getId());
+
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            DatabaseCommunicationAPI.OutputColoredText(DatabaseCommunicationAPI.RED_OUTPUT,
+                    "[DatabaseCommunicationAPI] : Erreur de connexion 'setSpecialisation()'");
+        }
     }
 
     public List<Job> getPlayerJobs(Player p) {
@@ -973,7 +990,11 @@ public class Database {
         int playerId = getPlayerFk(p);
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("SELECT job_fk ,level, current_exp FROM t_player_jobs WHERE player_fk = ? AND job_fk = ?");
+                    .prepareStatement("SELECT pj.job_fk ,pj.level, pj.current_exp, s.name " +
+                            "FROM t_player_jobs AS pj " +
+                            "LEFT JOIN t_specialisations AS s " +
+                            "ON pj.specialisation_fk = s.specialisation_id " +
+                            "WHERE pj.player_fk = ? AND pj.job_fk = ?");
             statement.setInt(1, playerId);
             statement.setInt(2, playerJob.getId());
 
@@ -983,13 +1004,14 @@ public class Database {
                 int jobFk = results.getInt("job_fk");
                 int level = results.getInt("level");
                 double currentExp = results.getDouble("current_exp");
+                String specialisation = results.getString("name");
 
-                return new JobProgression(jobFk, currentExp, level, playerJob);
+                return new JobProgression(jobFk, currentExp, level, playerJob, specialisation);
             }
             statement.close();
 
         } catch (SQLException e) {
-            System.out.println("[Database API] - " + "FindJobPlayerInfo - " + e);
+            System.out.println("[Database API] : " + "getJobProgression - " + e);
         }
         return null;
     }
@@ -1000,11 +1022,16 @@ public class Database {
 
         try {
             PreparedStatement statement = _plugin.databaseLink._connection
-                    .prepareStatement("UPDATE t_player_jobs SET current_exp = ?, level = ? WHERE player_fk = ? AND job_fk = ?");
+                    .prepareStatement("UPDATE t_player_jobs AS pj " +
+                            "JOIN t_specialisations AS s " +
+                            "ON s.specialisation_id = pj.specialisation_fk " +
+                            "SET pj.current_exp = ?, pj.level = ?, s.name = ? " +
+                            "WHERE pj.player_fk = ? AND pj.job_fk = ?");
             statement.setDouble(1, jobProgression.getExperience());
             statement.setInt(2, jobProgression.getLevel());
-            statement.setInt(3, playerId);
-            statement.setInt(4, jobProgression.getJobId());
+            statement.setString(3, jobProgression.getSpecialisation());
+            statement.setInt(4, playerId);
+            statement.setInt(5, jobProgression.getJobId());
 
             statement.execute();
             statement.close();

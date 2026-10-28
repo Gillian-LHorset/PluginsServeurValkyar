@@ -17,10 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import static fr.Valkyar.databaseCommunicationAPI.Utilities.JobsUtilities.loadJobsSpecialisations;
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.PlayerProfileUtility.RegisterPlayerProfile;
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.PrestigeTokenUtility.DefinPresigeToken;
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.TownUtility.getAllTowns;
@@ -51,6 +50,8 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
     public static HashMap<UUID, PlayerProfile> playerProfiles = new HashMap<>();
     public static HashMap<BlockPosition, BlockData> PlacedBlocks = new HashMap<>();
     public static HashMap<Integer, Town> TownMap = new HashMap<>();
+
+    public static List<Database.specialisation> specialisationsList = new ArrayList<>();
 
     public static ItemStack PrestigeToken = DefinPresigeToken();
 
@@ -85,6 +86,8 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
 
             RegisterPlayerProfile(p, this);
         }
+
+        specialisationsList = loadJobsSpecialisations(this.databaseLink);
 
         getAllTowns(databaseLink).forEach(t -> {
             TownMap.put(t.getId(), t);

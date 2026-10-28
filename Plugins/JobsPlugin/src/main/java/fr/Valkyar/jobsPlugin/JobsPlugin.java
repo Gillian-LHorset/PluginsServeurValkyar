@@ -4,9 +4,11 @@ import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
 import fr.Valkyar.databaseCommunicationAPI.Models.Job;
 import fr.Valkyar.jobsPlugin.Commands.JobCommand;
 import fr.Valkyar.jobsPlugin.Commands.PrestigeCommand;
+import fr.Valkyar.jobsPlugin.Commands.SpecialisationCommand;
 import fr.Valkyar.jobsPlugin.Listeners.JobListeners.*;
 import fr.Valkyar.jobsPlugin.Listeners.PrestigeShopMenuHandler;
 import fr.Valkyar.jobsPlugin.TabCompletion.JobCommandCompletion;
+import fr.Valkyar.jobsPlugin.TabCompletion.SpecialisationCommandCompletion;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,9 +36,11 @@ public final class JobsPlugin extends JavaPlugin {
         // Register Commands
         getCommand("jobs").setExecutor(new JobCommand(this));
         getCommand("prestige").setExecutor(new PrestigeCommand(this, config));
+        getCommand("specialisation").setExecutor(new SpecialisationCommand(this));
 
         // Register tab completion
         getCommand("jobs").setTabCompleter(new JobCommandCompletion(this));
+        getCommand("specialisation").setTabCompleter(new SpecialisationCommandCompletion());
 
         getServer().getPluginManager().registerEvents(new AnvilListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
