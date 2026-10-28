@@ -1,9 +1,0 @@
-name: DisplayingPlugin
-version: '0.0.1'
-main: fr.Valkyar.displayingPlugin.DisplayingPlugin
-api-version: '1.21'
-authors: [ GG5 ]
-description: DISPLAY - This plugin is used for display things in the player sceen.
-
-
-depend: [DatabaseCommunicationAPI]

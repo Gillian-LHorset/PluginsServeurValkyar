@@ -1,5 +1,0 @@
-fr\Valkyar\moderatorPlugin\Listener\LeaveListener.class
-fr\Valkyar\moderatorPlugin\Listener\JoinListener.class
-fr\Valkyar\moderatorPlugin\ModeratorPlugin.class
-fr\Valkyar\moderatorPlugin\Commands\VanishCommand.class
-fr\Valkyar\moderatorPlugin\Commands\VanishTabCompletion.class
