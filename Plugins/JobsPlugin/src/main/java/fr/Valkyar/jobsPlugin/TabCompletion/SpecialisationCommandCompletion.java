@@ -18,7 +18,7 @@ import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.speci
 public class SpecialisationCommandCompletion implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        List <String> tabList = new ArrayList<>();
+        List<String> tabList = new ArrayList<>();
         if (sender instanceof Player p) {
             PlayerProfile playerProfile = playerProfiles.get(p.getUniqueId());
             Job pJob = playerProfile.getPrimaryJob();

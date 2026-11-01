@@ -11,12 +11,17 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.List;
+import java.util.Map;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.PrestigeToken;
 import static fr.Valkyar.databaseCommunicationAPI.Utilities.PrestigeTokenUtility.CountPrestigeTokens;
 import static fr.Valkyar.jobsPlugin.Commands.prestigeCommands.PrestigeShop.prestigeItemCostKey;
+import static fr.Valkyar.jobsPlugin.Commands.prestigeCommands.PrestigeShop.prestigeItemSpecialisationKey;
 
 public class PrestigeShopMenuHandler implements Listener {
 
@@ -45,7 +50,7 @@ public class PrestigeShopMenuHandler implements Listener {
 
         if (e.getCurrentItem() == null
                 || e.getCurrentItem().getType().isAir()
-                ) {
+        ) {
             return;
         }
 
@@ -84,7 +89,7 @@ public class PrestigeShopMenuHandler implements Listener {
         }
     }
 
-    public boolean CanPlayerBuyItem(Player p, ItemStack prestigeItem) {
+    private boolean CanPlayerBuyItem(Player p, ItemStack prestigeItem) {
         PersistentDataContainer itemData = prestigeItem.getItemMeta().getPersistentDataContainer();
 
         if (itemData == null) {
@@ -103,12 +108,27 @@ public class PrestigeShopMenuHandler implements Listener {
         return CountPrestigeTokens(p) >= itemCost;
     }
 
-    public void BuyItem(Player p, ItemStack prestigeItem) {
+    private void BuyItem(Player p, ItemStack prestigeItem) {
         Integer itemCost = prestigeItem.getItemMeta().getPersistentDataContainer().get(prestigeItemCostKey, PersistentDataType.INTEGER);
         for (int i = 0; i < itemCost; i++) {
             p.getInventory().removeItem(PrestigeToken);
         }
         p.sendMessage(ChatColor.GREEN + "Félicitation, vous avez acheter " + prestigeItem.getItemMeta().getDisplayName() + ".");
-        p.getInventory().addItem(prestigeItem);
+        ;
+        p.getInventory().addItem(setItemLore(prestigeItem.clone()));
+    }
+
+    private ItemStack setItemLore(ItemStack prestigeItem) {
+        ItemMeta meta = prestigeItem.getItemMeta();
+        if (meta == null) {
+            return null;
+        }
+
+        List<String> newLore = meta.getLore();
+        newLore.removeLast();
+        meta.setLore(newLore);
+        prestigeItem.setItemMeta(meta);
+
+        return prestigeItem;
     }
 }
