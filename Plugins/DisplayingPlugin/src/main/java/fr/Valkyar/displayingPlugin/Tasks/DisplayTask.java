@@ -65,15 +65,18 @@ public class DisplayTask extends BukkitRunnable {
             String title = _plugin.moneyIcon + ChatColor.YELLOW + " " + formattedBalance;
 
             if (pProfile.hasMainJobs()) {
-                title += "   " + "job1: " + pProfile.getPrimaryJob().getDisplayName() + "   lvl: " + pProfile.getPrimaryJobLvl();
+                title += "  " + "job1: " + pProfile.getPrimaryJob().getDisplayName() + "   lvl: " + pProfile.getPrimaryJobLvl();
+                if (pProfile.hasSpecialisation()) {
+                    title += "  " + "spe: " + pProfile.getSpecialisation();
+                }
             }
             if (pProfile.hasSecondJobs()) {
-                title += "   " + "job2: " + pProfile.getSecondaryJob().getDisplayName() + "   lvl: " + pProfile.getSecondaryJobLvl();
+                title += "  " + "job2: " + pProfile.getSecondaryJob().getDisplayName() + "   lvl: " + pProfile.getSecondaryJobLvl();
             }
 
             if (playerTown != null) {
-                title += "   " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown.getName();
-                title += "   " + _plugin.moneyIcon + ChatColor.YELLOW + " " + playerTown.getBalance();
+                title += "  " + _plugin.townIcon + ChatColor.GREEN + " " + playerTown.getName();
+                title += "  " + _plugin.moneyIcon + ChatColor.YELLOW + " " + playerTown.getBalance();
             }
 
             UUID uuid = p.getUniqueId();
