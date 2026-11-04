@@ -1,5 +1,6 @@
 package fr.Valkyar.databaseCommunicationAPI;
 
+import fr.Valkyar.databaseCommunicationAPI.MendingManager.TraderMendingLIstener;
 import fr.Valkyar.databaseCommunicationAPI.Models.BlockData;
 import fr.Valkyar.databaseCommunicationAPI.Models.Town;
 import fr.Valkyar.databaseCommunicationAPI.listeners.ItemProtectionListener;
@@ -76,6 +77,7 @@ public final class DatabaseCommunicationAPI extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new PlaceBlockListener(), this);
         getServer().getPluginManager().registerEvents(new ItemProtectionListener(), this);
+        getServer().getPluginManager().registerEvents(new TraderMendingLIstener(), this);
 
         stockPlacedBlockTask = new StockPlacedBlockTask(this);
         // attend 1 minute (1200 ticks) avant la première exécution
