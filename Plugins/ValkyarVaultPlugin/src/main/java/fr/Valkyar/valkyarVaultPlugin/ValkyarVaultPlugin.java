@@ -1,5 +1,7 @@
 package fr.Valkyar.valkyarVaultPlugin;
 
+import fr.Valkyar.valkyarVaultPlugin.BlackMarket.BlackMerchant;
+import fr.Valkyar.valkyarVaultPlugin.BlackMarket.ManageBlackMerchantCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.BalanceCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.PayCommand;
 import fr.Valkyar.valkyarVaultPlugin.TabCompletion.PayTabCompletion;
@@ -21,6 +23,7 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
         // Register Commands
         getCommand("pay").setExecutor(new PayCommand(this));
         getCommand("balance").setExecutor(new BalanceCommand(this));
+        getCommand("blackmerchant").setExecutor(new ManageBlackMerchantCommand()); // only for test
 
         // Register tab completion
         getCommand("pay").setTabCompleter(new PayTabCompletion());
