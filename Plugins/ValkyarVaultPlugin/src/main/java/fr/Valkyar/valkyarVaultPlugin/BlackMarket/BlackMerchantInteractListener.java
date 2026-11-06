@@ -3,6 +3,7 @@ package fr.Valkyar.valkyarVaultPlugin.BlackMarket;
 import com.google.gson.Gson;
 import fr.Valkyar.databaseCommunicationAPI.Models.PlayerProfile;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
+import java.util.Map;
 
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.PrestigeToken;
 import static fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI.playerProfiles;
@@ -137,10 +139,21 @@ public class BlackMerchantInteractListener implements Listener {
             p.getInventory().removeItem(PrestigeToken);
         }
         p.sendMessage(ChatColor.GREEN + "Vous avez acheter " + (item.getItemMeta().getDisplayName().isEmpty() ? item.getType().toString().toLowerCase() : item.getItemMeta().getDisplayName().toLowerCase()) + ".");
-        p.getInventory().addItem(setItemLore(item.clone()));
+
+        Map<Integer, ItemStack> leftOver = p.getInventory().addItem(resetItemLore(item.clone()));
+
+        if (!leftOver.isEmpty()) {
+            Location loc = p.getLocation();
+
+            for (ItemStack itemDrop : leftOver.values()) {
+                loc.getWorld().dropItemNaturally(loc, itemDrop);
+            }
+
+            p.sendMessage(ChatColor.RED + "Votre inventaire est plein, l'objet est tombé au sol !");
+        }
     }
 
-    private ItemStack setItemLore(ItemStack item) {
+    private ItemStack resetItemLore(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return null;

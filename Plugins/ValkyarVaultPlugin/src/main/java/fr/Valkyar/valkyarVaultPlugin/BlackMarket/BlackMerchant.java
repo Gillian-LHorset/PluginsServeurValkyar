@@ -10,6 +10,7 @@ import org.bukkit.entity.WanderingTrader;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -86,8 +87,14 @@ public class BlackMerchant {
                         continue;
                     }
 
-                    // le 'true' permet d'appliquer des niveaux supérieurs aux limites vanilla
-                    meta.addEnchant(enchant, level, true);
+                    // vérifie si l'item est un livre enchanté
+                    if (meta instanceof EnchantmentStorageMeta storageMeta) {
+                        // le 'true' permet d'appliquer des niveaux supérieurs aux limites vanilla
+                        storageMeta.addStoredEnchant(enchant, level, true);
+                    } else {
+                        // le 'true' permet d'appliquer des niveaux supérieurs aux limites vanilla
+                        meta.addEnchant(enchant, level, true);
+                    }
                 }
             }
 
