@@ -8,6 +8,7 @@ import fr.Valkyar.valkyarVaultPlugin.Commands.BalanceCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.PayCommand;
 import fr.Valkyar.valkyarVaultPlugin.TabCompletion.PayTabCompletion;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +21,11 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
     public static final String RED_OUTPUT = "\u001B[31m";
     public static final String GREEN_OUTPUT = "\u001B[32m";
 
+    public static BlackMerchant blackMerchant;
+
     public DatabaseCommunicationAPI api = DatabaseCommunicationAPI.getApi();
+
+    public static FileConfiguration config;
 
     @Override
     public void onEnable() {
@@ -37,6 +42,10 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+
+        config = this.getConfig();
+
+        blackMerchant = new BlackMerchant(this);
     }
 
     @Override
@@ -44,7 +53,7 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public static void OutputColoredText (String color, String message) {
+    public static void OutputColoredText(String color, String message) {
         System.out.println(color + message + ANSI_RESET + "");
     }
 }
