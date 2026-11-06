@@ -101,7 +101,6 @@ public class BlackMerchant {
     }
 
     public static void openBlackMarket(Player player) {
-        player.sendMessage("debug4");
         player.openInventory(marketInventory);
     }
 }
