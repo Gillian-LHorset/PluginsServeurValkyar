@@ -4,9 +4,15 @@ BlackMarketItems:
       rarity: "mythique"
       material: "ENCHANTED_BOOK"
       enchant: "MENDING"
+      money: "jeton"
+      price: 10
   - Netherite_sword:
       rarity: "epique"
       material: "NETHERITE_SWORD"
+      money: "jeton"
+      price: 1
   - wheat:
       rarity: "commun"
       material: "WHEAT"
+      money: "piece"
+      price: 10
