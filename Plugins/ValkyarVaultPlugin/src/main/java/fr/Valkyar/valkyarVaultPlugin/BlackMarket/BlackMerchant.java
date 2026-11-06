@@ -24,8 +24,12 @@ import static fr.Valkyar.valkyarVaultPlugin.ValkyarVaultPlugin.config;
 
 public class BlackMerchant {
     private final ValkyarVaultPlugin _plugin;
-    public static Inventory marketInventory = org.bukkit.Bukkit.createInventory(null, 27, ChatColor.BLACK + "Marché Noir");;
 
+    public static final String MENU_NAME = ChatColor.BLACK + "Marché Noir";
+    // the protection of the inventory is in DatabaseCommunicationAPI
+    public static Inventory marketInventory = org.bukkit.Bukkit.createInventory(null, 27, MENU_NAME);;
+
+    public static NamespacedKey itemCostKey;
     public static NamespacedKey enchantKey;
     private HashMap<String, ItemStack> itemsMap = new HashMap<>();
 
@@ -64,7 +68,7 @@ public class BlackMerchant {
 
             PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
             // add the price of the item in the PersistentDataContainer
-            NamespacedKey itemCostKey = new NamespacedKey(_plugin, "item_price");
+            itemCostKey = new NamespacedKey(_plugin, "item_price");
 
             dataContainer.set(itemCostKey, PersistentDataType.STRING, jsonString);
             ///////////////////
@@ -98,6 +102,7 @@ public class BlackMerchant {
             String rarity = (String) itemMap.get("rarity");
             itemsMap.put(rarity, item);
         }
+        itemsMap.values().forEach(i -> marketInventory.addItem(i));
     }
 
     public static void openBlackMarket(Player player) {

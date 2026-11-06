@@ -13,5 +13,5 @@ BlackMarketItems:
     price: 1
   - rarity: "commun"
     material: "WHEAT"
-    money: "argent"
+    money: "pièce"
     price: 10
