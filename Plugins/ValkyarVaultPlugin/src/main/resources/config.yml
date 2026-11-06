@@ -1,0 +1,12 @@
+#Rarity lvl : commun, rare, epique, legendaire, mythique
+BlackMarketItems:
+  - mending:
+      rarity: "mythique"
+      material: "ENCHANTED_BOOK"
+      enchant: "MENDING"
+  - Netherite_sword:
+      rarity: "epique"
+      material: "NETHERITE_SWORD"
+  - wheat:
+      rarity: "commun"
+      material: "WHEAT"

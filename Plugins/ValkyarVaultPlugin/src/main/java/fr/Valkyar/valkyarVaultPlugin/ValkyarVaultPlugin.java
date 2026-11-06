@@ -7,6 +7,8 @@ import fr.Valkyar.valkyarVaultPlugin.BlackMarket.ManageBlackMerchantCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.BalanceCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.PayCommand;
 import fr.Valkyar.valkyarVaultPlugin.TabCompletion.PayTabCompletion;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.Valkyar.databaseCommunicationAPI.DatabaseCommunicationAPI;
@@ -25,7 +27,7 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
         // Register Commands
         getCommand("pay").setExecutor(new PayCommand(this));
         getCommand("balance").setExecutor(new BalanceCommand(this));
-        getCommand("blackmerchant").setExecutor(new ManageBlackMerchantCommand()); // only for test
+        getCommand("blackmerchant").setExecutor(new ManageBlackMerchantCommand()); // only for test TODO : need to be protected or deleted
 
         // Register tab completion
         getCommand("pay").setTabCompleter(new PayTabCompletion());
