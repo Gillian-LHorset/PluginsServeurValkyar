@@ -1,6 +1,8 @@
 package fr.Valkyar.valkyarVaultPlugin;
 
+import fr.Valkyar.databaseCommunicationAPI.listeners.JoinListener;
 import fr.Valkyar.valkyarVaultPlugin.BlackMarket.BlackMerchant;
+import fr.Valkyar.valkyarVaultPlugin.BlackMarket.BlackMerchantInteractListener;
 import fr.Valkyar.valkyarVaultPlugin.BlackMarket.ManageBlackMerchantCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.BalanceCommand;
 import fr.Valkyar.valkyarVaultPlugin.Commands.PayCommand;
@@ -27,6 +29,9 @@ public final class ValkyarVaultPlugin extends JavaPlugin {
 
         // Register tab completion
         getCommand("pay").setTabCompleter(new PayTabCompletion());
+
+
+        getServer().getPluginManager().registerEvents(new BlackMerchantInteractListener(), this);
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
