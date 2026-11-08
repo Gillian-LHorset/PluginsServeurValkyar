@@ -9,17 +9,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static fr.Valkyar.valkyarVaultPlugin.ValkyarVaultPlugin.config;
 
@@ -32,12 +28,20 @@ public class BlackMerchant {
     // the protection of the inventory is in DatabaseCommunicationAPI
     public static Inventory marketInventory = org.bukkit.Bukkit.createInventory(null, 27, MENU_NAME);;
 
+    private Map<String, Integer> rarityAmountMap = new HashMap<>();
+
     public static NamespacedKey itemCostKey;
     public static NamespacedKey enchantKey;
-    private HashMap<String, ItemStack> allItemsMap = new HashMap<>();
+    private HashMap<String, List<ItemStack>> allItemsMap = new HashMap<>() {};
 
     public BlackMerchant(ValkyarVaultPlugin plugin) {
         _plugin = plugin;
+
+        List<Map<?, ?>> tempMap = config.getMapList("BlackMarketItemsRarity");
+        tempMap.forEach(map -> {
+            map.keySet()
+        })
+        //rarityAmountMap
     }
 
     public void CreateBlackMerchant(Location loc) {
@@ -60,24 +64,24 @@ public class BlackMerchant {
                 marketInventory.clear();
             }
             // 10m
-        }.runTaskLater(_plugin, 20L * 5);
+        }.runTaskLater(_plugin, 20L * 60 * 10);
     }
 
     public static record ItemPrice_MoneyType(int price, String moneyType){}
 
     private void setBlackMarket() {
-        List<Map<?, ?>> itemsList = config.getMapList("BlackMarketItems");
+        List<Map<?, ?>> itemsConfig = config.getMapList("BlackMarketItems");
 
-        for (Map<?, ?> itemMap : itemsList) {
-            Material material = Material.matchMaterial((String) itemMap.get("material"));
+        for (Map<?, ?> itemConfig : itemsConfig) {
+            Material material = Material.matchMaterial((String) itemConfig.get("material"));
 
             ItemStack item = new ItemStack(material);
 
             ItemMeta meta = item.getItemMeta();
 
             // about the price
-            int ItemPrice = (int) itemMap.get("price");
-            String ItemMoneyType = (String) itemMap.get("money");
+            int ItemPrice = (int) itemConfig.get("price");
+            String ItemMoneyType = (String) itemConfig.get("money");
 
             ItemPrice_MoneyType data = new ItemPrice_MoneyType(ItemPrice, ItemMoneyType);
 
@@ -91,7 +95,7 @@ public class BlackMerchant {
             dataContainer.set(itemCostKey, PersistentDataType.STRING, jsonString);
             ///////////////////
 
-            List<Map<?, ?>> enchantments = (List<Map<?, ?>>) itemMap.get("enchantments");
+            List<Map<?, ?>> enchantments = (List<Map<?, ?>>) itemConfig.get("enchantments");
             if (enchantments != null) {
                 for (Map<?, ?> enchMap : enchantments) {
                     String enchName = (String) enchMap.get("name");
@@ -121,12 +125,35 @@ public class BlackMerchant {
             lore.add(ChatColor.DARK_PURPLE + "Prix : " + ChatColor.YELLOW + ItemPrice + " " + ItemMoneyType);
 
             meta.setLore(lore);
+            // set meta
             item.setItemMeta(meta);
 
-            String rarity = (String) itemMap.get("rarity");
-            allItemsMap.put(rarity, item);
+            String rarity = (String) itemConfig.get("rarity");
+            allItemsMap.get(rarity).add(item);
+        }
+    }
+
+    public List<ItemStack> getRandomShopItems(Map<String, List<ItemStack>> allItemsMap, Map<String, Integer> amountsToPick) {
+        List<ItemStack> selectedItems = new ArrayList<>();
+
+        // On parcourt chaque rareté et le nombre d'items souhaités
+        for (Map.Entry<String, Integer> entry : amountsToPick.entrySet()) {
+            String rarity = entry.getKey();
+            int amount = entry.getValue();
+
+            List<ItemStack> availableItems = allItemsMap.get(rarity);
+
+            // Vérifie que la liste existe et n'est pas vide pour éviter les erreurs
+            if (availableItems != null && !availableItems.isEmpty()) {
+                for (int i = 0; i < amount; i++) {
+                    // Choisit un index aléatoire (les doublons sont autorisés naturellement ici)
+                    int randomIndex = random.nextInt(availableItems.size());
+                    selectedItems.add(availableItems.get(randomIndex));
+                }
+            }
         }
 
+        return selectedItems;
     }
 
     public static void openBlackMarket(Player player) {

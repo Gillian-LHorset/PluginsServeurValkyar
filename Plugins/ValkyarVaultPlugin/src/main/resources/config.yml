@@ -7,6 +7,13 @@ BlackMarketItems:
         level: 1
     money: "Jeton Prestige"
     price: 10
+  - rarity: "legendaire"
+    material: "ENCHANTED_BOOK"
+    enchantments:
+      - name: "SOLIDITY"
+        level: 4
+    money: "Jeton Prestige"
+    price: 5
   - rarity: "epique"
     material: "NETHERITE_SWORD"
     money: "Jeton Prestige"
@@ -15,3 +22,10 @@ BlackMarketItems:
     material: "WHEAT"
     money: "pièce"
     price: 10
+
+BlackMarketItemsRarity:
+  - mythique: 0
+  - legendaire: 1
+  - epique: 2
+  - rare: 3
+  - commun: 5
