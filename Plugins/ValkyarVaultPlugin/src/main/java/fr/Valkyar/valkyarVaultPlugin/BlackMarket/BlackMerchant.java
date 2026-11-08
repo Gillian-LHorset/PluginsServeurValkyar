@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,12 +28,13 @@ public class BlackMerchant {
     private final ValkyarVaultPlugin _plugin;
 
     public static final String MENU_NAME = ChatColor.BLACK + "Marché Noir";
+    public static final String TRADER_NAME = ChatColor.BLACK + "Marchand Noir";
     // the protection of the inventory is in DatabaseCommunicationAPI
     public static Inventory marketInventory = org.bukkit.Bukkit.createInventory(null, 27, MENU_NAME);;
 
     public static NamespacedKey itemCostKey;
     public static NamespacedKey enchantKey;
-    private HashMap<String, ItemStack> itemsMap = new HashMap<>();
+    private HashMap<String, ItemStack> allItemsMap = new HashMap<>();
 
     public BlackMerchant(ValkyarVaultPlugin plugin) {
         _plugin = plugin;
@@ -42,8 +44,23 @@ public class BlackMerchant {
         WanderingTrader blackMerchant = (WanderingTrader) loc.getWorld().spawnEntity(loc, EntityType.WANDERING_TRADER);
         blackMerchant.setAI(false);
         blackMerchant.setInvulnerable(true);
-        blackMerchant.setCustomName(ChatColor.BLACK + "Marchand Noir");
+        blackMerchant.setCustomName(TRADER_NAME);
         setBlackMarket();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                blackMerchant.remove();
+
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    String title = player.getOpenInventory().getTitle();
+                    if (title != null && title.equalsIgnoreCase(MENU_NAME)) {
+                        player.closeInventory();
+                    }
+                }
+                marketInventory.clear();
+            }
+            // 10m
+        }.runTaskLater(_plugin, 20L * 5);
     }
 
     public static record ItemPrice_MoneyType(int price, String moneyType){}
@@ -107,9 +124,9 @@ public class BlackMerchant {
             item.setItemMeta(meta);
 
             String rarity = (String) itemMap.get("rarity");
-            itemsMap.put(rarity, item);
+            allItemsMap.put(rarity, item);
         }
-        itemsMap.values().forEach(i -> marketInventory.addItem(i));
+
     }
 
     public static void openBlackMarket(Player player) {

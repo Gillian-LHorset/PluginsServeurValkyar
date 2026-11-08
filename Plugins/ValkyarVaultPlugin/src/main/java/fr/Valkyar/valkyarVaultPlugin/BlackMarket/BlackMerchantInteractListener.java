@@ -32,7 +32,7 @@ public class BlackMerchantInteractListener implements Listener {
     public void onInteractWithMerchant(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof WanderingTrader trader) {
 
-            if (trader.getCustomName() != null && trader.getCustomName().equalsIgnoreCase(ChatColor.BLACK + "Marchand Noir")) {
+            if (trader.getCustomName() != null && trader.getCustomName().equalsIgnoreCase(TRADER_NAME)) {
 
                 event.setCancelled(true);
 
